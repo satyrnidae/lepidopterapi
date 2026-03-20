@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "lepidoptera-api",
+  "version": "${version}",
+  "name": "Lepidoptera API",
+  "description": "Provides common functionality for satyrnidae's mods.",
+  "authors": [
+    "satyrnidae"
+  ],
+  "contact": {
+    "homepage": "https://satyrn.dev/",
+    "sources": "https://github.com/satyrnidae/lepidopterapi"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.satyrn.lepidoptera.fabric.MainEntrypoint"
+    ],
+    "client": [
+      "dev.satyrn.lepidoptera.fabric.client.ClientEntrypoint"
+    ]
+  },
+  "mixins": [
+    "lepidoptera.common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.19.2",
+    "java": ">=17",
+    "architectury": ">=6.6.92",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "cloth-config": ">=8.3.134",
+    "modmenu": ">=4.1.2"
+  }
+}

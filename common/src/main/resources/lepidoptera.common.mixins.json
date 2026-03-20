@@ -1,0 +1,24 @@
+{
+  "required": false,
+  "package": "dev.satyrn.lepidoptera.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+    "accessors.net.minecraft.client.renderer.entity.LivingEntityRendererAccessor"
+  ],
+  "mixins": [
+    "accessors.net.minecraft.advancements.CriteriaTriggersAccessor",
+    "accessors.net.minecraft.data.recipes.ShapedRecipeBuilderAccessor",
+    "accessors.net.minecraft.world.item.InstrumentItemAccessor",
+    "accessors.net.minecraft.world.item.ItemAccessor",
+    "accessors.me.shedaniel.autoconfig.serializer.YamlConfigSerializerAccessor",
+    "net.minecraft.world.entity.LivingEntityMixin",
+    "net.minecraft.world.entity.TamableEntityMixin",
+    "net.minecraft.world.item.BlockItemMixin",
+    "net.minecraft.world.item.ItemMixin",
+    "net.minecraft.world.item.crafting.RepairItemRecipeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

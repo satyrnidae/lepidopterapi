@@ -1,0 +1,231 @@
+plugins {
+    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'org.hidetake.ssh' version '2.12.0' apply false
+}
+
+architectury {
+    minecraft = project.minecraft_version
+}
+
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+}
+
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
+    apply plugin: 'org.hidetake.ssh'
+
+    base {
+        // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+        archivesName = "$rootProject.archives_name-$project.name"
+    }
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+        maven {
+            name = "Shedaniel Maven"
+            url "https://maven.shedaniel.me/"
+        }
+        maven {
+            name = "TerraformersMC"
+            url "https://maven.terraformersmc.com/releases/"
+        }
+    }
+
+    loom {
+        silentMojangMappingsLicense()
+        mixin {
+            defaultRefmapName = "${project.rootProject.name}.common.refmap.json"
+        }
+    }
+
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-1.19.2:2022.11.27@zip")
+        }
+        implementation("com.google.code.findbugs:jsr305:3.0.2")
+    }
+
+    java {
+        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+        // if it is present.
+        // If you remove this line, sources will not be generated.
+        withSourcesJar()
+
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+
+    remotes {
+        mavenSftp {
+            host = providers.provider { rootProject.findProperty('sftpHost') }
+            user = providers.provider { rootProject.findProperty('sftpUser') }
+            password = providers.provider { rootProject.findProperty('sftpPassword') }
+        }
+    }
+
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
+
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            // Add repositories to publish to here.
+            // Notice: This block does NOT have the same function as the block in the top level.
+            // The repositories here will be used for publishing your artifact, not for
+            // retrieving dependencies.
+            maven {
+                name = "maven.satyrn.dev"
+                url = providers.provider {
+                    "sftp://${rootProject.findProperty('sftpHost')}:22"
+                }
+            }
+        }
+    }
+
+    // Ensure creds are fetched before publishing
+    tasks.withType(PublishToMavenRepository).configureEach {
+        dependsOn fetch1PasswordSecrets, testSftpConnection
+
+        doFirst {
+            repository.credentials {
+                username = rootProject.findProperty('sftpUser')
+                password = rootProject.findProperty('sftpPassword')
+            }
+
+            println "Publishing with credentials:"
+            println "URL: ${repository.url}"
+            println "Username: ${repository.credentials.username}"
+            println "Password: ${repository.credentials.password ? '*****' : 'NULL'}"
+        }
+    }
+
+    // Configure JSch system properties
+    System.setProperty('org.gradle.sftp.preferredAuthentications', 'password')
+    System.setProperty('org.gradle.sftp.strictHostKeyChecking', 'no')
+}
+
+tasks.register('fetch1PasswordSecrets') {
+    doFirst {
+        // Skip sign-in if already authenticated or in CI
+        if (System.getenv("CI") == "true" || "op get account".execute().waitFor() == 0) {
+            logger.lifecycle("1Password: Using existing session")
+            return
+        }
+
+        "op signin --raw".execute().with {
+            waitForOrKill(30_000)
+            if (exitValue() != 0) throw new GradleException("Sign-in failed: ${err.text}")
+        }
+    }
+    doLast {
+        def text = "op item get \"${rootProject.sftp_login}\" --vault \"${rootProject.secrets_vault}\" --format json".execute().with {
+            waitForOrKill(10_000)
+            if (exitValue() != 0) throw new GradleException("Secret fetch failed: ${err.text}")
+            text
+        }
+        def json = new groovy.json.JsonSlurper().parseText(text)
+        rootProject.ext.sftpHost = [
+                json.urls?.find { it.primary }?.href,      // Primary URL href
+                json.fields?.find { it.label == "hostname" }?.value,
+                json.fields?.find { it.label == "host" }?.value,
+                json.fields?.find { it.label == "server" }?.value
+        ].find { it }?.toString()?.replaceAll(/^[a-z]+:\/\//, '')
+        rootProject.ext.sftpUser = json.fields.find { it.label == "username" }?.value
+        rootProject.ext.sftpPassword = json.fields.find { it.label == "password" }?.value
+
+        println "SFTP Host: ${rootProject.ext.sftpHost}"
+        println "SFTP User: ${rootProject.ext.sftpUser}"
+    }
+}
+
+tasks.register('testSftpConnection') {
+    dependsOn fetch1PasswordSecrets
+
+    doLast {
+        try {
+            def jsch = new com.jcraft.jsch.JSch()
+            def session = jsch.getSession(
+                    rootProject.ext.sftpUser,
+                    rootProject.ext.sftpHost,
+                    22
+            )
+            session.setPassword(rootProject.ext.sftpPassword)
+            session.setConfig("StrictHostKeyChecking", "no")
+            session.setConfig("PreferredAuthentications", "password")
+
+            session.connect(5000)
+            logger.lifecycle("✅ Verified SFTP credentials work with JSch")
+
+            // Test actual file operations
+            def channel = session.openChannel("sftp") as com.jcraft.jsch.ChannelSftp
+            channel.connect()
+            try {// Test target directory
+                channel.put(new ByteArrayInputStream("test".bytes), "connection-test.txt")
+                channel.rm("connection-test.txt")
+                logger.lifecycle("✅ Verified write access to target directory")
+            } finally {
+                channel.disconnect()
+                session.disconnect()
+            }
+        } catch (Exception e) {
+            throw new GradleException("""
+                SFTP verification failed: ${e.message}
+                
+                Credentials used:
+                - Host: ${rootProject.ext.sftpHost}
+                - User: ${rootProject.ext.sftpUser}
+                - Password: ${rootProject.ext.sftpPassword ? '*****' : 'NULL'}
+                
+                Server requirements:
+                1. Password authentication must be enabled
+                2. User must have write permissions to target directory
+                """.stripIndent())
+        }
+    }
+}
+
+// Add to your build.gradle
+tasks.register('verifyHostResolution') {
+    doLast {
+        try {
+            InetAddress.getByName(rootProject.ext.sftpHost).with {
+                logger.lifecycle("✅ Host resolution successful: ${hostAddress}")
+            }
+        } catch (UnknownHostException e) {
+            throw new GradleException("""
+                Host resolution failed for: ${rootProject.ext.sftpHost}
+                
+                Possible fixes:
+                1. Verify the hostname is correct
+                2. Check your DNS settings
+                3. Try using an IP address instead
+                4. Ensure network connectivity
+                """.stripIndent())
+        }
+    }
+}

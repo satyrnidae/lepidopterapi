@@ -1,0 +1,8 @@
+@MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
+package dev.satyrn.lepidoptera.mixin.net.minecraft.world.entity;
+
+import dev.satyrn.lepidoptera.annotations.VariablesAreNonnullByDefault;
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "lepidoptera-api",
+    "version": "${version}",
+    "metadata": {
+      "name": "LepidopterAPI",
+      "description": "Provides common functionality for satyrnidae's mods.",
+      "contributors": {
+        "satyrnidae": "Author"
+      },
+      "icon": "assets/lepidopterapi/icon.png",
+      "license": "MIT"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "dev.satyrn.lepidoptera.quilt.InitEntrypoint"
+      ],
+      "client_init": [
+        "dev.satyrn.lepidoptera.quilt.ClientInitEntrypoint"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=1.19.2"
+      },
+      {
+        "id": "architectury",
+        "version": ">=6.6.92"
+      },
+      {
+        "id": "cloth-config",
+        "optional": true,
+        "version": ">=8.3.134"
+      },
+      {
+        "id": "modmenu",
+        "optional": true,
+        "version": ">=4.1.2"
+      }
+    ]
+  },
+  "mixin": [
+    "lepidoptera.common.mixins.json"
+  ]
+}

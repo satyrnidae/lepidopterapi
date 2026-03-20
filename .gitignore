@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+# Local only file
+*.local.*
+
 # BlueJ files
 *.ctxt
 
@@ -22,3 +25,24 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+.gradle
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+run/
+build/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
