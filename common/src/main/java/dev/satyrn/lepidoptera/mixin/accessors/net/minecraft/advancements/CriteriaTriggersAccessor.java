@@ -24,7 +24,7 @@ public interface CriteriaTriggersAccessor {
      */
     @SuppressWarnings("unused")
     @Invoker()
-    static <T extends CriterionTrigger<?>> T callRegister(T object) {
+    static <T extends CriterionTrigger<?>> T callRegister(String string, T object) {
         throw new AssertionError();
     }
 }

@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import static net.minecraft.world.level.GameRules.BooleanValue;
 import static net.minecraft.world.level.GameRules.Key;
 
-@ModMeta(value = LepidopteraAPI.MOD_ID, name = "Lepidoptera API", semVer = "0.4.0+1.19.2")
+@ModMeta(value = LepidopteraAPI.MOD_ID, name = "Lepidoptera API", semVer = "1.0.0-SNAPSHOT+1.21.1")
 public class LepidopteraAPI implements LepidopteraMod {
     public static final String MOD_ID = "lepidoptera_api";
     private static final Logger LOGGER = LogManager.getLogger();

@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.util;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.annotations.Api;
 import dev.satyrn.lepidoptera.annotations.ModMeta;
 import dev.satyrn.lepidoptera.api.SemVer;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.util.StackLocatorUtil;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+@Api
 public final class ModHelper {
     private ModHelper() {
         NotInitializable.staticClass(ModHelper.class);
@@ -72,6 +74,7 @@ public final class ModHelper {
         return Objects.requireNonNull(ResourceLocation.tryBuild(modId, path));
     }
 
+    @Api
     public static SemVer version() {
         return version(StackLocatorUtil.getCallerClass(2));
     }

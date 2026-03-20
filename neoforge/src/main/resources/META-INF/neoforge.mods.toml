@@ -1,0 +1,44 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/satyrnidae/lepidopterapi"
+license = "MIT"
+
+[[mods]]
+modId = "lepidoptera_api"
+version = "${version}"
+displayName = "Lepidoptera API"
+authors = "satyrnidae"
+description = '''
+Provides common functionality for satyrnidae's mods.
+'''
+
+[[mixins]]
+config = "lepidoptera.common.mixins.json"
+
+[[dependencies.lepidoptera_api]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.lepidoptera_api]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.lepidoptera_api]]
+modId = "architectury"
+type = "required"
+versionRange = "[13,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.lepidoptera_api]]
+modId = "cloth_config"
+type = "optional"
+versionRange = "[15,)"
+ordering = "NONE"
+side = "BOTH"

@@ -22,7 +22,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
 
     @Override
     public int hashCode() {
-        return Objects.hash(major, minor, patch, preRelease, metadata);
+        return Objects.hash(major, minor, patch, preRelease);
     }
 
     @Override

@@ -28,26 +28,22 @@
         "version": "*"
       },
       {
-        "id": "quilt_base",
-        "version": "*"
-      },
-      {
         "id": "minecraft",
-        "version": ">=1.19.2"
+        "version": ">=1.21.1"
       },
       {
         "id": "architectury",
-        "version": ">=6.6.92"
+        "version": ">=13.0.6"
       },
       {
         "id": "cloth-config",
         "optional": true,
-        "version": ">=8.3.134"
+        "version": ">=15.0.140"
       },
       {
         "id": "modmenu",
         "optional": true,
-        "version": ">=4.1.2"
+        "version": ">=11.0.3"
       }
     ]
   },

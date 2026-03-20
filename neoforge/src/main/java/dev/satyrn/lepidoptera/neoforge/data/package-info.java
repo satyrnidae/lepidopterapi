@@ -1,0 +1,8 @@
+@MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
+package dev.satyrn.lepidoptera.neoforge.data;
+
+import dev.satyrn.lepidoptera.annotations.VariablesAreNonnullByDefault;
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

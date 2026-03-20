@@ -1,15 +1,13 @@
 package dev.satyrn.lepidoptera.mixin.net.minecraft.world.item;
 
-
-import dev.satyrn.lepidoptera.api.world.item.Equipment;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.*;
 
-import javax.annotation.Nullable;
-
+// NOTE: Item.getEquipSound() was removed in MC 1.20.5. The equip sound is now
+// provided via the Equippable data component. The Equipment.getEquipSound() API
+// has been removed accordingly.
 @Mixin(BlockItem.class)
 public abstract class BlockItemMixin extends Item {
 
@@ -18,14 +16,5 @@ public abstract class BlockItemMixin extends Item {
     private BlockItemMixin(Properties properties) {
         super(properties);
         throw new AssertionError();
-    }
-
-    @Unique
-    @Override
-    public @Nullable SoundEvent getEquipSound() {
-        if (this.getBlock() instanceof Equipment equipment) {
-            return equipment.getEquipSound();
-        }
-        return super.getEquipSound();
     }
 }

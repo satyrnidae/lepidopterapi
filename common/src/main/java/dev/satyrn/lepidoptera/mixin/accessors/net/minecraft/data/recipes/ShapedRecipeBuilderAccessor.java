@@ -1,9 +1,10 @@
 package dev.satyrn.lepidoptera.mixin.accessors.net.minecraft.data.recipes;
 
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Mixin(ShapedRecipeBuilder.class)
 public interface ShapedRecipeBuilderAccessor {
     @Accessor
-    Advancement.Builder getAdvancement();
+    Map<String, Criterion<?>> getCriteria();
 
     @Accessor
     int getCount();
@@ -31,5 +32,5 @@ public interface ShapedRecipeBuilderAccessor {
     Map<Character, Ingredient> getKey();
 
     @Invoker
-    void invokeEnsureValid(ResourceLocation resourceLocation);
+    ShapedRecipePattern invokeEnsureValid(ResourceLocation resourceLocation);
 }

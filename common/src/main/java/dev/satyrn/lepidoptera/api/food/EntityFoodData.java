@@ -5,7 +5,7 @@ import dev.satyrn.lepidoptera.annotations.Api;
 import dev.satyrn.lepidoptera.api.entity.LivingEntityX;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,15 +31,15 @@ public class EntityFoodData {
 
     @SuppressWarnings("unused")
     public void eat(final @NotNull Item item, final @NotNull ItemStack stack) {
-        if (item.isEdible()) {
-            final @NotNull var foodProperties = Objects.requireNonNull(item.getFoodProperties());
-            this.eat(foodProperties.getNutrition(), foodProperties.getSaturationModifier());
+        final var foodProperties = stack.get(DataComponents.FOOD);
+        if (foodProperties != null) {
+            this.eat(foodProperties.nutrition(), foodProperties.saturation());
         }
     }
 
     @SuppressWarnings("unused")
     public void tick(final @NotNull LivingEntity entity) {
-        final @NotNull var difficulty = entity.getLevel().getDifficulty();
+        final @NotNull var difficulty = entity.level().getDifficulty();
         this.lastFoodLevel = this.foodLevel;
         if (this.exhaustionLevel > 4F) {
             this.exhaustionLevel -= 4F;
@@ -50,8 +50,8 @@ public class EntityFoodData {
             }
         }
 
-        final boolean isRegenEnabled = entity.getLevel().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-        final boolean isEntityStarvationEnabled = entity.getLevel().getGameRules().getBoolean(Objects.requireNonNull(LepidopteraAPI.RULE_ENTITY_STARVATION));
+        final boolean isRegenEnabled = entity.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+        final boolean isEntityStarvationEnabled = entity.level().getGameRules().getBoolean(Objects.requireNonNull(LepidopteraAPI.RULE_ENTITY_STARVATION));
         if (isRegenEnabled && this.saturationLevel > 0F && ((LivingEntityX)entity).isHurt() && this.foodLevel >= 20) {
             this.tickTimer++;
             if (this.tickTimer >= 10) {
@@ -71,7 +71,7 @@ public class EntityFoodData {
             this.tickTimer++;
             if (this.tickTimer >= 80) {
                 if (isEntityStarvationEnabled && (entity.getHealth() > 10F || difficulty == Difficulty.HARD || entity.getHealth() > 1F && difficulty == Difficulty.NORMAL)) {
-                    entity.hurt(DamageSource.STARVE, 1.0F);
+                    entity.hurt(entity.damageSources().starve(), 1.0F);
                 }
 
                 this.tickTimer = 0;
