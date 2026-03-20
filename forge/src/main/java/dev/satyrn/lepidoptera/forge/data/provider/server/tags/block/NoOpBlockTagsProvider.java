@@ -4,16 +4,13 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class NoOpBlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider {
-    protected NoOpBlockTagsProvider(DataGenerator generator, String modId,
+public class NoOpBlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider {
+    public NoOpBlockTagsProvider(DataGenerator generator, String modId,
             @Nullable ExistingFileHelper existingFileHelper) {
         super(generator, modId, existingFileHelper);
     }
 
     @Override
-    protected final void addTags() {
-        addModTags();
+    protected void addTags() {
     }
-
-    protected abstract void addModTags();
 }
