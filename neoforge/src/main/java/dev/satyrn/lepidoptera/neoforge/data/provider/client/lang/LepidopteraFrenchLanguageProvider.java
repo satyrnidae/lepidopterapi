@@ -31,10 +31,10 @@ public class LepidopteraFrenchLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1), new FormattedStringBuilder("À n'activer que si vous comprenez les conséquences.", ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),"Activer les recettes de l'alambic alchimiste");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0), "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de serveur.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de la configuration.");
         this.add(T9n.configOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick"), "Shift-clic droit pour équiper l'alambic dans le casque");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 0), "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de serveur.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 0), "Les changements prennent effet lors du rechargement de la configuration.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de la configuration.");
         this.add(T9n.configOption(LepidopteraConfig.class, "showAlembicInCreativeTabs"), "Afficher l'alambic alchimiste dans l'inventaire Créatif");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 0), "Afficher les alambics alchimistes dans l'onglet Outils et utilitaires du mode Créatif.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1), new FormattedStringBuilder("Modifier ce paramètre nécessite un redémarrage complet du serveur !", ChatFormatting.YELLOW));

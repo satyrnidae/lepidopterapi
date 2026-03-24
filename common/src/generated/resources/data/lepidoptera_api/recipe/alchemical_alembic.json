@@ -14,6 +14,9 @@
   "group": "alchemical_alembic",
   "ingredients": [
     {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
       "item": "lepidoptera_api:depleted_alembic"
     },
     {

@@ -21,13 +21,13 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
 
     @YamlComment("Enables recipes for and using the alembic items. " +
             "Changing this requires a server restart or /reload to take effect. " +
-            "The server value is pushed to clients on join.")
+            "The server value is pushed to clients on join and on config reload.")
     @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean enableAlchemicalAlembicRecipes = false;
 
     @YamlComment("Allows the alembics to be shift-click equipped into the helmet slot. " +
-            "Changing this requires a server restart to take effect. " +
-            "The server value is pushed to clients on join.")
+            "Changes take effect when the config is reloaded; no server restart required. " +
+            "The server value is pushed to clients on join and on config reload.")
     @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean alchemicalAlembicCanShiftClick = true;
 

@@ -68,7 +68,8 @@ public class LepidopteraRecipeProvider extends ModRecipeProvider {
                 "alchemical_alembic",
                 CraftingBookCategory.MISC,
                 new ItemStack(LepidopteraItems.ALCHEMICAL_ALEMBIC.get()),
-                NonNullList.of(Ingredient.of(ItemTags.SOUL_FIRE_BASE_BLOCKS),
+                NonNullList.of(Ingredient.EMPTY,
+                        Ingredient.of(ItemTags.SOUL_FIRE_BASE_BLOCKS),
                         Ingredient.of(LepidopteraItems.DEPLETED_ALEMBIC.get()),
                         Ingredient.of(ItemTags.CANDLES),
                         Ingredient.of(Items.GLOWSTONE_DUST)));
