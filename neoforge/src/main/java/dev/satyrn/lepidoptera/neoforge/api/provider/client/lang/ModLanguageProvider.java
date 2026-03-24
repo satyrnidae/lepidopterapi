@@ -1,14 +1,18 @@
 package dev.satyrn.lepidoptera.neoforge.api.provider.client.lang;
 
+import dev.satyrn.lepidoptera.api.WithLocation;
 import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
 @Api
-public abstract class ModLanguageProvider extends LanguageProvider {
+public abstract class ModLanguageProvider
+        extends LanguageProvider
+        implements WithLocation {
     protected final ModMeta metadata;
     protected final String locale;
 
@@ -42,6 +46,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
     @Override
     public String getName() {
-        return this.locale.toUpperCase() + " Language Provider for " + ModHelper.friendlyName(this.metadata);
+        return location().toString();
+    }
+
+    @Override
+    public ResourceLocation location() {
+        return ModHelper.resource(this.metadata, "providers/lang/" + this.locale);
     }
 }

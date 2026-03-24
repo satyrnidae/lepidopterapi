@@ -6,6 +6,7 @@ import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import dev.satyrn.lepidoptera.api.network.PacketReadyCallback;
 import dev.satyrn.lepidoptera.api.network.ServerPlayContext;
 import dev.satyrn.lepidoptera.neoforge.condition.AlchemicalAlembicRecipesCondition;
+import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraFrenchLanguageProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraLanguageProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.recipe.LepidopteraRecipeProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.tags.LepidopteraEntityTypeTags;
@@ -76,6 +77,7 @@ public class LepidopteraNeo {
     private void onGatherData(GatherDataEvent event) {
         event.createProvider(LepidopteraRecipeProvider::new);
         event.createProvider(LepidopteraLanguageProvider::new);
+        event.createProvider(LepidopteraFrenchLanguageProvider::new);
         event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture, event.getExistingFileHelper()));
         event.createProvider((arg, completableFuture) -> new LepidopteraItemTags(arg, completableFuture, event.getExistingFileHelper()));
     }

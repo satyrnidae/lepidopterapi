@@ -1,0 +1,42 @@
+package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
+
+import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
+import dev.satyrn.lepidoptera.api.lang.T9n;
+import dev.satyrn.lepidoptera.config.LepidopteraConfig;
+import dev.satyrn.lepidoptera.item.LepidopteraItems;
+import dev.satyrn.lepidoptera.neoforge.api.provider.client.lang.ModLanguageProvider;
+import net.minecraft.ChatFormatting;
+import net.minecraft.data.PackOutput;
+
+public class LepidopteraFrenchLanguageProvider extends ModLanguageProvider {
+    public LepidopteraFrenchLanguageProvider(PackOutput output) {
+        super(LepidopteraAPI.class, output, "fr_fr");
+    }
+
+    @Override
+    protected void addTranslations() {
+        // I tried with this lol
+        this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alambic alchimiste");
+        this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Alambic alchimiste éteint");
+
+        this.add(T9n.gamerule("doAnimalStarvation"), "Inanition des animaux");
+        this.add(T9n.gameruleDesc("doAnimalStarvation"), "Lepidoptera API: Les animaux affamés peuvent subir des dégâts jusqu'à ce qu'ils meurent.");
+
+        this.add(T9n.netMsg(this.metadata, "versionMismatch"), "Les versions de Lepidoptera API sont dépareillées entre le serveur et le client. Serveur : %s, Client : %s");
+
+        this.add(T9n.configTitle(LepidopteraConfig.class), "Lepidoptera API configuration");
+        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "Journalisation de débogage");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0), new FormattedStringBuilder("AVERTISSEMENT ! ", ChatFormatting.RED).append("Toutes les interactions d'API seront journalisées."));
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1), new FormattedStringBuilder("À n'activer que si vous comprenez les conséquences.", ChatFormatting.YELLOW));
+        this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),"Activer les recettes de l'alambic alchimiste");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0), "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de serveur.");
+        this.add(T9n.configOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick"), "Shift-clic droit pour équiper l'alambic dans le casque");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 0), "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 1), "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de serveur.");
+        this.add(T9n.configOption(LepidopteraConfig.class, "showAlembicInCreativeTabs"), "Afficher l'alambic alchimiste dans l'inventaire Créatif");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 0), "Afficher les alambics alchimistes dans l'onglet Outils et utilitaires du mode Créatif.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1), new FormattedStringBuilder("Modifier ce paramètre nécessite un redémarrage complet du serveur !", ChatFormatting.YELLOW));
+    }
+}

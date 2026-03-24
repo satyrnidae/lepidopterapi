@@ -141,8 +141,6 @@ public class LepidopteraAPI implements LepidopteraMod {
 
         if (SYNCED_CONFIG.get().showAlembicInCreativeTabs) {
             CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES,
-                    () -> new ItemStack(LepidopteraItems.ALCHEMICAL_ALEMBIC.get()));
-            CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES,
                     () -> new ItemStack(LepidopteraItems.DEPLETED_ALEMBIC.get()));
         }
 

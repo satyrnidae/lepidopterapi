@@ -19,16 +19,16 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean debug = false;
 
-    @YamlComment("Enables breakable crafting recipes that use the Alchemical Alembic. " +
+    @YamlComment("Enables recipes for and using the alembic items. " +
             "Changing this requires a server restart or /reload to take effect. " +
             "The server value is pushed to clients on join.")
-    @ConfigEntry.Gui.Tooltip(count = 3)
+    @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean enableAlchemicalAlembicRecipes = false;
 
-    @YamlComment("Allows the Alchemical Alembic to be shift-click equipped into the helmet slot. " +
+    @YamlComment("Allows the alembics to be shift-click equipped into the helmet slot. " +
             "Changing this requires a server restart to take effect. " +
             "The server value is pushed to clients on join.")
-    @ConfigEntry.Gui.Tooltip(count = 3)
+    @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean alchemicalAlembicCanShiftClick = true;
 
     @YamlComment("Allows the Alchemical Alembic to show in the Creative tabs. " +
