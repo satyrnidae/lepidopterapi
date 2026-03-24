@@ -1,0 +1,42 @@
+{
+  "criteria": {
+    "has_the_depleted_alembic": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lepidoptera_api:depleted_alembic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_flask": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:glass_bottle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "lepidoptera_api:depleted_alembic"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_the_depleted_alembic",
+      "has_the_flask"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "lepidoptera_api:depleted_alembic"
+    ]
+  }
+}

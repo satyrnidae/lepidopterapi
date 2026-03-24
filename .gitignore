@@ -35,6 +35,7 @@ replay_pid*
 *.ipr
 out/
 run/
+logs/
 build/
 
 # Eclipse

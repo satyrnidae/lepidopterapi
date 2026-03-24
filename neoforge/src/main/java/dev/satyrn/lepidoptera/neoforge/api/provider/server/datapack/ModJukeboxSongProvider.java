@@ -1,0 +1,93 @@
+package dev.satyrn.lepidoptera.neoforge.api.provider.server.datapack;
+
+import dev.satyrn.lepidoptera.api.ModHelper;
+import dev.satyrn.lepidoptera.api.WithLocation;
+import dev.satyrn.lepidoptera.api.annotations.Api;
+import dev.satyrn.lepidoptera.api.ModMeta;
+import dev.satyrn.lepidoptera.api.lang.T9n;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.JukeboxSong;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+
+public abstract class ModJukeboxSongProvider
+        extends DatapackBuiltinEntriesProvider
+        implements WithLocation {
+    private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder();
+
+    private final ModMeta metadata;
+    private final PackOutput output;
+
+    private @Nullable BootstrapContext<JukeboxSong> bootstrapContext;
+    private @Nullable HolderGetter<SoundEvent> sounds;
+
+    public ModJukeboxSongProvider(Class<?> modClass, PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+        super(output, provider, BUILDER, Set.of(ModHelper.modId(modClass)));
+        this.metadata = ModHelper.metadata(modClass);
+        this.output = output;
+        BUILDER.add(Registries.JUKEBOX_SONG, this::bootstrap);
+    }
+
+    private void bootstrap(BootstrapContext<JukeboxSong> ctx) {
+        this.bootstrapContext = ctx;
+        this.sounds = ctx.lookup(Registries.SOUND_EVENT);
+        this.addSongs();
+    }
+
+    protected abstract void addSongs();
+
+    @Api
+    protected final void register(final ResourceKey<JukeboxSong> key,
+                                  final float lengthInSeconds,
+                                  final int comparatorOutput) {
+        ResourceKey<SoundEvent> soundKey = ResourceKey.create(Registries.SOUND_EVENT, key.location());
+        register(key, soundKey, lengthInSeconds, comparatorOutput);
+    }
+
+    protected final void register(final ResourceKey<JukeboxSong> songKey,
+                                  final ResourceKey<SoundEvent> soundKey,
+                                  final float lengthInSeconds,
+                                  final int comparatorOutput) {
+        Objects.requireNonNull(this.bootstrapContext);
+        Objects.requireNonNull(this.sounds);
+        Holder.Reference<SoundEvent> sound = this.sounds.getOrThrow(soundKey);
+        this.bootstrapContext.register(songKey,
+                new JukeboxSong(sound,
+                        Component.translatable(T9n.itemDesc(songKey)),
+                        lengthInSeconds, comparatorOutput));
+    }
+
+    @Api
+    protected ModMeta getMetadata() {
+        return this.metadata;
+    }
+
+    @Api
+    protected PackOutput getOutput() {
+        return this.output;
+    }
+
+    @Override
+    public String getName() {
+        return location().toString();
+    }
+
+    @Override
+    public ResourceLocation location() {
+        return ModHelper.resource(this.metadata, "providers/jukebox_song");
+    }
+}

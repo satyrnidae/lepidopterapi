@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.fabric.client;
 
 import dev.satyrn.lepidoptera.client.LepidopteraAPIClient;
+import dev.satyrn.lepidoptera.fabric.client.network.play.FabricClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,6 +20,9 @@ public final class ClientEntrypoint implements ClientModInitializer {
         LepidopteraAPIClient.INSTANCE.preInit();
         LepidopteraAPIClient.INSTANCE.init();
         LepidopteraAPIClient.INSTANCE.postInit();
+
+        // Register S2C receivers and client ready callback hook.
+        FabricClientNetworking.init();
 
         info("Initialized client-sided code for Lepidoptera API for Fabric MC.");
     }

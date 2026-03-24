@@ -10,16 +10,19 @@
       "contributors": {
         "satyrnidae": "Author"
       },
-      "icon": "assets/lepidopterapi/icon.png",
+      "icon": "icon.png",
       "license": "MIT"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
-      "init": [
-        "dev.satyrn.lepidoptera.quilt.InitEntrypoint"
+      "main": [
+        "dev.satyrn.lepidoptera.quilt.MainEntrypoint"
       ],
-      "client_init": [
-        "dev.satyrn.lepidoptera.quilt.ClientInitEntrypoint"
+      "client": [
+        "dev.satyrn.lepidoptera.quilt.client.ClientEntrypoint"
+      ],
+      "modmenu": [
+        "dev.satyrn.lepidoptera.quilt.client.ModMenuApiImpl"
       ]
     },
     "depends": [
@@ -48,6 +51,8 @@
     ]
   },
   "mixin": [
-    "lepidoptera.common.mixins.json"
+    "lepidoptera.api.mixins.json",
+    "lepidoptera.common.mixins.json",
+    "lepidoptera.quilt.mixins.json"
   ]
 }

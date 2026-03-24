@@ -11,13 +11,6 @@ architectury {
     loader('quilt')
 }
 
-loom {
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${project.rootProject.name}.${project.name}.refmap.json"
-    }
-}
-
 configurations {
     common {
         canBeResolved = true
@@ -38,11 +31,8 @@ configurations {
 dependencies {
     modImplementation "org.quiltmc:quilt-loader:$rootProject.quilt_loader_version"
 
-    // Quilt Standard Libraries and QSL.
+    // Quilt Standard Libraries and QFAPI.
     modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:$rootProject.quilted_fabric_api_version"
-
-    // QSL Base is JiJ'd inside quilted-fabric-api but needs to be on compile classpath explicitly.
-    modCompileOnly "org.quiltmc.qsl.core:qsl_base:10.0.0-alpha.1+1.21"
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:$rootProject.architectury_api_version") {
@@ -71,7 +61,9 @@ processResources {
     // Quilt Loader resolves mixin configs from the mod container directory, not the general classpath.
     // Copy the common mixin config here so it's found in dev mode.
     from(project(':common').sourceSets.main.resources) {
+        include 'lepidoptera.api.mixins.json'
         include 'lepidoptera.common.mixins.json'
+        include 'icon.png'
     }
 
     filesMatching('quilt.mod.json') {

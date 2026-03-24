@@ -7,13 +7,6 @@ architectury {
     fabric()
 }
 
-loom {
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${project.rootProject.name}.${project.name}.refmap.json"
-    }
-}
-
 configurations {
     common {
         canBeResolved = true
@@ -58,6 +51,10 @@ processResources {
 
     filesMatching('fabric.mod.json') {
         expand version: project.version
+    }
+
+    from(project(':common').sourceSets.main.resources) {
+        include 'icon.png'
     }
 }
 

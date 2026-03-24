@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.config.serializers;
 
-import dev.satyrn.lepidoptera.annotations.YamlComment;
+import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -266,7 +266,7 @@ class YamlCommentInjectorTest {
         void yamlWithoutMatchingKeys_unchanged() {
             String yaml = "foo: bar\nbaz: 42\n";
             String result = injector.injectComments(yaml, Map.of(), null);
-            // Comments map is empty — output should contain same keys/values
+            // Comments map is empty - output should contain same keys/values
             assertTrue(result.contains("foo: bar"));
             assertTrue(result.contains("baz: 42"));
         }

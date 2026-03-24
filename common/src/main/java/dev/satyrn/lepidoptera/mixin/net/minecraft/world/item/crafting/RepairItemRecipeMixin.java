@@ -1,8 +1,8 @@
 package dev.satyrn.lepidoptera.mixin.net.minecraft.world.item.crafting;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import dev.satyrn.lepidoptera.api.world.item.Repairable;
-import dev.satyrn.lepidoptera.util.NotInitializable;
+import dev.satyrn.lepidoptera.api.item.Repairable;
+import dev.satyrn.lepidoptera.api.NotInitializable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -19,7 +19,7 @@ public abstract class RepairItemRecipeMixin extends CustomRecipe {
 
     private RepairItemRecipeMixin(final CraftingBookCategory category) {
         super(category);
-        NotInitializable.mixinClass(RepairItemRecipeMixin.class);
+        NotInitializable.mixinClass(this);
     }
 
     @Inject(method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)

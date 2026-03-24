@@ -1,8 +1,0 @@
-@MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
-package dev.satyrn.lepidoptera.client.color.item;
-
-import dev.satyrn.lepidoptera.annotations.VariablesAreNonnullByDefault;
-import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;

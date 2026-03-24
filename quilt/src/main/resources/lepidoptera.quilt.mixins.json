@@ -1,0 +1,7 @@
+{
+  "required": false,
+  "package": "dev.satyrn.lepidoptera.quilt.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixins": []
+}

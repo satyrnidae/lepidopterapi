@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "group": "depleted_alembic",
+  "key": {
+    "B": {
+      "item": "minecraft:glass_bottle"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "NI ",
+    " B ",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lepidoptera_api:depleted_alembic"
+  }
+}

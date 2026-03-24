@@ -1,0 +1,154 @@
+package dev.satyrn.lepidoptera.neoforge.api.provider.server.recipe;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
+import dev.satyrn.lepidoptera.api.WithLocation;
+import dev.satyrn.lepidoptera.api.annotations.Api;
+import dev.satyrn.lepidoptera.api.ModMeta;
+import dev.satyrn.lepidoptera.api.ModHelper;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceLocation;
+
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Abstract base for mod-specific recipe data providers.
+ *
+ * <p>Subclass this and implement {@link #buildModRecipes} to add recipes for your mod.
+ * Wire the provider into your {@code GatherDataEvent} listener via
+ * {@code event.createProvider((output, lookup) -> new YourRecipeProvider(output, lookup))}.
+ */
+@Api
+public abstract class ModRecipeProvider
+        extends RecipeProvider
+        implements WithLocation {
+    protected final ModMeta metadata;
+    private final PackOutput packOutput;
+
+    protected ModRecipeProvider(Class<?> modClass, PackOutput output,
+            CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider);
+        this.packOutput = output;
+        this.metadata = ModHelper.metadata(modClass);
+    }
+
+    @Override
+    protected final CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
+        return CompletableFuture.allOf(
+                super.run(arg, arg2),
+                runModded(arg, arg2)
+        );
+    }
+
+    @Override
+    protected final void buildRecipes(RecipeOutput output) {
+        buildModRecipes(output);
+    }
+
+    protected void buildModRecipes(RecipeOutput output) { }
+
+    @Api
+    protected CompletableFuture<?> runModded(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
+        // Defaults to no-op
+        return CompletableFuture.runAsync(() -> {});
+    }
+
+    @Api
+    protected <T> CompletableFuture<?> recipeWithConditions(
+            CachedOutput cachedOutput,
+            ResourceLocation id,
+            T recipe,
+            MapCodec<T> codec,
+            ResourceLocation typeId,
+            RecipeCategory category,
+            Map<String, Criterion<?>> criteria,
+            HolderLookup.Provider registryAccess,
+            ResourceLocation... conditions) {
+        PackOutput.PathProvider recipePaths =
+                packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
+        PackOutput.PathProvider advancementPaths =
+                packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "advancement");
+
+        return CompletableFuture.allOf(
+                buildRecipeWithConditions(cachedOutput, id, recipe, codec, typeId, recipePaths, registryAccess, conditions),
+                buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess)
+        );
+    }
+
+    private static <T> CompletableFuture<?> buildRecipeAchievement(
+            CachedOutput cachedOutput,
+            ResourceLocation id,
+            PackOutput.PathProvider advancementPaths,
+            RecipeCategory category,
+            Map<String, Criterion<?>> criteria,
+            HolderLookup.Provider registryAccess) {
+        Advancement.Builder builder = Advancement.Builder.recipeAdvancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
+                .requirements(AdvancementRequirements.Strategy.OR);
+        criteria.forEach(builder::addCriterion);
+        Advancement advancement = builder.build(id).value();
+
+        JsonObject json = Advancement.CODEC
+                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), advancement)
+                .getOrThrow()
+                .getAsJsonObject();
+
+        Path path = advancementPaths.json(id.withPrefix("recipes/" + category.getFolderName() + "/"));
+        return DataProvider.saveStable(cachedOutput, json, path);
+    }
+
+    private static <T> CompletableFuture<?> buildRecipeWithConditions(
+            CachedOutput cachedOutput,
+            ResourceLocation id,
+            T recipe,
+            MapCodec<T> codec,
+            ResourceLocation typeId,
+            PackOutput.PathProvider recipePaths,
+            HolderLookup.Provider registryAccess,
+            ResourceLocation... conditions) {
+        JsonArray fabricConditions = new JsonArray();
+        JsonArray neoConditions = new JsonArray();
+
+        for (var condition : conditions) {
+            JsonObject fabricCondition = new JsonObject();
+            fabricCondition.addProperty("condition", condition.toString());
+            fabricConditions.add(fabricCondition);
+
+            JsonObject neoCondition = new JsonObject();
+            neoCondition.addProperty("type", condition.toString());
+            neoConditions.add(neoCondition);
+        }
+
+        JsonObject json = codec.codec()
+                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), recipe)
+                .getOrThrow()
+                .getAsJsonObject();
+        json.addProperty("type", typeId.toString());
+        json.add("neoforge:conditions", neoConditions);
+        json.add("fabric:load_conditions", fabricConditions);
+
+        Path path = recipePaths.json(id);
+        return DataProvider.saveStable(cachedOutput, json, path);
+    }
+
+    @Override
+    public ResourceLocation location() {
+        return ModHelper.resource(metadata, "providers/recipe");
+    }
+}

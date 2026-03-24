@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "type": "lepidoptera_api:crafting_shaped_breakable",
+  "damage": 32767,
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "group": "diamond",
+  "key": {
+    "A": {
+      "item": "lepidoptera_api:alchemical_alembic"
+    },
+    "C": {
+      "item": "minecraft:coal"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CAC",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:diamond"
+  }
+}
