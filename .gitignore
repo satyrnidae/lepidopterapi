@@ -47,3 +47,6 @@ build/
 .springBeans
 .sts4-cache
 bin/
+
+# VS Code
+*.code-workspace
