@@ -15,17 +15,21 @@ import java.util.List;
  *
  * <p>Allows mods to read (and potentially add to) the list of {@link RenderLayer}s applied
  * during entity rendering without requiring direct access to the private field.</p>
+ *
+ * @since 0.4.0+1.19.2
  */
+@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
 @Environment(EnvType.CLIENT)
-@Api
 @Mixin(LivingEntityRenderer.class)
 public interface LivingEntityRendererAccessor {
+
     /**
      * Returns the mutable list of render layers attached to this entity renderer.
      *
      * @return the render layer list
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Api @Accessor
-    @SuppressWarnings("rawtypes")
-    List<RenderLayer> getLayers();
+    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+    @Accessor List<RenderLayer<?, ?>> getLayers();
 }

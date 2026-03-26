@@ -11,8 +11,10 @@ import me.shedaniel.autoconfig.ConfigData;
  * to overlay server values onto the local config object.</p>
  *
  * @param <T> the concrete config type (self-referential)
+ *
+ * @since 0.4.0+1.19.2
  */
-@Api
+@Api("0.4.0+1.19.2")
 public interface NestingConfigData<T extends NestingConfigData<T>> extends ConfigData {
     /**
      * Copies all values from {@code other} into this config object.
@@ -21,6 +23,9 @@ public interface NestingConfigData<T extends NestingConfigData<T>> extends Confi
      * over the local config without replacing the object reference.</p>
      *
      * @param other the source config to copy from
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Api void copyFrom(final T other);
+    @Api("0.4.0+1.19.2")
+    void copyFrom(final T other);
 }

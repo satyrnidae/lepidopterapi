@@ -17,32 +17,33 @@ public final class LepidopteraItems {
     public static final RegistrySupplier<Item> ALCHEMICAL_ALEMBIC;
     public static final RegistrySupplier<Item> DEPLETED_ALEMBIC;
 
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(LepidopteraAPI.MOD_ID, Registries.ITEM);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(LepidopteraAPI.MOD_ID, Registries.ITEM);
 
     static {
-        DEPLETED_ALEMBIC = ITEMS.register(
-                "depleted_alembic",
-                () -> new Item(new Item.Properties().stacksTo(16)));
-        ALCHEMICAL_ALEMBIC = ITEMS.register(
-                "alchemical_alembic",
-                () -> new AlchemicalAlembicItem(new Item.Properties().durability(5).rarity(Rarity.RARE))
-                        .setRemainsInCraftingTable()
-                        .setDamageOnFuelUse(2)
-                        .setFuelDepletionRemainingItem(DEPLETED_ALEMBIC.get())
-                        .setCraftingDepletionRemainingItem(DEPLETED_ALEMBIC.get())
-                        .asItem());
+        DEPLETED_ALEMBIC = ITEMS.register("depleted_alembic", () -> new Item(new Item.Properties().stacksTo(16)));
+        ALCHEMICAL_ALEMBIC = ITEMS.register("alchemical_alembic", () -> new AlchemicalAlembicItem(
+                new Item.Properties().durability(5).rarity(Rarity.RARE)).setRemainsInCraftingTable()
+                .setDamageOnFuelUse(2)
+                .setFuelDepletionRemainingItem(DEPLETED_ALEMBIC.get())
+                .setCraftingDepletionRemainingItem(DEPLETED_ALEMBIC.get())
+                .asItem());
     }
 
-    private LepidopteraItems() {}
+    private LepidopteraItems() {
+    }
 
     public static void register() {
         ITEMS.register();
     }
 
     static final class AlchemicalAlembicItem extends Item implements Repairable, ItemExtensions {
-        AlchemicalAlembicItem(Properties props) { super(props); }
+        AlchemicalAlembicItem(Properties props) {
+            super(props);
+        }
 
-        @Override public boolean preventRepair() { return true; }
+        @Override
+        public boolean preventRepair() {
+            return true;
+        }
     }
 }

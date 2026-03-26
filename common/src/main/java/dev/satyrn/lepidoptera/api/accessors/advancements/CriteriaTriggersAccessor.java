@@ -3,16 +3,19 @@ package dev.satyrn.lepidoptera.api.accessors.advancements;
 import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
+import org.jetbrains.annotations.Contract;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
+
+import javax.annotation.Nullable;
 
 /**
  * Invoker mixin for {@link CriteriaTriggers}.
  *
  * @author Isabel Maskrey
- * @since 2.0.0+alpha.1
+ * @since 0.4.0+1.19.2
  */
-@Api
+@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
 @Mixin(CriteriaTriggers.class)
 public interface CriteriaTriggersAccessor {
 
@@ -23,10 +26,13 @@ public interface CriteriaTriggersAccessor {
      * @param <T>    The criterion type.
      *
      * @return The registered criterion.
+     *
+     * @since 0.4.0+1.19.2
      */
-    @SuppressWarnings("unused")
-    @Invoker()
-    static <T extends CriterionTrigger<?>> T callRegister(String string, T object) {
+    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+    @Contract("_, !null -> !null; _, null -> null")
+    static @Invoker <T extends CriterionTrigger<?>> T callRegister(final String string, final @Nullable T object) {
+        // noinspection Contract - Static invoker mixin; this code is never called.
         throw new AssertionError();
     }
 }

@@ -6,8 +6,8 @@ import dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.entity.ModEntity
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class LepidopteraEntityTypeTags extends ModEntityTypeTagsProvider {
@@ -17,8 +17,7 @@ public class LepidopteraEntityTypeTags extends ModEntityTypeTagsProvider {
         super(LepidopteraAPI.class, arg, completableFuture, existingFileHelper);
     }
 
-    @Override
-    protected void addModTags(final HolderLookup.Provider provider) {
+    protected @Override void addModTags(final HolderLookup.Provider provider) {
         this.tag(ApiEntityTags.TICKS_FOOD);
     }
 }

@@ -28,8 +28,10 @@ import java.util.Optional;
  * }</pre>
  *
  * @param <T> the config type
+ *
+ * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT+1.21.1")
 public final class ConfigOverlay<T> {
 
     private volatile @Nullable T value;
@@ -39,9 +41,12 @@ public final class ConfigOverlay<T> {
      * client has disconnected.
      *
      * @return the active server value, or {@link Optional#empty()}
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    @Api public Optional<T> get() {
+    public Optional<T> get() {
         return Optional.ofNullable(value);
     }
 
@@ -49,15 +54,23 @@ public final class ConfigOverlay<T> {
      * Stores the server-provided value. Called by Lepidoptera when a sync packet arrives.
      *
      * @param value the received value
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api public void set(final T value) {
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @Contract(mutates = "this")
+    public void set(final T value) {
         this.value = value;
     }
 
     /**
      * Clears the stored value. Called by Lepidoptera on client disconnect.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api public void clear() {
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @Contract(mutates = "this")
+    public void clear() {
         this.value = null;
     }
 }

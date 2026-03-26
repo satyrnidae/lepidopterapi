@@ -1,8 +1,8 @@
 package dev.satyrn.lepidoptera.config.serializers;
 
-import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import dev.satyrn.lepidoptera.api.NotInitializable;
 import dev.satyrn.lepidoptera.api.config.serializers.CommentedYamlConfigSerializer;
+import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 
 import javax.annotation.Nullable;
 import java.beans.BeanInfo;
@@ -32,10 +32,14 @@ public class YamlCommentInjector {
     private static final String TYPE_LEADER = "Type: ";
     private static final int INDENT = 4;
 
-    /** The default maximum comment line length used by {@link CommentedYamlConfigSerializer}. */
+    /**
+     * The default maximum comment line length used by {@link CommentedYamlConfigSerializer}.
+     */
     public static final int DEFAULT_LINE_LENGTH = 120;
 
-    /** The minimum enforced comment line length. */
+    /**
+     * The minimum enforced comment line length.
+     */
     public static final int MIN_LINE_LENGTH = 60;
 
     private final int lineLength;
@@ -174,7 +178,8 @@ public class YamlCommentInjector {
                     try {
                         Field field = clazz.getDeclaredField(prop.getName());
                         comment = field.getAnnotation(YamlComment.class);
-                    } catch (NoSuchFieldException ignored) {}
+                    } catch (NoSuchFieldException ignored) {
+                    }
                 }
 
                 String fullPath = currentPath.isEmpty() ? prop.getName() : currentPath + "." + prop.getName();
@@ -185,9 +190,9 @@ public class YamlCommentInjector {
                 if (prop.getPropertyType().isEnum()) {
                     String enumComments = getEnumComments(prop.getPropertyType(), indentLevel);
                     if (!enumComments.isEmpty()) {
-                        String entryPath = (comment != null && comment.sectionHeader())
-                                ? fullPath + "." + SECTION_IDENTIFIER
-                                : fullPath;
+                        String entryPath = (comment != null && comment.sectionHeader()) ? fullPath +
+                                "." +
+                                SECTION_IDENTIFIER : fullPath;
                         String existing = comments.getOrDefault(entryPath, "");
                         comments.put(entryPath, (existing.isEmpty() ? "" : existing + "\n") + enumComments);
                     }
@@ -202,8 +207,12 @@ public class YamlCommentInjector {
         // Also handle public instance fields not covered by bean getter/setter pairs.
         for (Field field : clazz.getDeclaredFields()) {
             int mods = field.getModifiers();
-            if (!Modifier.isPublic(mods) || Modifier.isStatic(mods)) continue;
-            if (handledNames.contains(field.getName())) continue;
+            if (!Modifier.isPublic(mods) || Modifier.isStatic(mods)) {
+                continue;
+            }
+            if (handledNames.contains(field.getName())) {
+                continue;
+            }
 
             final @Nullable YamlComment comment = field.getAnnotation(YamlComment.class);
             String fullPath = currentPath.isEmpty() ? field.getName() : currentPath + "." + field.getName();
@@ -214,9 +223,9 @@ public class YamlCommentInjector {
             if (field.getType().isEnum()) {
                 String enumComments = getEnumComments(field.getType(), indentLevel);
                 if (!enumComments.isEmpty()) {
-                    String entryPath = (comment != null && comment.sectionHeader())
-                            ? fullPath + "." + SECTION_IDENTIFIER
-                            : fullPath;
+                    String entryPath = (comment != null && comment.sectionHeader()) ? fullPath +
+                            "." +
+                            SECTION_IDENTIFIER : fullPath;
                     String existing = comments.getOrDefault(entryPath, "");
                     comments.put(entryPath, (existing.isEmpty() ? "" : existing + "\n") + enumComments);
                 }
@@ -228,9 +237,14 @@ public class YamlCommentInjector {
         }
     }
 
-    private void buildFieldComments(Map<String, String> comments, @Nullable YamlComment comment,
-                                    String fullPath, int indentLevel, Class<?> type) {
-        if (comment == null) return;
+    private void buildFieldComments(Map<String, String> comments,
+                                    @Nullable YamlComment comment,
+                                    String fullPath,
+                                    int indentLevel,
+                                    Class<?> type) {
+        if (comment == null) {
+            return;
+        }
         boolean isSection = comment.sectionHeader();
         String entryPath = isSection ? fullPath + "." + SECTION_IDENTIFIER : fullPath;
 
@@ -268,8 +282,9 @@ public class YamlCommentInjector {
      *
      * <p>Returns an empty string if {@code enumClass} is not an enum or has no constants.</p>
      *
-     * @param enumClass  the enum class to describe
+     * @param enumClass   the enum class to describe
      * @param indentLevel the nesting depth of the field (used for word-wrap indent calculation)
+     *
      * @return a multi-line comment string listing valid enum values, or empty string
      */
     public String getEnumComments(Class<?> enumClass, int indentLevel) {
@@ -310,6 +325,7 @@ public class YamlCommentInjector {
      * Word-wraps {@code text} to fit within the configured line length, with no base or pre-indent.
      *
      * @param text the text to wrap
+     *
      * @return the word-wrapped string
      */
     public String wordWrap(String text) {
@@ -326,6 +342,7 @@ public class YamlCommentInjector {
      * @param text       the text to wrap
      * @param baseIndent spaces added at the start of each continuation line
      * @param preIndent  additional indent already present in the context (subtracted from line budget)
+     *
      * @return the word-wrapped string
      */
     public String wordWrap(String text, int baseIndent, int preIndent) {
@@ -385,6 +402,7 @@ public class YamlCommentInjector {
      *
      * @param pathStack the current nesting stack of section keys
      * @param property  the property name to append
+     *
      * @return the full dot-separated path, e.g. {@code "section.subsection.property"}
      */
     public String getCurrentPath(Deque<String> pathStack, String property) {
@@ -408,13 +426,14 @@ public class YamlCommentInjector {
                 List.class, Map.class);
 
         private BeanInspection() {
-            NotInitializable.staticClass(BeanInspection.class);
+            NotInitializable.staticClass(this);
         }
 
         /**
          * Returns {@code true} if {@code type} qualifies as a JavaBean config sub-section.
          *
          * @param type the class to inspect
+         *
          * @return {@code true} if the class should be recursed into for comment generation
          */
         public static boolean isBean(Class<?> type) {

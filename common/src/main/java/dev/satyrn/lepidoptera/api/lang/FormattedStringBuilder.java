@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting;
  * prefixes the text with the requested format codes and automatically appends
  * {@link ChatFormatting#RESET} afterwards, keeping each section self-contained.</p>
  *
- * <p>Intended for use wherever a plain {@code String} is required but formatting is desired —
+ * <p>Intended for use wherever a plain {@code String} is required but formatting is desired -
  * for example, Cloth Config tooltip strings passed to
  * {@code LanguageProvider.add(String, String)}.</p>
  *
@@ -23,20 +23,23 @@ import net.minecraft.ChatFormatting;
  *     .build();
  * // → "§c§lWARNING:§r Handle with care."
  * }</pre>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class FormattedStringBuilder {
     private final StringBuilder sb = new StringBuilder();
 
-    @Api
-    public FormattedStringBuilder() {}
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public FormattedStringBuilder() {
+    }
 
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder(String text) {
         this.append(text);
     }
 
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder(String text, ChatFormatting... formats) {
         this.append(text, formats);
     }
@@ -45,9 +48,12 @@ public final class FormattedStringBuilder {
      * Appends plain text with no formatting codes.
      *
      * @param text the text to append
+     *
      * @return {@code this}, for chaining
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder append(final String text) {
         sb.append(text);
         return this;
@@ -59,9 +65,12 @@ public final class FormattedStringBuilder {
      *
      * @param text    the text to append
      * @param formats one or more {@link ChatFormatting} values to apply before the text
+     *
      * @return {@code this}, for chaining
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder append(final String text, final ChatFormatting... formats) {
         for (final ChatFormatting format : formats) {
             sb.append(format);
@@ -79,8 +88,10 @@ public final class FormattedStringBuilder {
      * context.</p>
      *
      * @return {@code this}, for chaining
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder reset() {
         sb.append(ChatFormatting.RESET);
         return this;
@@ -90,8 +101,10 @@ public final class FormattedStringBuilder {
      * Returns the accumulated formatted string.
      *
      * @return the built string containing all appended text and formatting codes
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public String build() {
         return sb.toString();
     }
@@ -101,8 +114,7 @@ public final class FormattedStringBuilder {
      *
      * @return the built string
      */
-    @Override
-    public String toString() {
+    public @Override String toString() {
         return build();
     }
 }

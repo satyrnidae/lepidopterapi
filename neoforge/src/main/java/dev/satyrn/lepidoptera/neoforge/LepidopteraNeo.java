@@ -5,14 +5,14 @@ import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import dev.satyrn.lepidoptera.api.network.PacketReadyCallback;
 import dev.satyrn.lepidoptera.api.network.ServerPlayContext;
+import dev.satyrn.lepidoptera.item.LepidopteraItems;
 import dev.satyrn.lepidoptera.neoforge.condition.AlchemicalAlembicRecipesCondition;
 import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraFrenchLanguageProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraLanguageProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.recipe.LepidopteraRecipeProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.tags.LepidopteraEntityTypeTags;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.tags.LepidopteraItemTags;
-import dev.satyrn.lepidoptera.neoforge.network.play.NeoForgePacketChannelsImpl;
-import dev.satyrn.lepidoptera.item.LepidopteraItems;
+import dev.satyrn.lepidoptera.neoforge.network.NeoForgePacketChannelsImpl;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -27,14 +27,14 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 import static dev.satyrn.lepidoptera.LepidopteraAPI.MOD_ID;
+import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
 @Mod(MOD_ID)
 public class LepidopteraNeo {
 
-    private static final DeferredRegister<MapCodec<? extends ICondition>> CONDITION_CODECS =
-            DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, MOD_ID);
+    private static final DeferredRegister<MapCodec<? extends ICondition>> CONDITION_CODECS = DeferredRegister.create(
+            NeoForgeRegistries.Keys.CONDITION_CODECS, MOD_ID);
 
     static {
         CONDITION_CODECS.register("alchemical_alembic_recipes", () -> AlchemicalAlembicRecipesCondition.CODEC);
@@ -78,8 +78,10 @@ public class LepidopteraNeo {
         event.createProvider(LepidopteraRecipeProvider::new);
         event.createProvider(LepidopteraLanguageProvider::new);
         event.createProvider(LepidopteraFrenchLanguageProvider::new);
-        event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture, event.getExistingFileHelper()));
-        event.createProvider((arg, completableFuture) -> new LepidopteraItemTags(arg, completableFuture, event.getExistingFileHelper()));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture,
+                event.getExistingFileHelper()));
+        event.createProvider((arg, completableFuture) -> new LepidopteraItemTags(arg, completableFuture,
+                event.getExistingFileHelper()));
     }
 
     private static void onFurnaceFuelBurnTime(FurnaceFuelBurnTimeEvent event) {
@@ -89,13 +91,18 @@ public class LepidopteraNeo {
     }
 
     private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (PacketChannels.SERVER_READY_CALLBACKS.isEmpty()) return;
-        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
-        NeoForgePacketChannelsImpl.NeoForgeServerPlayContext ctx =
-                new NeoForgePacketChannelsImpl.NeoForgeServerPlayContext(serverPlayer);
-        boolean hasAnyChannel = PacketChannels.CLIENT_CHANNELS.stream()
-                .anyMatch(ctx::canSend);
-        if (!hasAnyChannel) return;
+        if (PacketChannels.SERVER_READY_CALLBACKS.isEmpty()) {
+            return;
+        }
+        if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        NeoForgePacketChannelsImpl.NeoForgeServerPlayContext ctx = new NeoForgePacketChannelsImpl.NeoForgeServerPlayContext(
+                serverPlayer);
+        boolean hasAnyChannel = PacketChannels.CLIENT_CHANNELS.stream().anyMatch(ctx::canSend);
+        if (!hasAnyChannel) {
+            return;
+        }
         for (PacketReadyCallback<ServerPlayContext> callback : PacketChannels.SERVER_READY_CALLBACKS) {
             callback.onReady(ctx);
         }

@@ -1,5 +1,5 @@
 {
-  "required": false,
+  "required": true,
   "package": "dev.satyrn.lepidoptera.api.accessors",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
@@ -10,7 +10,6 @@
     "advancements.CriteriaTriggersAccessor",
     "autoconfig.YamlConfigSerializerAccessor",
     "item.InstrumentItemAccessor",
-    "item.ItemAccessor",
     "recipes.ShapedRecipeBuilderAccessor"
   ],
   "injectors": {

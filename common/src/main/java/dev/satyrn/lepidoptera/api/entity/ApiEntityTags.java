@@ -9,9 +9,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Contract;
 
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ApiEntityTags {
-    @Api public static final TagKey<EntityType<?>> TICKS_FOOD;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1") public static final TagKey<EntityType<?>> TICKS_FOOD;
 
     static {
         TICKS_FOOD = register("ticks_food");

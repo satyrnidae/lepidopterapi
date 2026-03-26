@@ -1,5 +1,5 @@
 @MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
-package dev.satyrn.lepidoptera.neoforge.network.play;
+package dev.satyrn.lepidoptera.quilt.network;
 
 import dev.satyrn.lepidoptera.api.annotations.VariablesAreNonnullByDefault;
 import net.minecraft.FieldsAreNonnullByDefault;

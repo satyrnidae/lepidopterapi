@@ -1,4 +1,4 @@
-package dev.satyrn.lepidoptera.fabric.client.network.play;
+package dev.satyrn.lepidoptera.quilt.client.network;
 
 import dev.satyrn.lepidoptera.api.network.ClientPlayContext;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
@@ -19,30 +19,31 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 /**
- * Client-only Fabric networking setup: registers S2C receivers and client ready callbacks.
+ * Client-only Quilt networking setup, mirroring
+ * {@link dev.satyrn.lepidoptera.fabric.client.network.play.FabricClientNetworking}.
  *
- * <p>Called from {@link dev.satyrn.lepidoptera.fabric.client.ClientEntrypoint#onInitializeClient}.
- * Kept in a client-only class so that no client-specific imports pollute the server-safe
- * {@link dev.satyrn.lepidoptera.fabric.network.play.FabricPacketChannelsImpl}.</p>
+ * <p>Uses Fabric API networking ({@code net.fabricmc.fabric.api.client.networking.v1}) -
+ * QSL/QFAPI is discontinued.</p>
  */
 @Environment(EnvType.CLIENT)
-public final class FabricClientNetworking {
+public final class QuiltClientNetworking {
 
-    private FabricClientNetworking() {}
+    private QuiltClientNetworking() {
+    }
 
     /**
      * Registers all S2C receivers and the client ready callback hook.
      * Must be called during {@code ClientModInitializer.onInitializeClient}.
      */
     public static void init() {
-        // Register a global receiver for each S2C channel
         for (ResourceLocation id : PacketChannels.CLIENT_CHANNELS) {
             ClientPlayNetworking.registerGlobalReceiver(ChannelPayload.typeFor(id), (payload, ctx) -> {
-                List<PacketReceiver<ClientPlayContext>> receivers =
-                        PacketChannels.CLIENT_RECEIVERS.get(payload.channelId());
-                if (receivers == null || receivers.isEmpty()) return;
-                FabricClientPlayContext context =
-                        new FabricClientPlayContext(ctx.client(), ctx.client().getConnection());
+                List<PacketReceiver<ClientPlayContext>> receivers = PacketChannels.CLIENT_RECEIVERS.get(
+                        payload.channelId());
+                if (receivers == null || receivers.isEmpty()) {
+                    return;
+                }
+                QuiltClientPlayContext context = new QuiltClientPlayContext(ctx.client(), ctx.client().getConnection());
                 FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
                 for (PacketReceiver<ClientPlayContext> receiver : receivers) {
                     receiver.receive(context, buf);
@@ -50,14 +51,15 @@ public final class FabricClientNetworking {
             });
         }
 
-        // Fire client ready callbacks when joining a Lepidoptera-aware server
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (PacketChannels.CLIENT_READY_CALLBACKS.isEmpty()) return;
-            FabricClientPlayContext context = new FabricClientPlayContext(client, handler);
-            // Only fire if the server has at least one Lepidoptera channel registered
-            boolean hasAnyChannel = PacketChannels.SERVER_CHANNELS.stream()
-                    .anyMatch(context::canSend);
-            if (!hasAnyChannel) return;
+            if (PacketChannels.CLIENT_READY_CALLBACKS.isEmpty()) {
+                return;
+            }
+            QuiltClientPlayContext context = new QuiltClientPlayContext(client, handler);
+            boolean hasAnyChannel = PacketChannels.SERVER_CHANNELS.stream().anyMatch(context::canSend);
+            if (!hasAnyChannel) {
+                return;
+            }
             for (PacketReadyCallback<ClientPlayContext> callback : PacketChannels.CLIENT_READY_CALLBACKS) {
                 callback.onReady(context);
             }
@@ -65,47 +67,38 @@ public final class FabricClientNetworking {
 
         // Fire client disconnect callbacks when leaving a server
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            for (Runnable cb : PacketChannels.CLIENT_DISCONNECT_CALLBACKS) cb.run();
+            for (Runnable cb : PacketChannels.CLIENT_DISCONNECT_CALLBACKS) {
+                cb.run();
+            }
         });
     }
 
-    // -------------------------------------------------------------------------
-    // Client play context implementation
-    // -------------------------------------------------------------------------
-
-    /**
-     * {@link ClientPlayContext} backed by Fabric's client networking.
-     */
     @Environment(EnvType.CLIENT)
-    public static final class FabricClientPlayContext implements ClientPlayContext {
+    public static final class QuiltClientPlayContext implements ClientPlayContext {
 
         private final Minecraft client;
         private final ClientPacketListener handler;
 
-        public FabricClientPlayContext(Minecraft client, ClientPacketListener handler) {
+        public QuiltClientPlayContext(Minecraft client, ClientPacketListener handler) {
             this.client = client;
             this.handler = handler;
         }
 
-        @Override
-        public Minecraft client() {
+        public @Override Minecraft client() {
             return client;
         }
 
-        @Override
-        public ClientPacketListener handler() {
+        public @Override ClientPacketListener handler() {
             return handler;
         }
 
-        @Override
-        public void send(ResourceLocation id, FriendlyByteBuf buf) {
+        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ClientPlayNetworking.send(new ChannelPayload(id, bytes));
         }
 
-        @Override
-        public boolean canSend(ResourceLocation id) {
+        public @Override boolean canSend(ResourceLocation id) {
             CustomPacketPayload.Type<ChannelPayload> type = ChannelPayload.typeFor(id);
             return ClientPlayNetworking.canSend(type);
         }

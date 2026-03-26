@@ -1,12 +1,14 @@
 package dev.satyrn.lepidoptera.api.item.crafting;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
+import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.item.ItemExtensions;
 import dev.satyrn.lepidoptera.api.item.ItemStackExtensions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 
@@ -16,10 +18,15 @@ import javax.annotation.Nullable;
  * <p>Used internally by {@link BreakableShapedRecipe} and {@link BreakableShapelessRecipe}
  * to compute the item stack that should remain in a crafting slot after a recipe is crafted,
  * accounting for damage applied to tool-like ingredients.</p>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class CraftingUtils {
+
     private static final RandomSource RANDOM = RandomSource.create();
 
+    @Contract("-> fail")
     private CraftingUtils() {
         NotInitializable.staticClass(this);
     }
@@ -35,13 +42,21 @@ public final class CraftingUtils {
      *
      * @param source the ingredient stack being consumed
      * @param damage the amount of damage to apply to any damageable remainder
+     *
      * @return the resulting remainder stack, or {@link ItemStack#EMPTY}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static ItemStack damageAndDepleteCrafting(final ItemStack source, final int damage) {
-        if (!source.getItem().hasCraftingRemainingItem()) return ItemStack.EMPTY;
+        if (!source.getItem().hasCraftingRemainingItem()) {
+            return ItemStack.EMPTY;
+        }
 
-        @Nullable Item remainItem = source.getItem().getCraftingRemainingItem();
-        if (remainItem == null) return ItemStack.EMPTY;
+        final @Nullable Item remainItem = source.getItem().getCraftingRemainingItem();
+        if (remainItem == null) {
+            return ItemStack.EMPTY;
+        }
 
         ItemStack remainder = new ItemStack(remainItem);
 
@@ -52,8 +67,11 @@ public final class CraftingUtils {
             ItemStackExtensions.cast(remainder).hurtAndBreak(damage, RANDOM, item -> hasBroken.setTrue());
 
             if (hasBroken.isTrue()) {
-                final @Nullable Item depletionRemainder = ItemExtensions.cast(remainItem).getCraftingDepletionRemainingItem();
-                if (depletionRemainder == null) return ItemStack.EMPTY;
+                final @Nullable Item depletionRemainder = ItemExtensions.cast(remainItem)
+                        .getCraftingDepletionRemainingItem();
+                if (depletionRemainder == null) {
+                    return ItemStack.EMPTY;
+                }
                 remainder = new ItemStack(depletionRemainder);
             }
         }
@@ -72,8 +90,13 @@ public final class CraftingUtils {
      *
      * @param source    the original fuel source stack (used only to copy the initial damage value)
      * @param remainder the pre-computed fuel remainder stack to damage
+     *
      * @return the resulting remainder stack after damage, or {@link ItemStack#EMPTY}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(mutates = "param1")
     public static ItemStack damageAndDepleteFuel(final ItemStack source, final ItemStack remainder) {
         if (!remainder.isEmpty() && remainder.isDamageableItem()) {
             final Item remainItem = remainder.getItem();

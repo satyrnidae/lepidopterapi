@@ -14,8 +14,10 @@ import net.minecraft.network.FriendlyByteBuf;
  * encode/decode call.</p>
  *
  * @param <T> the config type
+ *
+ * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT+1.21.1")
 public interface ConfigCodec<T> {
 
     /**
@@ -23,14 +25,21 @@ public interface ConfigCodec<T> {
      *
      * @param value the value to encode
      * @param buf   the target buffer
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api void encode(final T value, final FriendlyByteBuf buf);
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    void encode(final T value, final FriendlyByteBuf buf);
 
     /**
      * Reads and returns a value from the buffer.
      *
      * @param buf the source buffer
+     *
      * @return the decoded value
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api T decode(final FriendlyByteBuf buf);
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    T decode(final FriendlyByteBuf buf);
 }

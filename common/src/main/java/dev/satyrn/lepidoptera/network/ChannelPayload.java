@@ -20,15 +20,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public record ChannelPayload(ResourceLocation channelId, byte[] data) implements CustomPacketPayload {
 
-    /** Per-channel Type instances, created lazily at registration time. */
-    private static final ConcurrentHashMap<ResourceLocation, Type<ChannelPayload>> TYPES =
-            new ConcurrentHashMap<>();
+    /**
+     * Per-channel Type instances, created lazily at registration time.
+     */
+    private static final ConcurrentHashMap<ResourceLocation, Type<ChannelPayload>> TYPES = new ConcurrentHashMap<>();
 
     /**
      * Returns (or creates) the {@link CustomPacketPayload.Type} for the given channel ID.
      * Thread-safe; safe to call from any thread.
      *
      * @param id the channel identifier
+     *
      * @return the unique type token for this channel
      */
     public static Type<ChannelPayload> typeFor(ResourceLocation id) {
@@ -43,26 +45,24 @@ public record ChannelPayload(ResourceLocation channelId, byte[] data) implements
      * cache the result if registering multiple times would be wasteful.</p>
      *
      * @param id the channel identifier
+     *
      * @return a codec that reads/writes the raw payload bytes
      */
     public static StreamCodec<RegistryFriendlyByteBuf, ChannelPayload> codecFor(final ResourceLocation id) {
         return new StreamCodec<>() {
-            @Override
-            public ChannelPayload decode(RegistryFriendlyByteBuf buf) {
+            public @Override ChannelPayload decode(RegistryFriendlyByteBuf buf) {
                 byte[] bytes = new byte[buf.readableBytes()];
                 buf.readBytes(bytes);
                 return new ChannelPayload(id, bytes);
             }
 
-            @Override
-            public void encode(RegistryFriendlyByteBuf buf, ChannelPayload value) {
+            public @Override void encode(RegistryFriendlyByteBuf buf, ChannelPayload value) {
                 buf.writeBytes(value.data());
             }
         };
     }
 
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @Override Type<? extends CustomPacketPayload> type() {
         return typeFor(channelId);
     }
 }

@@ -9,16 +9,35 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Contract;
 
+/**
+ * Item tags provided and consumed by the Lepidoptera API.
+ *
+ * <p>These tags are used by {@link EquipmentRegistry} to resolve equipment slots
+ * at server data load. Tags prefixed with {@code equipment/} map items to their
+ * worn slot; the {@code quick_equip} suffix indicates shift-click equippability.</p>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
+ */
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ApiItemTags {
-    @Api public static final TagKey<Item> FEET_EQUIPMENT;
-    @Api public static final TagKey<Item> LEGS_EQUIPMENT;
-    @Api public static final TagKey<Item> CHEST_EQUIPMENT;
-    @Api public static final TagKey<Item> HEAD_EQUIPMENT;
-    @Api public static final TagKey<Item> BODY_EQUIPMENT;
-    @Api public static final TagKey<Item> FEET_EQUIPMENT_SHIFTABLE;
-    @Api public static final TagKey<Item> LEGS_EQUIPMENT_SHIFTABLE;
-    @Api public static final TagKey<Item> CHEST_EQUIPMENT_SHIFTABLE;
-    @Api public static final TagKey<Item> HEAD_EQUIPMENT_SHIFTABLE;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> FEET_EQUIPMENT;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> LEGS_EQUIPMENT;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> CHEST_EQUIPMENT;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> HEAD_EQUIPMENT;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> BODY_EQUIPMENT;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> FEET_EQUIPMENT_SHIFTABLE;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> LEGS_EQUIPMENT_SHIFTABLE;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> CHEST_EQUIPMENT_SHIFTABLE;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final TagKey<Item> HEAD_EQUIPMENT_SHIFTABLE;
 
     static {
         FEET_EQUIPMENT = register("equipment/feet");

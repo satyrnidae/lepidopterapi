@@ -1,13 +1,13 @@
 package dev.satyrn.lepidoptera.neoforge.client.events;
 
-import dev.satyrn.lepidoptera.client.LepidopteraAPIClient;
 import dev.satyrn.lepidoptera.api.network.ClientPlayContext;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import dev.satyrn.lepidoptera.api.network.PacketReadyCallback;
 import dev.satyrn.lepidoptera.api.network.PacketReceiver;
+import dev.satyrn.lepidoptera.client.LepidopteraAPIClient;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
+import dev.satyrn.lepidoptera.neoforge.network.NeoForgePacketChannelsImpl;
 import dev.satyrn.lepidoptera.network.ChannelPayload;
-import dev.satyrn.lepidoptera.neoforge.network.play.NeoForgePacketChannelsImpl;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
@@ -26,14 +26,14 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.List;
 
-import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 import static dev.satyrn.lepidoptera.LepidopteraAPI.MOD_ID;
+import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
 /**
  * NeoForge client-side initialization events.
  */
-@OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = MOD_ID)
+@OnlyIn(Dist.CLIENT)
 public final class ClientEvents {
     private ClientEvents() {
         throw new AssertionError();
@@ -43,9 +43,9 @@ public final class ClientEvents {
     static void onClientSetup(final FMLClientSetupEvent event) {
         info("Initializing client-side code for Lepidoptera API for NeoForge");
 
-        ModLoadingContext.get().registerExtensionPoint(
-                IConfigScreenFactory.class,
-                () -> (mc, screen) -> AutoConfig.getConfigScreen(LepidopteraConfig.class, screen).get());
+        ModLoadingContext.get()
+                .registerExtensionPoint(IConfigScreenFactory.class,
+                        () -> (mc, screen) -> AutoConfig.getConfigScreen(LepidopteraConfig.class, screen).get());
 
         LepidopteraAPIClient.INSTANCE.preInit();
         LepidopteraAPIClient.INSTANCE.init();
@@ -64,9 +64,10 @@ public final class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)
     private static void dispatchClientPayload(ChannelPayload payload, IPayloadContext ctx) {
-        List<PacketReceiver<ClientPlayContext>> receivers =
-                PacketChannels.CLIENT_RECEIVERS.get(payload.channelId());
-        if (receivers == null || receivers.isEmpty()) return;
+        List<PacketReceiver<ClientPlayContext>> receivers = PacketChannels.CLIENT_RECEIVERS.get(payload.channelId());
+        if (receivers == null || receivers.isEmpty()) {
+            return;
+        }
         Minecraft client = Minecraft.getInstance();
         NeoForgeClientPlayContext context = new NeoForgeClientPlayContext(client);
         // Read the buf immediately on the IO thread (payload.data() is a stable byte[]).
@@ -82,17 +83,22 @@ public final class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)
     private static void onClientLoggedOut(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) {
-        for (Runnable cb : PacketChannels.CLIENT_DISCONNECT_CALLBACKS) cb.run();
+        for (Runnable cb : PacketChannels.CLIENT_DISCONNECT_CALLBACKS) {
+            cb.run();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
     private static void onClientLoggedIn(net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingIn event) {
-        if (PacketChannels.CLIENT_READY_CALLBACKS.isEmpty()) return;
+        if (PacketChannels.CLIENT_READY_CALLBACKS.isEmpty()) {
+            return;
+        }
         Minecraft client = Minecraft.getInstance();
         NeoForgeClientPlayContext context = new NeoForgeClientPlayContext(client);
-        boolean hasAnyChannel = PacketChannels.SERVER_CHANNELS.stream()
-                .anyMatch(context::canSend);
-        if (!hasAnyChannel) return;
+        boolean hasAnyChannel = PacketChannels.SERVER_CHANNELS.stream().anyMatch(context::canSend);
+        if (!hasAnyChannel) {
+            return;
+        }
         for (PacketReadyCallback<ClientPlayContext> callback : PacketChannels.CLIENT_READY_CALLBACKS) {
             callback.onReady(context);
         }
@@ -112,18 +118,15 @@ public final class ClientEvents {
             this.client = client;
         }
 
-        @Override
-        public Minecraft client() {
+        public @Override Minecraft client() {
             return client;
         }
 
-        @Override
-        public ClientPacketListener handler() {
+        public @Override ClientPacketListener handler() {
             return client.getConnection();
         }
 
-        @Override
-        public void send(ResourceLocation id, FriendlyByteBuf buf) {
+        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ClientPacketListener conn = client.getConnection();
@@ -133,11 +136,9 @@ public final class ClientEvents {
             }
         }
 
-        @Override
-        public boolean canSend(ResourceLocation id) {
+        public @Override boolean canSend(ResourceLocation id) {
             // On NeoForge, if we have a connection and the channel was registered, assume supported.
-            return client.getConnection() != null
-                    && PacketChannels.SERVER_CHANNELS.contains(id);
+            return client.getConnection() != null && PacketChannels.SERVER_CHANNELS.contains(id);
         }
     }
 }

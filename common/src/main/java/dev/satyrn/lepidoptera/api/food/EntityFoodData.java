@@ -3,9 +3,9 @@ package dev.satyrn.lepidoptera.api.food;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.entity.LivingEntityExtensions;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +24,10 @@ import java.util.Objects;
  *
  * <p>Attach one instance per entity (e.g. as an extra field via mixin) and call
  * {@link #tick(LivingEntity)} each game tick from the entity's tick method.</p>
+ *
+ * @since 0.4.0+1.19.2
  */
-@Api
+@Api("0.4.0+1.19.2")
 public class EntityFoodData {
     final static int MAX_FOOD_LEVEL = 20;
 
@@ -36,15 +38,19 @@ public class EntityFoodData {
     private int lastFoodLevel = MAX_FOOD_LEVEL;
 
     // Food damage and starvation are difficulty-dependent now
+
     /**
      * Adds food and saturation directly, as if the entity ate food with the given stats.
      * Food level is capped at 20; saturation is capped at the current food level.
      *
      * @param level      the food units to add
      * @param saturation the saturation modifier (effective saturation added = {@code level * saturation * 2})
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void eat(final int level, final float saturation) {
+    public void eat(final int level, final float saturation) {
         this.foodLevel = Math.min(level + this.foodLevel, MAX_FOOD_LEVEL);
         this.saturationLevel = Math.min(this.saturationLevel + (level * saturation * 2F), this.foodLevel);
     }
@@ -54,15 +60,32 @@ public class EntityFoodData {
      * {@link DataComponents#FOOD} component. Does nothing if the item has no food component.
      *
      * @param stack the item stack being eaten
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "this")
-    @Api public boolean eat(final ItemStack stack) {
+    public boolean eat(final ItemStack stack) {
         final @Nullable var foodProperties = stack.get(DataComponents.FOOD);
         if (foodProperties != null) {
             this.eat(foodProperties.nutrition(), foodProperties.saturation());
             return true;
         }
         return false;
+    }
+
+    /**
+     * Feeds the entity the given item stack
+     *
+     * @param item  The item
+     * @param stack The item stack
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @Api(value = "0.4.0+1.19.2", deprecated = "1.0.0-SNAPSHOT.1+1.21.1")
+    @Deprecated(since = "1.0.0-SNAPSHOT.1+1.21.1", forRemoval = true)
+    public void eat(final Item item, final ItemStack stack) {
+        eat(stack);
     }
 
     /**
@@ -73,10 +96,12 @@ public class EntityFoodData {
      * (respecting the {@code doAnimalStarvation} game rule and world difficulty).</p>
      *
      * @param entity the entity whose food data is being ticked
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api(value = "0.4.0+1.19.2")
     @Contract(mutates = "this, param")
-    @Api public void tick(final LivingEntity entity) {
-        @SuppressWarnings("resource")
+    public void tick(final LivingEntity entity) {
         final var difficulty = entity.level().getDifficulty();
         this.lastFoodLevel = this.foodLevel;
         if (this.exhaustionLevel > 4F) {
@@ -88,11 +113,14 @@ public class EntityFoodData {
             }
         }
 
-        @SuppressWarnings("resource")
         final boolean isRegenEnabled = entity.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
-        @SuppressWarnings("resource")
-        final boolean isEntityStarvationEnabled = entity.level().getGameRules().getBoolean(Objects.requireNonNull(LepidopteraAPI.RULE_ENTITY_STARVATION));
-        if (isRegenEnabled && this.saturationLevel > 0F && ((LivingEntityExtensions)entity).isHurt() && this.foodLevel >= 20) {
+        final boolean isEntityStarvationEnabled = entity.level()
+                .getGameRules()
+                .getBoolean(Objects.requireNonNull(LepidopteraAPI.RULE_ENTITY_STARVATION));
+        if (isRegenEnabled &&
+                this.saturationLevel > 0F &&
+                ((LivingEntityExtensions) entity).isHurt() &&
+                this.foodLevel >= 20) {
             this.tickTimer++;
             if (this.tickTimer >= 10) {
                 float healAmount = Math.min(this.saturationLevel, 6F);
@@ -100,7 +128,7 @@ public class EntityFoodData {
                 this.addExhaustion(healAmount);
                 this.tickTimer = 0;
             }
-        } else if (isRegenEnabled && this.foodLevel >= 18 && ((LivingEntityExtensions)entity).isHurt()) {
+        } else if (isRegenEnabled && this.foodLevel >= 18 && ((LivingEntityExtensions) entity).isHurt()) {
             this.tickTimer++;
             if (this.tickTimer >= 80) {
                 entity.heal(1F);
@@ -110,7 +138,10 @@ public class EntityFoodData {
         } else if (this.foodLevel <= 0) {
             this.tickTimer++;
             if (this.tickTimer >= 80) {
-                if (isEntityStarvationEnabled && (entity.getHealth() > 10F || difficulty == Difficulty.HARD || entity.getHealth() > 1F && difficulty == Difficulty.NORMAL)) {
+                if (isEntityStarvationEnabled &&
+                        (entity.getHealth() > 10F ||
+                                difficulty == Difficulty.HARD ||
+                                entity.getHealth() > 1F && difficulty == Difficulty.NORMAL)) {
                     entity.hurt(entity.damageSources().starve(), 1.0F);
                 }
 
@@ -126,9 +157,12 @@ public class EntityFoodData {
      * saturation, and exhaustion saved by {@link #addAdditionalSaveData(CompoundTag)}.
      *
      * @param compoundTag the tag to read from
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void readAdditionalSaveData(final CompoundTag compoundTag) {
+    public void readAdditionalSaveData(final CompoundTag compoundTag) {
         if (compoundTag.contains("foodLevel", 99)) {
             this.foodLevel = compoundTag.getInt("foodLevel");
             this.tickTimer = compoundTag.getInt("foodTickTimer");
@@ -141,9 +175,12 @@ public class EntityFoodData {
      * Writes food state into a {@link CompoundTag} for persistence.
      *
      * @param compoundTag the tag to write into
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "param")
-    @Api public void addAdditionalSaveData(final CompoundTag compoundTag) {
+    public void addAdditionalSaveData(final CompoundTag compoundTag) {
         compoundTag.putInt("foodLevel", this.foodLevel);
         compoundTag.putInt("foodTickTimer", this.tickTimer);
         compoundTag.putFloat("foodSaturationLevel", this.saturationLevel);
@@ -152,10 +189,14 @@ public class EntityFoodData {
 
     /**
      * Gets the current food level.
+     *
      * @return The food level.
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api public int getFoodLevel() {
+    public int getFoodLevel() {
         return this.foodLevel;
     }
 
@@ -163,9 +204,12 @@ public class EntityFoodData {
      * Returns the food level from the previous tick, used to detect changes.
      *
      * @return the food level recorded at the start of the last {@link #tick(LivingEntity)} call
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api public int getLastFoodLevel() {
+    public int getLastFoodLevel() {
         return this.lastFoodLevel;
     }
 
@@ -173,9 +217,12 @@ public class EntityFoodData {
      * Returns {@code true} if the entity's food level is below the maximum (20).
      *
      * @return {@code true} if food level is less than 20
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api public boolean needsFood() {
+    public boolean needsFood() {
         return this.foodLevel < MAX_FOOD_LEVEL;
     }
 
@@ -184,9 +231,12 @@ public class EntityFoodData {
      * Exhaustion above 4 per tick drains saturation and eventually food level.
      *
      * @param exhaustion the exhaustion amount to add
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void addExhaustion(float exhaustion) {
+    public void addExhaustion(float exhaustion) {
         this.exhaustionLevel = Math.min(this.exhaustionLevel + exhaustion, 40F);
     }
 
@@ -194,9 +244,12 @@ public class EntityFoodData {
      * Returns the current exhaustion level.
      *
      * @return exhaustion in the range {@code [0, 40]}
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api public float getExhaustionLevel() {
+    public float getExhaustionLevel() {
         return this.exhaustionLevel;
     }
 
@@ -205,9 +258,12 @@ public class EntityFoodData {
      * Saturation acts as a buffer: it depletes before the food level itself decreases.
      *
      * @return the saturation level
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api public float getSaturationLevel() {
+    public float getSaturationLevel() {
         return this.saturationLevel;
     }
 
@@ -215,9 +271,12 @@ public class EntityFoodData {
      * Directly sets the food level without triggering any side effects.
      *
      * @param foodLevel the new food level
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void setFoodLevel(int foodLevel) {
+    public void setFoodLevel(int foodLevel) {
         this.foodLevel = foodLevel;
     }
 
@@ -225,9 +284,12 @@ public class EntityFoodData {
      * Directly sets the saturation level without triggering any side effects.
      *
      * @param saturationLevel the new saturation level
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void setSaturation(float saturationLevel) {
+    public void setSaturation(float saturationLevel) {
         this.saturationLevel = saturationLevel;
     }
 
@@ -235,9 +297,12 @@ public class EntityFoodData {
      * Directly sets the exhaustion level without triggering any side effects.
      *
      * @param exhaustionLevel the new exhaustion level
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(mutates = "this")
-    @Api public void setExhaustion(float exhaustionLevel) {
+    public void setExhaustion(float exhaustionLevel) {
         this.exhaustionLevel = exhaustionLevel;
     }
 }

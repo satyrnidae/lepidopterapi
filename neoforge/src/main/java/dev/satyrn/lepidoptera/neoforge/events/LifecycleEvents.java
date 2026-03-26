@@ -5,8 +5,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 import static dev.satyrn.lepidoptera.LepidopteraAPI.MOD_ID;
+import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
 @EventBusSubscriber(modid = MOD_ID)
 public class LifecycleEvents {

@@ -5,25 +5,24 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-@Api
-public abstract class ModOnlyItemTagsProvider
-        extends ModItemTagsProvider {
-    @Api
-    protected ModOnlyItemTagsProvider(final Class<?> modClass, final PackOutput output,
-            final CompletableFuture<HolderLookup.Provider> lookupProvider,
-            @Nullable final ExistingFileHelper existingFileHelper) {
-        super(modClass, output, lookupProvider,
-                CompletableFuture.completedFuture(tag -> Optional.empty()),
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
+public abstract class ModOnlyItemTagsProvider extends ModItemTagsProvider {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    protected ModOnlyItemTagsProvider(final Class<?> modClass,
+                                      final PackOutput output,
+                                      final CompletableFuture<HolderLookup.Provider> lookupProvider,
+                                      @Nullable final ExistingFileHelper existingFileHelper) {
+        super(modClass, output, lookupProvider, CompletableFuture.completedFuture(tag -> Optional.empty()),
                 existingFileHelper);
     }
 
-    @Override
-    public ResourceLocation location() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public @Override ResourceLocation location() {
         return super.location().withSuffix("_only");
     }
 }

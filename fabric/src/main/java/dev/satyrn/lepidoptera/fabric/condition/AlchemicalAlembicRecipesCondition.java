@@ -17,26 +17,27 @@ import net.minecraft.core.HolderLookup;
  */
 public final class AlchemicalAlembicRecipesCondition implements ResourceCondition {
 
-    public static final AlchemicalAlembicRecipesCondition INSTANCE =
-            new AlchemicalAlembicRecipesCondition();
+    public static final AlchemicalAlembicRecipesCondition INSTANCE = new AlchemicalAlembicRecipesCondition();
 
-    /** No-field codec — this condition carries no additional JSON data. */
-    public static final MapCodec<AlchemicalAlembicRecipesCondition> CODEC =
-            MapCodec.unit(INSTANCE);
+    /**
+     * No-field codec - this condition carries no additional JSON data.
+     */
+    public static final MapCodec<AlchemicalAlembicRecipesCondition> CODEC = MapCodec.unit(INSTANCE);
 
-    /** {@link ResourceConditionType} wrapping the condition ID and codec for registration. */
-    public static final ResourceConditionType<AlchemicalAlembicRecipesCondition> TYPE =
-            ResourceConditionType.create(LepidopteraAPI.ALCHEMICAL_ALEMBIC_RECIPES_CONDITION, CODEC);
+    /**
+     * {@link ResourceConditionType} wrapping the condition ID and codec for registration.
+     */
+    public static final ResourceConditionType<AlchemicalAlembicRecipesCondition> TYPE = ResourceConditionType.create(
+            LepidopteraAPI.ALCHEMICAL_ALEMBIC_RECIPES_CONDITION, CODEC);
 
-    private AlchemicalAlembicRecipesCondition() {}
+    private AlchemicalAlembicRecipesCondition() {
+    }
 
-    @Override
-    public ResourceConditionType<?> getType() {
+    public @Override ResourceConditionType<?> getType() {
         return TYPE;
     }
 
-    @Override
-    public boolean test(HolderLookup.Provider registryLookup) {
+    public @Override boolean test(HolderLookup.Provider registryLookup) {
         return LepidopteraAPI.alchemicalAlembicRecipesEnabled();
     }
 }

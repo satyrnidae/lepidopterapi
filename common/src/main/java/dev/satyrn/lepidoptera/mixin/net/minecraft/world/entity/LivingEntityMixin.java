@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.mixin.net.minecraft.world.entity;
 
+import dev.satyrn.lepidoptera.api.NotInitializable;
 import dev.satyrn.lepidoptera.api.entity.HungryEntityRegistry;
 import dev.satyrn.lepidoptera.api.entity.LivingEntityExtensions;
 import dev.satyrn.lepidoptera.api.food.EntityFoodData;
-import dev.satyrn.lepidoptera.api.NotInitializable;
 import dev.satyrn.lepidoptera.api.item.EquipmentRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -21,24 +21,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 
 @Mixin(net.minecraft.world.entity.LivingEntity.class)
-@Implements({
-        @Interface(iface = LivingEntityExtensions.class, prefix = "lapix$")
-})
+@Implements({@Interface(iface = LivingEntityExtensions.class, prefix = "lapix$")})
 public abstract class LivingEntityMixin extends Entity {
 
-    @Unique
-    private final EntityFoodData lapi$foodData = new EntityFoodData();
+    @Unique private final EntityFoodData lapi$foodData = new EntityFoodData();
 
     private LivingEntityMixin(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
         NotInitializable.mixinClass(this);
     }
 
-    @Shadow
-    public abstract float getHealth();
+    public abstract @Shadow float getHealth();
 
-    @Shadow
-    public abstract float getMaxHealth();
+    public abstract @Shadow float getMaxHealth();
 
     @Intrinsic
     public boolean lapix$isHurt() {
@@ -84,7 +79,9 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "getEquipmentSlotForItem", at = @At("RETURN"), cancellable = true)
     private static void lapi$onGetEquipmentSlotForItem(final ItemStack stack,
                                                        final CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (cir.getReturnValue() != EquipmentSlot.MAINHAND) return;
+        if (cir.getReturnValue() != EquipmentSlot.MAINHAND) {
+            return;
+        }
         @Nullable EquipmentSlot slot = EquipmentRegistry.getSlot(stack);
         if (slot != null) {
             cir.setReturnValue(slot);

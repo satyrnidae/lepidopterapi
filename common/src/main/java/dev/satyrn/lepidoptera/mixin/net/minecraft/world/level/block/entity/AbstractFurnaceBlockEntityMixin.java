@@ -29,14 +29,15 @@ public abstract class AbstractFurnaceBlockEntityMixin {
         NotInitializable.mixinClass(this);
     }
 
-    @ModifyArgs(
-            method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;"))
+    @ModifyArgs(method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)V",
+                at = @At(value = "INVOKE",
+                         target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;"))
     private static void lepidoptera$damageFuelRemainder(Args args,
                                                         @Local(index = 6, ordinal = 0) final ItemStack source) {
         int slotIndex = args.get(0);
-        if (slotIndex != LAPI$FUEL_SLOT) return;
+        if (slotIndex != LAPI$FUEL_SLOT) {
+            return;
+        }
         ItemStack remainder = args.get(1);
 
         args.set(1, CraftingUtils.damageAndDepleteFuel(source, remainder));

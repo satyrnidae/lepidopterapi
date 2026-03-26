@@ -77,7 +77,9 @@ class YamlCommentInjectorTest {
             StringBuilder input = new StringBuilder();
             // Build a sentence > 78 chars
             for (int i = 0; i < 25; i++) {
-                if (!input.isEmpty()) input.append(" ");
+                if (!input.isEmpty()) {
+                    input.append(" ");
+                }
                 input.append(word);
             }
             String result = injector.wordWrap(input.toString());
@@ -116,7 +118,9 @@ class YamlCommentInjectorTest {
             String word = "word";
             StringBuilder input = new StringBuilder();
             for (int i = 0; i < 20; i++) {
-                if (!input.isEmpty()) input.append(" ");
+                if (!input.isEmpty()) {
+                    input.append(" ");
+                }
                 input.append(word);
             }
             String result = narrow.wordWrap(input.toString(), 20, 20);
@@ -135,13 +139,10 @@ class YamlCommentInjectorTest {
 
     @Nested
     class GetEnumComments {
-        enum SimpleEnum { ALPHA, BETA, GAMMA }
+        enum SimpleEnum {ALPHA, BETA, GAMMA}
 
         enum AnnotatedEnum {
-            @YamlComment("First option")
-            ONE,
-            @YamlComment("Second option")
-            TWO
+            @YamlComment("First option") ONE, @YamlComment("Second option") TWO
         }
 
         @Test
@@ -184,32 +185,57 @@ class YamlCommentInjectorTest {
             private String name = "";
             private int count = 0;
 
-            public SimpleConfig() {}
+            public SimpleConfig() {
+            }
 
             @YamlComment("The name value")
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
 
             @YamlComment("The count value")
-            public int getCount() { return count; }
-            public void setCount(int count) { this.count = count; }
+            public int getCount() {
+                return count;
+            }
+
+            public void setCount(int count) {
+                this.count = count;
+            }
         }
 
         public static class SectionConfig {
             private Inner inner = new Inner();
 
-            public SectionConfig() {}
+            public SectionConfig() {
+            }
 
             @YamlComment(value = "Inner section", sectionHeader = true)
-            public Inner getInner() { return inner; }
-            public void setInner(Inner inner) { this.inner = inner; }
+            public Inner getInner() {
+                return inner;
+            }
+
+            public void setInner(Inner inner) {
+                this.inner = inner;
+            }
 
             public static class Inner {
                 private boolean flag = false;
-                public Inner() {}
+
+                public Inner() {
+                }
+
                 @YamlComment("A boolean flag")
-                public boolean isFlag() { return flag; }
-                public void setFlag(boolean flag) { this.flag = flag; }
+                public boolean isFlag() {
+                    return flag;
+                }
+
+                public void setFlag(boolean flag) {
+                    this.flag = flag;
+                }
             }
         }
 
@@ -285,9 +311,8 @@ class YamlCommentInjectorTest {
         @Test
         void sectionCommentInjectedBeforeSectionKey() {
             String yaml = "inner:\n    flag: true\n";
-            Map<String, String> comments = Map.of(
-                    "inner." + YamlCommentInjector.SECTION_IDENTIFIER, "Inner section header"
-            );
+            Map<String, String> comments = Map.of("inner." + YamlCommentInjector.SECTION_IDENTIFIER,
+                    "Inner section header");
             String result = injector.injectComments(yaml, comments, null);
             int commentIdx = result.indexOf("# Inner section header");
             int sectionIdx = result.indexOf("inner:");
@@ -306,7 +331,8 @@ class YamlCommentInjectorTest {
         @Test
         void classLevelComment_prependedAsHeader() {
             @YamlComment("Top-level file comment")
-            class AnnotatedConfig {}
+            class AnnotatedConfig {
+            }
 
             String yaml = "foo: bar\n";
             String result = injector.injectComments(yaml, Map.of(), AnnotatedConfig.class);

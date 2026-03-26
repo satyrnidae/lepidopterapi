@@ -9,16 +9,15 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
-@Api
-public abstract class ModEntityTypeTagsProvider
-        extends EntityTypeTagsProvider
-        implements WithLocation {
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
+public abstract class ModEntityTypeTagsProvider extends EntityTypeTagsProvider implements WithLocation {
     protected final ModMeta metadata;
 
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public ModEntityTypeTagsProvider(Class<?> modClass,
                                      PackOutput arg,
                                      CompletableFuture<HolderLookup.Provider> completableFuture,
@@ -27,20 +26,20 @@ public abstract class ModEntityTypeTagsProvider
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    @Override
-    protected final void addTags(HolderLookup.Provider provider) {
+    protected @Override final void addTags(HolderLookup.Provider provider) {
         addModTags(provider);
     }
 
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected abstract void addModTags(HolderLookup.Provider provider);
 
-    @Override
-    public String getName() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public @Override String getName() {
         return location().toString();
     }
 
-    @Override
-    public ResourceLocation location() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public @Override ResourceLocation location() {
         return ModHelper.resource(this.metadata, "providers/tag/entity_type");
     }
 }

@@ -10,20 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NotInitializableTest {
 
-    private static class Foo {}
+    private static class Foo {
+    }
 
     @Test
     void staticClass_throwsAssertionError() {
-        AssertionError ex = assertThrows(AssertionError.class,
-                () -> NotInitializable.staticClass(Foo.class));
-        assertTrue(ex.getMessage().contains(Foo.class.getName()));
+        AssertionError ex = assertThrows(AssertionError.class, () -> NotInitializable.staticClass(new Foo()));
+        assertTrue(ex.getMessage().contains(Foo.class.getName()), "Actual message: " + ex.getMessage());
     }
 
     @Test
     void mixinClass_throwsAssertionError() {
-        AssertionError ex = assertThrows(AssertionError.class,
-                () -> NotInitializable.mixinClass(Foo.class));
-        assertTrue(ex.getMessage().contains(Foo.class.getName()));
+        AssertionError ex = assertThrows(AssertionError.class, () -> NotInitializable.mixinClass(new Foo()));
+        assertTrue(ex.getMessage().contains(Foo.class.getName()), "Actual message: " + ex.getMessage());
     }
 
     @Test

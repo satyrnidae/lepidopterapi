@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.neoforge.api.provider.server.datapack;
 
 import dev.satyrn.lepidoptera.api.ModHelper;
+import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
 import dev.satyrn.lepidoptera.api.annotations.Api;
-import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -18,15 +18,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.JukeboxSong;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public abstract class ModJukeboxSongProvider
-        extends DatapackBuiltinEntriesProvider
-        implements WithLocation {
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
+public abstract class ModJukeboxSongProvider extends DatapackBuiltinEntriesProvider implements WithLocation {
     private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder();
 
     private final ModMeta metadata;
@@ -35,7 +34,10 @@ public abstract class ModJukeboxSongProvider
     private @Nullable BootstrapContext<JukeboxSong> bootstrapContext;
     private @Nullable HolderGetter<SoundEvent> sounds;
 
-    public ModJukeboxSongProvider(Class<?> modClass, PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public ModJukeboxSongProvider(Class<?> modClass,
+                                  PackOutput output,
+                                  CompletableFuture<HolderLookup.Provider> provider) {
         super(output, provider, BUILDER, Set.of(ModHelper.modId(modClass)));
         this.metadata = ModHelper.metadata(modClass);
         this.output = output;
@@ -48,9 +50,10 @@ public abstract class ModJukeboxSongProvider
         this.addSongs();
     }
 
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected abstract void addSongs();
 
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected final void register(final ResourceKey<JukeboxSong> key,
                                   final float lengthInSeconds,
                                   final int comparatorOutput) {
@@ -58,6 +61,7 @@ public abstract class ModJukeboxSongProvider
         register(key, soundKey, lengthInSeconds, comparatorOutput);
     }
 
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected final void register(final ResourceKey<JukeboxSong> songKey,
                                   final ResourceKey<SoundEvent> soundKey,
                                   final float lengthInSeconds,
@@ -66,28 +70,27 @@ public abstract class ModJukeboxSongProvider
         Objects.requireNonNull(this.sounds);
         Holder.Reference<SoundEvent> sound = this.sounds.getOrThrow(soundKey);
         this.bootstrapContext.register(songKey,
-                new JukeboxSong(sound,
-                        Component.translatable(T9n.itemDesc(songKey)),
-                        lengthInSeconds, comparatorOutput));
+                new JukeboxSong(sound, Component.translatable(T9n.itemDesc(songKey)), lengthInSeconds,
+                        comparatorOutput));
     }
 
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected ModMeta getMetadata() {
         return this.metadata;
     }
 
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     protected PackOutput getOutput() {
         return this.output;
     }
 
-    @Override
-    public String getName() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public @Override String getName() {
         return location().toString();
     }
 
-    @Override
-    public ResourceLocation location() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public @Override ResourceLocation location() {
         return ModHelper.resource(this.metadata, "providers/jukebox_song");
     }
 }

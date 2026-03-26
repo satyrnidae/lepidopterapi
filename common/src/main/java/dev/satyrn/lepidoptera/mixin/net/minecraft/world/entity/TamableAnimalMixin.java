@@ -6,20 +6,14 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
-import org.spongepowered.asm.mixin.Implements;
-import org.spongepowered.asm.mixin.Interface;
-import org.spongepowered.asm.mixin.Intrinsic;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(TamableAnimal.class)
-@Implements({
-        @Interface(iface = TamableAnimalExtensions.class, prefix = "lapix$")
-})
+@Implements({@Interface(iface = TamableAnimalExtensions.class, prefix = "lapix$")})
 public abstract class TamableAnimalMixin {
 
     private TamableAnimalMixin() {

@@ -15,22 +15,21 @@ import net.neoforged.neoforge.common.conditions.ICondition;
  */
 public final class AlchemicalAlembicRecipesCondition implements ICondition {
 
-    public static final AlchemicalAlembicRecipesCondition INSTANCE =
-            new AlchemicalAlembicRecipesCondition();
+    public static final AlchemicalAlembicRecipesCondition INSTANCE = new AlchemicalAlembicRecipesCondition();
 
-    /** No-field codec — this condition carries no additional JSON data. */
-    public static final MapCodec<AlchemicalAlembicRecipesCondition> CODEC =
-            MapCodec.unit(INSTANCE);
+    /**
+     * No-field codec - this condition carries no additional JSON data.
+     */
+    public static final MapCodec<AlchemicalAlembicRecipesCondition> CODEC = MapCodec.unit(INSTANCE);
 
-    private AlchemicalAlembicRecipesCondition() {}
+    private AlchemicalAlembicRecipesCondition() {
+    }
 
-    @Override
-    public boolean test(IContext context) {
+    public @Override boolean test(IContext context) {
         return LepidopteraAPI.alchemicalAlembicRecipesEnabled();
     }
 
-    @Override
-    public MapCodec<? extends ICondition> codec() {
+    public @Override MapCodec<? extends ICondition> codec() {
         return CODEC;
     }
 }

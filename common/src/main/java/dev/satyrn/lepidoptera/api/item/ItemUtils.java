@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.NotInitializable;
+import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;

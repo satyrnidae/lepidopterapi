@@ -1,19 +1,18 @@
 package dev.satyrn.lepidoptera.quilt.client;
 
 import dev.satyrn.lepidoptera.client.LepidopteraAPIClient;
-import dev.satyrn.lepidoptera.quilt.client.network.play.QuiltClientNetworking;
+import dev.satyrn.lepidoptera.quilt.client.network.QuiltClientNetworking;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
-@SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
+@SuppressWarnings("unused")
 public class ClientEntrypoint implements ClientModInitializer {
 
-    @Override
-    public void onInitializeClient() {
+    public @Override void onInitializeClient() {
         info("Initializing client-sided code for Lepidoptera API for Quilt MC.");
 
         LepidopteraAPIClient.INSTANCE.preInit();

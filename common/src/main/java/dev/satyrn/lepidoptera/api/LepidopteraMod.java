@@ -10,14 +10,20 @@ import net.minecraft.server.MinecraftServer;
  * <p>Implement this interface on your mod's main entrypoint class and call
  * each phase method from the appropriate platform-specific hook to participate
  * in Lepidoptera's three-phase initialization sequence.</p>
+ *
+ * @since 0.4.1-alpha.1+1.19.2
  */
+@Api("0.4.1-alpha.1+1.19.2")
 public interface LepidopteraMod {
     /**
      * Called during the pre-initialization phase, before the main init phase.
      *
      * <p>Use this phase for tasks that must complete before {@link #init()}, such as
      * registering capabilities or early configuration loading.</p>
+     *
+     * @since 0.4.1-alpha.1+1.19.2
      */
+    @Api("0.4.1-alpha.1+1.19.2")
     default void preInit() {
 
     }
@@ -27,7 +33,10 @@ public interface LepidopteraMod {
      *
      * <p>The primary hook for registering blocks, items, entities, and other
      * game content.</p>
+     *
+     * @since 0.4.1-alpha.1+1.19.2
      */
+    @Api("0.4.1-alpha.1+1.19.2")
     default void init() {
 
     }
@@ -37,7 +46,10 @@ public interface LepidopteraMod {
      *
      * <p>Use this phase for tasks that depend on all mods having finished their main
      * initialization, such as cross-mod compatibility setup.</p>
+     *
+     * @since 0.4.1-alpha.1+1.19.2
      */
+    @Api("0.4.1-alpha.1+1.19.2")
     default void postInit() {
 
     }
@@ -49,8 +61,10 @@ public interface LepidopteraMod {
      * config file watchers that need to dispatch work onto the server thread.</p>
      *
      * @param server the running server instance
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStarted(MinecraftServer server) {
 
     }
@@ -59,8 +73,10 @@ public interface LepidopteraMod {
      * Called when the Minecraft server is stopping.
      *
      * <p>Use this to stop any background tasks that were started in {@link #serverStarted}.</p>
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStopped() {
 
     }
@@ -69,11 +85,13 @@ public interface LepidopteraMod {
      * Called after server data packs and tags have been (re-)loaded, including on {@code /reload}.
      *
      * <p>Use this to rebuild any caches that depend on tag contents, such as entity type or
-     * item tag registries. Not called on the client — only fires for the server-side tag load.</p>
+     * item tag registries. Not called on the client - only fires for the server-side tag load.</p>
      *
      * @param registryAccess the registry access for the current data load
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     default void onTagsLoaded(final RegistryAccess registryAccess) {
 
     }

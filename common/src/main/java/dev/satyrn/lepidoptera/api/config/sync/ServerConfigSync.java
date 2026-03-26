@@ -1,5 +1,7 @@
 package dev.satyrn.lepidoptera.api.config.sync;
 
+import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
@@ -15,14 +17,9 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.nio.file.ClosedWatchServiceException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
@@ -63,8 +60,10 @@ import java.util.function.Supplier;
  *   <li>Client disconnect → clear all overlays</li>
  *   <li>Client sends {@code config_req} → server re-sends config</li>
  * </ol>
+ *
+ * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT+1.21.1")
 public final class ServerConfigSync {
 
     private final int networkVersion;
@@ -94,10 +93,14 @@ public final class ServerConfigSync {
      * Creates a new builder for the given mod ID.
      *
      * @param modId the mod's ID; used to namespace the packet channels
+     *
      * @return a new builder
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
-    @Api public static Builder builder(final String modId) {
+    public static Builder builder(final String modId) {
         return new Builder(modId);
     }
 
@@ -105,11 +108,15 @@ public final class ServerConfigSync {
      * Creates a new builder scoped to the mod ID declared in a {@link ModMeta} annotation.
      *
      * @param metadata the {@code @ModMeta} annotation from the mod's entry class
+     *
      * @return a new builder
+     *
      * @see #builder(String)
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
-    @Api public static Builder builder(final ModMeta metadata) {
+    public static Builder builder(final ModMeta metadata) {
         return new Builder(metadata.name());
     }
 
@@ -117,12 +124,16 @@ public final class ServerConfigSync {
      * Creates a new builder scoped to the mod ID declared in the class's {@link ModMeta} annotation.
      *
      * @param modClass the mod class annotated with {@code @ModMeta}
+     *
      * @return a new builder
+     *
      * @see #builder(String)
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
-    @Api public static Builder builder(final Class<?> modClass) {
-        return new Builder(Objects.requireNonNull(modClass.getAnnotation(ModMeta.class)).name());
+    public static Builder builder(final Class<?> modClass) {
+        return new Builder(ModHelper.name(modClass));
     }
 
     /**
@@ -130,8 +141,11 @@ public final class ServerConfigSync {
      * Use this after a server-side config reload.
      *
      * @param server the running server
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api public void broadcastToAll(final MinecraftServer server) {
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    public void broadcastToAll(final MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             sendTo(player);
         }
@@ -142,8 +156,11 @@ public final class ServerConfigSync {
      * Use this for targeted re-sync (e.g. after {@code /reload}).
      *
      * @param player the target player
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api public void sendTo(final ServerPlayer player) {
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    public void sendTo(final ServerPlayer player) {
         PacketChannels.sendToPlayer(player, configChannel, buildConfigPacket());
     }
 
@@ -157,9 +174,14 @@ public final class ServerConfigSync {
      * which in turn fires the load listeners registered by {@link Builder#watchConfig}.
      *
      * @param server the running server; used to dispatch file-change work onto the server thread
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public void startWatching(final MinecraftServer server) {
-        if (watchEntries.isEmpty()) return;
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public void startWatching(final MinecraftServer server) {
+        if (watchEntries.isEmpty()) {
+            return;
+        }
         this.watchingServer = server;
         try {
             WatchService ws = FileSystems.getDefault().newWatchService();
@@ -174,7 +196,7 @@ public final class ServerConfigSync {
             t.setDaemon(true);
             t.start();
         } catch (IOException e) {
-            System.err.println("[Lepidoptera] Failed to start config file watcher: " + e.getMessage());
+            LepidopteraAPI.error("Failed to start config file watcher.", e);
         }
     }
 
@@ -183,9 +205,10 @@ public final class ServerConfigSync {
             while (!Thread.currentThread().isInterrupted()) {
                 WatchKey key = ws.take();
                 for (WatchEvent<?> event : key.pollEvents()) {
-                    if (event.kind() == StandardWatchEventKinds.OVERFLOW) continue;
-                    @SuppressWarnings("unchecked")
-                    WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
+                    if (event.kind() == StandardWatchEventKinds.OVERFLOW) {
+                        continue;
+                    }
+                    @SuppressWarnings("unchecked") WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
                     Path changed = pathEvent.context();
                     for (WatchEntry entry : watchEntries) {
                         if (entry.configPath().getFileName().equals(changed)) {
@@ -194,24 +217,32 @@ public final class ServerConfigSync {
                         }
                     }
                 }
-                if (!key.reset()) break;
+                if (!key.reset()) {
+                    break;
+                }
             }
         } catch (InterruptedException | ClosedWatchServiceException e) {
+            LepidopteraAPI.debug("Config file watcher was closed unexpectedly", e);
             Thread.currentThread().interrupt();
         }
     }
 
     /**
      * Stops the config file watcher. Called by the platform entrypoint when the server stops.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public void stopWatching() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public void stopWatching() {
         this.watchingServer = null;
         final @Nullable WatchService ws = this.watchService;
         if (ws != null) {
             this.watchService = null;
             try {
                 ws.close();
-            } catch (IOException ignored) {}
+            } catch (IOException e) {
+                LepidopteraAPI.debug("Config file watcher failed to close", e);
+            }
         }
     }
 
@@ -229,7 +260,10 @@ public final class ServerConfigSync {
 
         // Server ready: send version then config to the joining player
         PacketChannels.registerServerReadyCallback(ctx -> {
-            if (!ctx.canSend(versionChannel)) return;
+            if (!ctx.canSend(versionChannel)) {
+                LepidopteraAPI.debug("Failed to register client/server channel {}", versionChannel);
+                return;
+            }
             FriendlyByteBuf verBuf = new FriendlyByteBuf(Unpooled.buffer());
             verBuf.writeVarInt(networkVersion);
             ctx.send(versionChannel, verBuf);
@@ -240,9 +274,10 @@ public final class ServerConfigSync {
         PacketChannels.registerServerReceiver(versionChannel, (ctx, buf) -> {
             int clientVersion = buf.readVarInt();
             if (clientVersion != networkVersion) {
+                LepidopteraAPI.debug("Disconnecting client: server version mismatch!");
                 //noinspection resource - We don't want to dispose the server instance!
-                ctx.server().execute(() ->
-                        ctx.player().connection.disconnect(
+                ctx.server()
+                        .execute(() -> ctx.player().connection.disconnect(
                                 Component.translatable(mismatchKey, networkVersion, clientVersion)));
             }
         });
@@ -367,20 +402,16 @@ public final class ServerConfigSync {
     // Entry records
     // -------------------------------------------------------------------------
 
-    private record CommonConfigEntry<T>(
-            ConfigCodec<T> codec,
-            Supplier<T> source,
-            ConfigOverlay<T> overlay,
-            @Nullable SyncedConfig<T> synced) {}
+    private record CommonConfigEntry<T>(ConfigCodec<T> codec, Supplier<T> source, ConfigOverlay<T> overlay,
+                                        @Nullable SyncedConfig<T> synced) {
+    }
 
-    private record ClientOverrideEntry<T>(
-            BooleanSupplier enabled,
-            ConfigCodec<T> codec,
-            Supplier<T> source,
-            ConfigOverlay<T> overlay,
-            @Nullable SyncedConfig<T> synced) {}
+    private record ClientOverrideEntry<T>(BooleanSupplier enabled, ConfigCodec<T> codec, Supplier<T> source,
+                                          ConfigOverlay<T> overlay, @Nullable SyncedConfig<T> synced) {
+    }
 
-    private record WatchEntry(ConfigHolder<?> holder, Path configPath) {}
+    private record WatchEntry(ConfigHolder<?> holder, Path configPath) {
+    }
 
     // -------------------------------------------------------------------------
     // Builder
@@ -388,8 +419,10 @@ public final class ServerConfigSync {
 
     /**
      * Fluent builder for {@link ServerConfigSync}.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     public static final class Builder {
 
         private final String modId;
@@ -410,10 +443,14 @@ public final class ServerConfigSync {
          * @param version     integer version; increment on any breaking config wire-format change
          * @param mismatchKey i18n key for the disconnect message;
          *                    receives {@code (serverVersion, clientVersion)} as format arguments
+         *
          * @return this builder
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
+        @Api("1.0.0-SNAPSHOT+1.21.1")
         @Contract(value = "_, _ -> this", mutates = "this")
-        @Api public Builder networkVersion(final int version, final String mismatchKey) {
+        public Builder networkVersion(final int version, final String mismatchKey) {
             this.networkVersion = version;
             this.mismatchKey = mismatchKey;
             return this;
@@ -427,12 +464,16 @@ public final class ServerConfigSync {
          * @param source  supplies the current server-side value at send time
          * @param overlay the client-side holder that receives the pushed value
          * @param <T>     the config type
+         *
          * @return this builder
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Contract("_, _, _ -> this")
-        @Api public <T> Builder commonConfig(final ConfigCodec<T> codec,
-                                             final Supplier<T> source,
-                                             final ConfigOverlay<T> overlay) {
+        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @Contract(value = "_, _, _ -> this", mutates = "this")
+        public <T> Builder commonConfig(final ConfigCodec<T> codec,
+                                        final Supplier<T> source,
+                                        final ConfigOverlay<T> overlay) {
             commonConfigs.add(new CommonConfigEntry<>(codec, source, overlay, null));
             return this;
         }
@@ -446,13 +487,17 @@ public final class ServerConfigSync {
          * @param source  supplies the current override value at send time
          * @param overlay the client-side holder that receives the pushed value
          * @param <T>     the config type
+         *
          * @return this builder
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Contract("_, _, _, _ -> this")
-        @Api public <T> Builder clientOverride(final BooleanSupplier enabled,
-                                               final ConfigCodec<T> codec,
-                                               final Supplier<T> source,
-                                               final ConfigOverlay<T> overlay) {
+        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @Contract(value = "_, _, _, _ -> this", mutates = "this")
+        public <T> Builder clientOverride(final BooleanSupplier enabled,
+                                          final ConfigCodec<T> codec,
+                                          final Supplier<T> source,
+                                          final ConfigOverlay<T> overlay) {
             clientOverrides.add(new ClientOverrideEntry<>(enabled, codec, source, overlay, null));
             return this;
         }
@@ -466,10 +511,14 @@ public final class ServerConfigSync {
          * @param localConfig the local config instance; used as the server-side source and
          *                    client-side fallback
          * @param <T>         the config type
+         *
          * @return the {@link SyncedConfig} pairing the local config with the new overlay
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Contract("_, _ -> new")
-        @Api public <T> SyncedConfig<T> commonConfig(final ConfigCodec<T> codec, final T localConfig) {
+        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @Contract(value = "_, _ -> new", mutates = "this")
+        public <T> SyncedConfig<T> commonConfig(final ConfigCodec<T> codec, final T localConfig) {
             SyncedConfig<T> synced = new SyncedConfig<>(localConfig, new ConfigOverlay<>());
             commonConfigs.add(new CommonConfigEntry<>(codec, synced::local, synced.overlay(), synced));
             return synced;
@@ -485,12 +534,16 @@ public final class ServerConfigSync {
          * @param localConfig the local config instance; used as the server-side source and
          *                    client-side fallback
          * @param <T>         the config type
+         *
          * @return the {@link SyncedConfig} pairing the local config with the new overlay
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
+        @Api("1.0.0-SNAPSHOT+1.21.1")
         @Contract("_, _, _ -> new")
-        @Api public <T> SyncedConfig<T> clientOverride(final BooleanSupplier enabled,
-                                                   final ConfigCodec<T> codec,
-                                                   final T localConfig) {
+        public <T> SyncedConfig<T> clientOverride(final BooleanSupplier enabled,
+                                                  final ConfigCodec<T> codec,
+                                                  final T localConfig) {
             SyncedConfig<T> synced = new SyncedConfig<>(localConfig, new ConfigOverlay<>());
             clientOverrides.add(new ClientOverrideEntry<>(enabled, codec, synced::local, synced.overlay(), synced));
             return synced;
@@ -502,11 +555,11 @@ public final class ServerConfigSync {
          *
          * <p>Two events trigger a broadcast to all connected players:
          * <ul>
-         *   <li><b>File change on disk</b> — detected by a daemon {@link WatchService} thread
+         *   <li><b>File change on disk</b> - detected by a daemon {@link WatchService} thread
          *       started in {@link ServerConfigSync#startWatching(MinecraftServer)}. When the file
          *       is modified, {@code holder.load()} is invoked on the server thread, which fires
          *       Cloth Config's load event and then broadcasts.</li>
-         *   <li><b>In-game Cloth Config GUI save</b> — Cloth Config's GUI save calls
+         *   <li><b>In-game Cloth Config GUI save</b> - Cloth Config's GUI save calls
          *       {@code holder.save()}, which in turn calls {@code holder.load()} internally;
          *       the load listener then broadcasts.</li>
          * </ul>
@@ -517,10 +570,14 @@ public final class ServerConfigSync {
          *
          * @param holder     the Cloth Config holder whose file should be watched
          * @param configPath the absolute path to the config file on disk
+         *
          * @return this builder
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
+        @Api("1.0.0-SNAPSHOT+1.21.1")
         @Contract("_, _ -> this")
-        @Api public Builder watchConfig(final ConfigHolder<?> holder, final Path configPath) {
+        public Builder watchConfig(final ConfigHolder<?> holder, final Path configPath) {
             watchEntries.add(new WatchEntry(holder, configPath));
             return this;
         }
@@ -530,17 +587,22 @@ public final class ServerConfigSync {
          * via {@link PacketChannels}. Must be called once during mod initialization.
          *
          * @return the registered {@link ServerConfigSync} instance, which can be held
-         *         for later calls to {@link #broadcastToAll} or {@link #sendTo}
+         * for later calls to {@link #broadcastToAll} or {@link #sendTo}
+         *
+         * @since 1.0.0-SNAPSHOT+1.21.1
          */
+        @Api("1.0.0-SNAPSHOT+1.21.1")
         @Contract("-> new")
-        @Api public ServerConfigSync register() {
+        public ServerConfigSync register() {
             ServerConfigSync sync = new ServerConfigSync(this);
             sync.registerChannels();
             // Wire broadcast-on-load for each watched config holder.
             for (WatchEntry entry : sync.watchEntries) {
                 entry.holder().registerLoadListener((h, cfg) -> {
                     @Nullable MinecraftServer server = sync.watchingServer;
-                    if (server != null) sync.broadcastToAll(server);
+                    if (server != null) {
+                        sync.broadcastToAll(server);
+                    }
                     return InteractionResult.SUCCESS;
                 });
             }

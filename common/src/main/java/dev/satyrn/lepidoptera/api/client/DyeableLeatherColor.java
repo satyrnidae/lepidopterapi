@@ -18,12 +18,20 @@ import org.jetbrains.annotations.Contract;
  *
  * <p>Register an instance of this class as an {@code ItemColor} for any item that
  * uses the {@code DyedItemColor} data component.</p>
+ *
+ * @since 0.4.0+1.19.2
  */
+@Api("0.4.0+1.19.2")
 @Environment(EnvType.CLIENT)
-@Api
 public class DyeableLeatherColor implements ItemColor {
-    /** The default undyed leather color ({@code #A06540}). */
-    @Api public static final int LEATHER_COLOR = 0xA06540;
+
+    /**
+     * The default undyed leather color ({@code #A06540}).
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    public static final int LEATHER_COLOR = 0xA06540;
 
     /**
      * Returns the tint color for the given item stack and tint layer index.
@@ -31,13 +39,16 @@ public class DyeableLeatherColor implements ItemColor {
      * <p>Layer {@code 0} uses the stack's dyed color (defaulting to {@link #LEATHER_COLOR});
      * all other layers default to fully opaque white ({@code 0xFFFFFFFF}).</p>
      *
-     * @param itemStack  the stack being rendered
-     * @param tintIndex  the tint layer index
+     * @param itemStack the stack being rendered
+     * @param tintIndex the tint layer index
+     *
      * @return the ARGB tint color
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Override
-    @Api public int getColor(final ItemStack itemStack, final int tintIndex) {
+    public final @Override int getColor(final ItemStack itemStack, final int tintIndex) {
         return DyedItemColor.getOrDefault(itemStack, tintIndex > 0 ? 0xFFFFFFFF : LEATHER_COLOR);
     }
 }

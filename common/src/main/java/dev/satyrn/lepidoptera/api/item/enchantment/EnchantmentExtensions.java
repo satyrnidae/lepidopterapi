@@ -34,7 +34,10 @@ public interface EnchantmentExtensions {
      * @param value              the mutable damage value to modify in place
      */
     @Api
-    default void modifyDurabilityChange(RandomSource legacyRandomSource, int level, ItemStack itemStack, MutableFloat value) {
+    default void modifyDurabilityChange(RandomSource legacyRandomSource,
+                                        int level,
+                                        ItemStack itemStack,
+                                        MutableFloat value) {
         modifyItemFilteredCount(EnchantmentEffectComponents.ITEM_DAMAGE, legacyRandomSource, level, itemStack, value);
     }
 
@@ -49,12 +52,11 @@ public interface EnchantmentExtensions {
      * @param value              the mutable float to modify in place
      */
     @Api
-    default void modifyItemFilteredCount(
-            DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
-            RandomSource legacyRandomSource,
-            int level,
-            ItemStack itemStack,
-            MutableFloat value) {
+    default void modifyItemFilteredCount(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
+                                         RandomSource legacyRandomSource,
+                                         int level,
+                                         ItemStack itemStack,
+                                         MutableFloat value) {
         throw new NotImplementedException("Enchantment extensions mixin apply failed!");
     }
 
@@ -65,6 +67,7 @@ public interface EnchantmentExtensions {
      * is a record in 1.21; the mixin injects the interface at the bytecode level.</p>
      *
      * @param enchantment the enchantment to cast
+     *
      * @return the enchantment as {@link EnchantmentExtensions}
      */
     @Api

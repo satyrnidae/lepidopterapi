@@ -31,8 +31,10 @@ import java.util.function.Consumer;
  * }</pre>
  *
  * @param <T> the config type
+ *
+ * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT+1.21.1")
 public final class SyncedConfig<T> {
 
     private final T config;
@@ -46,8 +48,11 @@ public final class SyncedConfig<T> {
      * @param config  the local config instance; used as the server-side source and as the
      *                client-side fallback when no overlay is active
      * @param overlay the overlay that receives server-pushed values
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api public SyncedConfig(final T config, final ConfigOverlay<T> overlay) {
+    @Api("1.0.0-SNAPSHOT+1.21.1")
+    public SyncedConfig(final T config, final ConfigOverlay<T> overlay) {
         this.config = config;
         this.overlay = overlay;
     }
@@ -56,9 +61,12 @@ public final class SyncedConfig<T> {
      * Returns the server-pushed value if a sync is active, otherwise the local config.
      *
      * @return the currently active config value
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    @Api public T get() {
+    public T get() {
         return overlay.get().orElse(config);
     }
 
@@ -67,9 +75,12 @@ public final class SyncedConfig<T> {
      * Used as the supplier of the current server-side value when building sync packets.
      *
      * @return the local config instance
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    @Api public T local() {
+    public T local() {
         return config;
     }
 
@@ -78,9 +89,12 @@ public final class SyncedConfig<T> {
      * Use this when registering with {@link ServerConfigSync.Builder} directly.
      *
      * @return the overlay
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    @Api public ConfigOverlay<T> overlay() {
+    public ConfigOverlay<T> overlay() {
         return overlay;
     }
 
@@ -91,13 +105,17 @@ public final class SyncedConfig<T> {
      * newly applied server value). Callbacks run on the packet-receive thread; dispatch to
      * the game thread yourself if your callback touches game state.</p>
      *
-     * <p>Only meaningful on the client — overlays are only ever set from S2C packets.</p>
+     * <p>Only meaningful on the client - overlays are only ever set from S2C packets.</p>
      *
      * @param callback the callback to invoke after the overlay is set
+     *
      * @return {@code this}, for chaining
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> this")
-    @Api public SyncedConfig<T> onApply(final Consumer<T> callback) {
+    public SyncedConfig<T> onApply(final Consumer<T> callback) {
         applyCallbacks.add(callback);
         return this;
     }
@@ -105,35 +123,43 @@ public final class SyncedConfig<T> {
     /**
      * Registers a callback to invoke when the server-pushed overlay is cleared (e.g. on disconnect).
      *
-     * <p>Only meaningful on the client — overlays are only ever cleared from client-side events.</p>
+     * <p>Only meaningful on the client - overlays are only ever cleared from client-side events.</p>
      *
      * @param callback the callback to invoke after the overlay is cleared
+     *
      * @return {@code this}, for chaining
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> this")
-    @Api public SyncedConfig<T> onClear(final Runnable callback) {
+    public SyncedConfig<T> onClear(final Runnable callback) {
         clearCallbacks.add(callback);
         return this;
     }
 
     /**
      * Sets the overlay value and fires all registered {@link #onApply} callbacks.
-     * Package-private — called by {@link ServerConfigSync}.
+     * Package-private - called by {@link ServerConfigSync}.
      *
      * @param value the server-pushed config value
      */
     void applyOverlay(final T value) {
         this.overlay.set(value);
         T resolved = get();
-        for (Consumer<T> cb : applyCallbacks) cb.accept(resolved);
+        for (Consumer<T> cb : applyCallbacks) {
+            cb.accept(resolved);
+        }
     }
 
     /**
      * Clears the overlay and fires all registered {@link #onClear} callbacks.
-     * Package-private — called by {@link ServerConfigSync}.
+     * Package-private - called by {@link ServerConfigSync}.
      */
     void clearOverlay() {
         this.overlay.clear();
-        for (Runnable cb : clearCallbacks) cb.run();
+        for (Runnable cb : clearCallbacks) {
+            cb.run();
+        }
     }
 }

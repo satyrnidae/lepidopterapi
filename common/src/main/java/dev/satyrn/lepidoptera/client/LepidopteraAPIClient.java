@@ -13,5 +13,6 @@ import net.fabricmc.api.Environment;
 public class LepidopteraAPIClient implements LepidopteraMod {
     public static LepidopteraMod INSTANCE = new LepidopteraAPIClient();
 
-    private LepidopteraAPIClient() {}
+    private LepidopteraAPIClient() {
+    }
 }

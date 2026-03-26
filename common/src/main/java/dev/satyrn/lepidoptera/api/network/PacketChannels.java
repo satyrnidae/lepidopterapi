@@ -1,14 +1,18 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.NotInitializable;
+import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.network.PacketChannelsImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Static entry point for Lepidoptera's cross-platform play-phase packet API.
@@ -26,8 +30,10 @@ import java.util.*;
  * <h2>Threading</h2>
  * All registration methods are safe to call from any thread during mod initialization.
  * Registrations must be complete before any player connects.
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class PacketChannels {
 
     // -------------------------------------------------------------------------
@@ -36,29 +42,39 @@ public final class PacketChannels {
     // structurally unchanged by the time any packet is received.
     // -------------------------------------------------------------------------
 
-    /** Registered C2S channel IDs. */
+    /**
+     * Registered C2S channel IDs.
+     */
     public static final List<ResourceLocation> SERVER_CHANNELS = new ArrayList<>();
 
-    /** Registered S2C channel IDs. */
+    /**
+     * Registered S2C channel IDs.
+     */
     public static final List<ResourceLocation> CLIENT_CHANNELS = new ArrayList<>();
 
-    /** Registered C2S receivers, keyed by channel ID. */
-    public static final Map<ResourceLocation, List<PacketReceiver<ServerPlayContext>>> SERVER_RECEIVERS =
-            new HashMap<>();
+    /**
+     * Registered C2S receivers, keyed by channel ID.
+     */
+    public static final Map<ResourceLocation, List<PacketReceiver<ServerPlayContext>>> SERVER_RECEIVERS = new HashMap<>();
 
-    /** Registered S2C receivers, keyed by channel ID. */
-    public static final Map<ResourceLocation, List<PacketReceiver<ClientPlayContext>>> CLIENT_RECEIVERS =
-            new HashMap<>();
+    /**
+     * Registered S2C receivers, keyed by channel ID.
+     */
+    public static final Map<ResourceLocation, List<PacketReceiver<ClientPlayContext>>> CLIENT_RECEIVERS = new HashMap<>();
 
-    /** Server-side ready callbacks, fired when a Lepidoptera-aware client joins. */
-    public static final List<PacketReadyCallback<ServerPlayContext>> SERVER_READY_CALLBACKS =
-            new ArrayList<>();
+    /**
+     * Server-side ready callbacks, fired when a Lepidoptera-aware client joins.
+     */
+    public static final List<PacketReadyCallback<ServerPlayContext>> SERVER_READY_CALLBACKS = new ArrayList<>();
 
-    /** Client-side ready callbacks, fired when joining a Lepidoptera-aware server. */
-    public static final List<PacketReadyCallback<ClientPlayContext>> CLIENT_READY_CALLBACKS =
-            new ArrayList<>();
+    /**
+     * Client-side ready callbacks, fired when joining a Lepidoptera-aware server.
+     */
+    public static final List<PacketReadyCallback<ClientPlayContext>> CLIENT_READY_CALLBACKS = new ArrayList<>();
 
-    /** Client-side disconnect callbacks, fired when leaving a Lepidoptera-aware server. */
+    /**
+     * Client-side disconnect callbacks, fired when leaving a Lepidoptera-aware server.
+     */
     public static final List<Runnable> CLIENT_DISCONNECT_CALLBACKS = new ArrayList<>();
 
     // -------------------------------------------------------------------------
@@ -83,7 +99,9 @@ public final class PacketChannels {
         pendingCalls.clear();
     }
 
-    /** Calls buffered before {@link #setImpl} is called. */
+    /**
+     * Calls buffered before {@link #setImpl} is called.
+     */
     private static final List<Runnable> pendingCalls = new ArrayList<>();
 
     private static synchronized void dispatch(Runnable call) {
@@ -103,8 +121,10 @@ public final class PacketChannels {
      * any packet is sent or received on this channel.
      *
      * @param id the channel identifier
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerChannel(ResourceLocation id) {
         SERVER_CHANNELS.add(id);
         dispatch(() -> impl.onServerChannelRegistered(id));
@@ -115,8 +135,10 @@ public final class PacketChannels {
      * any packet is sent or received on this channel.
      *
      * @param id the channel identifier
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientChannel(ResourceLocation id) {
         CLIENT_CHANNELS.add(id);
         dispatch(() -> impl.onClientChannelRegistered(id));
@@ -130,8 +152,10 @@ public final class PacketChannels {
      *
      * @param id       the C2S channel identifier
      * @param receiver the handler to invoke when a packet arrives
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerReceiver(ResourceLocation id,
                                                            PacketReceiver<ServerPlayContext> receiver) {
         SERVER_RECEIVERS.computeIfAbsent(id, k -> new ArrayList<>()).add(receiver);
@@ -145,8 +169,10 @@ public final class PacketChannels {
      *
      * @param id       the S2C channel identifier
      * @param receiver the handler to invoke when a packet arrives
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientReceiver(ResourceLocation id,
                                                            PacketReceiver<ClientPlayContext> receiver) {
         CLIENT_RECEIVERS.computeIfAbsent(id, k -> new ArrayList<>()).add(receiver);
@@ -160,10 +186,11 @@ public final class PacketChannels {
      * least one registered Lepidoptera channel, preventing spurious calls for vanilla clients.</p>
      *
      * @param callback the callback to invoke
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
-    public static synchronized void registerServerReadyCallback(
-            PacketReadyCallback<ServerPlayContext> callback) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static synchronized void registerServerReadyCallback(PacketReadyCallback<ServerPlayContext> callback) {
         SERVER_READY_CALLBACKS.add(callback);
     }
 
@@ -175,10 +202,11 @@ public final class PacketChannels {
      * least one registered Lepidoptera channel, preventing spurious calls for vanilla servers.</p>
      *
      * @param callback the callback to invoke
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
-    public static synchronized void registerClientReadyCallback(
-            PacketReadyCallback<ClientPlayContext> callback) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static synchronized void registerClientReadyCallback(PacketReadyCallback<ClientPlayContext> callback) {
         CLIENT_READY_CALLBACKS.add(callback);
     }
 
@@ -187,8 +215,10 @@ public final class PacketChannels {
      * Use this to clear any server-pushed state (e.g. {@code ConfigOverlay} values).
      *
      * @param callback the callback to invoke on disconnect
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientDisconnectCallback(Runnable callback) {
         CLIENT_DISCONNECT_CALLBACKS.add(callback);
     }
@@ -202,13 +232,19 @@ public final class PacketChannels {
      * @param player the target player
      * @param id     the S2C channel identifier
      * @param buf    the payload buffer
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
+        if (impl == null) {
+            LepidopteraAPI.error("Failed to send packet {} to player: unregistered implementation!", id);
+            return;
+        }
         impl.sendToPlayer(player, id, buf);
     }
 
     private PacketChannels() {
-        NotInitializable.staticClass(PacketChannels.class);
+        NotInitializable.staticClass(this);
     }
 }

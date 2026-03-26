@@ -9,8 +9,14 @@ import org.jetbrains.annotations.Contract;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-@Api
+/**
+ * Provides lookup methods for the Cloth Config {@code Config} annotation
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
+ */
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public class ConfigHelper {
+
     @Contract("-> fail")
     private ConfigHelper() {
         NotInitializable.staticClass(this);
@@ -20,9 +26,12 @@ public class ConfigHelper {
      * Returns the mod display name of the calling class's {@link Config} annotation.
      *
      * @return the value of {@link Config#name()}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String name(final Class<?> configClass) {
+    public static String name(final Class<?> configClass) {
         return Objects.requireNonNull(findName(configClass));
     }
 
@@ -30,9 +39,12 @@ public class ConfigHelper {
      * Returns the mod display name of the calling class's {@link Config} annotation.
      *
      * @return the value of {@link Config#name()}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String name() {
+    public static String name() {
         return name(StackLocatorUtil.getCallerClass(2));
     }
 
@@ -40,11 +52,15 @@ public class ConfigHelper {
      * Returns the {@link Config} annotation present on {@code configClass}.
      *
      * @param configClass the annotated class
+     *
      * @return the annotation
+     *
      * @throws NullPointerException if the class has no {@link Config} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static Config config(final Class<?> configClass) {
+    public static Config config(final Class<?> configClass) {
         return Objects.requireNonNull(findConfig(configClass));
     }
 
@@ -52,10 +68,13 @@ public class ConfigHelper {
      * Returns the {@link Config} annotation of the calling class's mod.
      *
      * @return the annotation
+     *
      * @throws NullPointerException if the calling class has no {@link Config} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static Config config() {
+    public static Config config() {
         return config(StackLocatorUtil.getCallerClass(2));
     }
 

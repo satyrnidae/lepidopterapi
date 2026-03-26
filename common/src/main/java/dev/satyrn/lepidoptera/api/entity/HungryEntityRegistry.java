@@ -31,18 +31,15 @@ import java.util.Set;
  * // Register all types in a tag (resolved at data load)
  * HungryEntityRegistry.register(MyModTags.HUNGRY_ANIMALS);
  * }</pre>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class HungryEntityRegistry {
 
     private static final Set<EntityType<?>> TYPE_REGISTRY = new HashSet<>();
     private static final Set<TagKey<EntityType<?>>> TAG_REGISTRY = new HashSet<>();
     private static final Set<TagKey<EntityType<?>>> PROTECTED_TAGS = new HashSet<>();
-
-    /**
-     * Flattened lookup set rebuilt on every {@link #onTagsLoaded} call.
-     * {@code volatile} ensures visibility across the server-thread write and game-thread reads.
-     */
     private static volatile Set<EntityType<?>> RESOLVED_TYPES = new HashSet<>();
 
     @Contract("-> fail")
@@ -57,8 +54,11 @@ public final class HungryEntityRegistry {
      * registered, this call is a no-op.</p>
      *
      * @param type the entity type to register
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void register(final EntityType<?> type) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void register(final EntityType<?> type) {
         if (TYPE_REGISTRY.add(type)) {
             final Set<EntityType<?>> updated = new HashSet<>(RESOLVED_TYPES);
             updated.add(type);
@@ -74,8 +74,11 @@ public final class HungryEntityRegistry {
      * If the tag is already registered, this call is a no-op.</p>
      *
      * @param tag the entity type tag to register
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void register(final TagKey<EntityType<?>> tag) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void register(final TagKey<EntityType<?>> tag) {
         TAG_REGISTRY.add(tag);
     }
 
@@ -87,8 +90,11 @@ public final class HungryEntityRegistry {
      * {@link #onTagsLoaded} call.</p>
      *
      * @param type the entity type to remove
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void unregister(final EntityType<?> type) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void unregister(final EntityType<?> type) {
         if (TYPE_REGISTRY.remove(type)) {
             final Set<EntityType<?>> updated = new HashSet<>(RESOLVED_TYPES);
             updated.remove(type);
@@ -104,9 +110,12 @@ public final class HungryEntityRegistry {
      * {@code /reload}).</p>
      *
      * @param tag the tag to remove
+     *
      * @throws UnsupportedOperationException if the tag is protected (registered by Lepidoptera itself)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void unregister(final TagKey<EntityType<?>> tag) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void unregister(final TagKey<EntityType<?>> tag) {
         if (PROTECTED_TAGS.contains(tag)) {
             throw new UnsupportedOperationException("Cannot unregister a protected tag: " + tag.location());
         }
@@ -115,12 +124,14 @@ public final class HungryEntityRegistry {
 
     /**
      * Marks a tag as protected, preventing it from being removed via {@link #unregister(TagKey)}.
-     * Not part of the public API — called by {@code LepidopteraAPI} during post-initialization.
+     * Not part of the public API - called by {@code LepidopteraAPI} during post-initialization.
      *
      * @param tags the tag or tags to protect
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @SafeVarargs
-    public static void protect(final TagKey<EntityType<?>>... tags) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static @SafeVarargs void protect(final TagKey<EntityType<?>>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 
@@ -131,25 +142,31 @@ public final class HungryEntityRegistry {
      * entity tick.</p>
      *
      * @param type the entity type to check
+     *
      * @return {@code true} if the type is registered, either directly or via a tag
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static boolean isRegistered(final EntityType<?> type) {
+    public static boolean isRegistered(final EntityType<?> type) {
         return RESOLVED_TYPES.contains(type);
     }
 
     /**
      * Resolves all registered tags to concrete entity types and rebuilds the O(1) lookup set.
-     * Package-private — called by {@code LepidopteraAPI} on server data load and {@code /reload}.
+     * Package-private - called by {@code LepidopteraAPI} on server data load and {@code /reload}.
      *
      * @param registryAccess the current registry access
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static void onTagsLoaded(final RegistryAccess registryAccess) {
         final Set<EntityType<?>> resolved = new HashSet<>(TYPE_REGISTRY);
         final var entityTypeLookup = registryAccess.lookupOrThrow(Registries.ENTITY_TYPE);
         for (final TagKey<EntityType<?>> tag : TAG_REGISTRY) {
-            entityTypeLookup.get(tag).ifPresent(holders ->
-                    holders.forEach(h -> resolved.add(h.value())));
+            entityTypeLookup.get(tag).ifPresent(holders -> holders.forEach(h -> resolved.add(h.value())));
         }
         RESOLVED_TYPES = resolved;
     }

@@ -3,7 +3,7 @@ plugins {
 }
 
 loom {
-    neoForge { }
+    neoForge {}
 
     runs {
         data {

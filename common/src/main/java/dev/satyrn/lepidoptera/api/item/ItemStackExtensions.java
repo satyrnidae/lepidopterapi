@@ -5,6 +5,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.Contract;
 
 import java.util.function.Consumer;
 
@@ -26,12 +27,12 @@ public interface ItemStackExtensions {
      * allowing callers that lack access to a {@code LivingEntity} (e.g. entity-free
      * fuel consumption) to still trigger the break callback correctly.</p>
      *
-     * @param damage                the amount of damage to apply
-     * @param legacyRandomSource    the random source used for unbreaking enchantment rolls
-     * @param onBreak               callback invoked with the stack's item when the stack breaks
+     * @param damage             the amount of damage to apply
+     * @param legacyRandomSource the random source used for unbreaking enchantment rolls
+     * @param onBreak            callback invoked with the stack's item when the stack breaks
      */
     @Api
-    default void hurtAndBreak(int damage, RandomSource legacyRandomSource, Consumer<Item> onBreak) {
+    default void hurtAndBreak(final int damage, final RandomSource legacyRandomSource, final Consumer<Item> onBreak) {
         throw new NotImplementedException("This functionality is not implemented! Did the mixin fail?");
     }
 
@@ -42,10 +43,12 @@ public interface ItemStackExtensions {
      * is a final class; the mixin injects the interface at the bytecode level.</p>
      *
      * @param itemStack the stack to cast
+     *
      * @return the stack as {@link ItemStackExtensions}
      */
     @SuppressWarnings("DataFlowIssue")
-    static ItemStackExtensions cast(ItemStack itemStack) {
+    @Contract(pure = true)
+    static ItemStackExtensions cast(final ItemStack itemStack) {
         return (ItemStackExtensions) (Object) itemStack;
     }
 }

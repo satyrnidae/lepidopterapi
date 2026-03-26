@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.NotInitializable;
+import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -21,8 +21,10 @@ import java.util.*;
  * {@code Item#getEquipmentSlot(ItemStack)}. Registration is first-come,
  * first-served: subsequent calls for an already-registered item or tag are
  * silently ignored.</p>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class EquipmentRegistry {
     private static final HashMap<Item, Entry> ITEM_REGISTRY = new HashMap<>();
     private static final Map<TagKey<Item>, Entry> TAG_KEY_REGISTRY = new HashMap<>();
@@ -43,8 +45,10 @@ public final class EquipmentRegistry {
      *
      * @param slot the equipment slot the tagged items occupy
      * @param tag  the item tag identifying equippable items
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag) {
         registerEquipment(slot, tag, false);
     }
@@ -55,8 +59,10 @@ public final class EquipmentRegistry {
      * @param slot          the equipment slot the tagged items occupy
      * @param tag           the item tag identifying equippable items
      * @param canShiftClick {@code true} if items matching this tag can be equipped by shift-clicking
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, boolean canShiftClick) {
         if (!TAG_KEY_REGISTRY.containsKey(tag)) {
             TAG_KEY_REGISTRY.put(tag, new Entry(slot, canShiftClick));
@@ -68,8 +74,11 @@ public final class EquipmentRegistry {
      *
      * @param slot the equipment slot
      * @param item the item to register
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void registerEquipment(EquipmentSlot slot, ItemLike item) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void registerEquipment(EquipmentSlot slot, ItemLike item) {
         registerEquipment(slot, item, false);
     }
 
@@ -79,8 +88,11 @@ public final class EquipmentRegistry {
      * @param slot          the equipment slot
      * @param item          the item to register
      * @param canShiftClick {@code true} if this item can be equipped by shift-clicking
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
         var key = item.asItem();
         if (!ITEM_REGISTRY.containsKey(key)) {
             ITEM_REGISTRY.put(key, new Entry(slot, canShiftClick));
@@ -97,8 +109,11 @@ public final class EquipmentRegistry {
      * @param slot          the equipment slot
      * @param item          the item to update
      * @param canShiftClick {@code true} if this item can be equipped by shift-clicking
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void updateEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void updateEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
         ITEM_REGISTRY.put(item.asItem(), new Entry(slot, canShiftClick));
     }
 
@@ -108,8 +123,11 @@ public final class EquipmentRegistry {
      * <p>Takes effect immediately. Has no effect if the item was not directly registered.</p>
      *
      * @param item the item to remove
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void unregister(final ItemLike item) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void unregister(final ItemLike item) {
         ITEM_REGISTRY.remove(item.asItem());
     }
 
@@ -120,9 +138,12 @@ public final class EquipmentRegistry {
      * via remaining tags will re-appear at the next {@link #onTagsLoaded} call.</p>
      *
      * @param tag the tag to remove
+     *
      * @throws UnsupportedOperationException if the tag is protected (registered by Lepidoptera itself)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static void unregister(final TagKey<Item> tag) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static void unregister(final TagKey<Item> tag) {
         if (PROTECTED_TAGS.contains(tag)) {
             throw new UnsupportedOperationException("Cannot unregister a protected tag: " + tag.location());
         }
@@ -133,12 +154,11 @@ public final class EquipmentRegistry {
 
     /**
      * Marks a tag as protected, preventing it from being removed via {@link #unregister(TagKey)}.
-     * Not part of the public API — called by {@code LepidopteraAPI} during post-initialization.
+     * Not part of the public API - called by {@code LepidopteraAPI} during post-initialization.
      *
      * @param tags the tag or tags to protect
      */
-    @SafeVarargs
-    public static void protect(final TagKey<Item>...tags) {
+    public static @SafeVarargs void protect(final TagKey<Item>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 
@@ -149,8 +169,12 @@ public final class EquipmentRegistry {
      * <p>Item-level registrations are checked before tag-level registrations.</p>
      *
      * @param itemStack the stack to look up
+     *
      * @return the equipment slot, or {@code null}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable EquipmentSlot getSlot(final ItemStack itemStack) {
         @Nullable final Entry entry = getEntry(itemStack);
         return entry != null ? entry.slot : null;
@@ -160,8 +184,12 @@ public final class EquipmentRegistry {
      * Returns {@code true} if the given item stack is registered as shift-click equippable.
      *
      * @param itemStack the stack to check
+     *
      * @return {@code true} if the item can be equipped via shift-click
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static boolean canShiftClickEquipment(final ItemStack itemStack) {
         @Nullable final Entry entry = getEntry(itemStack);
         return entry != null && entry.canShiftClick;
@@ -175,17 +203,23 @@ public final class EquipmentRegistry {
      * Tag registrations are only visible after the first {@link #onTagsLoaded} call.</p>
      *
      * @param itemStack the stack to look up
+     *
      * @return the registration entry, or {@code null}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable Entry getEntry(final ItemStack itemStack) {
         @Nullable Entry entry = ITEM_REGISTRY.get(itemStack.getItem());
-        if (entry == null) entry = RESOLVED_TAG_ITEMS.get(itemStack.getItem());
+        if (entry == null) {
+            entry = RESOLVED_TAG_ITEMS.get(itemStack.getItem());
+        }
         return entry;
     }
 
     /**
      * Resolves tag registrations to concrete items and rebuilds the O(1) lookup cache.
-     * Package-private — called by {@code LepidopteraAPI} on server data load and {@code /reload}.
+     * Package-private - called by {@code LepidopteraAPI} on server data load and {@code /reload}.
      *
      * @param registryAccess the current registry access
      */
@@ -193,8 +227,8 @@ public final class EquipmentRegistry {
         final Map<Item, Entry> resolved = new HashMap<>();
         final var itemLookup = registryAccess.lookupOrThrow(Registries.ITEM);
         for (final var tagEntry : TAG_KEY_REGISTRY.entrySet()) {
-            itemLookup.get(tagEntry.getKey()).ifPresent(holders ->
-                    holders.forEach(h -> resolved.putIfAbsent(h.value(), tagEntry.getValue())));
+            itemLookup.get(tagEntry.getKey())
+                    .ifPresent(holders -> holders.forEach(h -> resolved.putIfAbsent(h.value(), tagEntry.getValue())));
         }
         RESOLVED_TAG_ITEMS = resolved;
     }
@@ -204,6 +238,10 @@ public final class EquipmentRegistry {
      *
      * @param slot          the target equipment slot
      * @param canShiftClick whether the item can be equipped by shift-clicking
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    public record Entry(EquipmentSlot slot, boolean canShiftClick) {}
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public record Entry(EquipmentSlot slot, boolean canShiftClick) {
+    }
 }

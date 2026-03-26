@@ -4,6 +4,7 @@ import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.util.StackLocatorUtil;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -17,6 +18,8 @@ import java.util.Objects;
  */
 @Api
 public final class ModHelper {
+
+    @Contract("-> fail")
     private ModHelper() {
         NotInitializable.staticClass(this);
     }
@@ -25,7 +28,10 @@ public final class ModHelper {
      * Returns a friendly display string (name + version) for the mod of the calling class.
      *
      * @return the friendly name, e.g. {@code "My Mod v1.2.3"}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static String friendlyName() {
         return friendlyName(StackLocatorUtil.getCallerClass(2));
     }
@@ -35,8 +41,12 @@ public final class ModHelper {
      * {@link ModMeta} annotation.
      *
      * @param modClass the class annotated with {@link ModMeta}
+     *
      * @return the friendly name, or the class's canonical name if no annotation is present
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static String friendlyName(final Class<?> modClass) {
         final @Nullable ModMeta meta = findMetadata(modClass);
         if (meta == null) {
@@ -53,8 +63,12 @@ public final class ModHelper {
      * suffix is omitted when the version string cannot be parsed.</p>
      *
      * @param meta the metadata annotation
+     *
      * @return the friendly name string
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static String friendlyName(final ModMeta meta) {
         final StringBuilder modName = new StringBuilder();
         if (!meta.name().isBlank()) {
@@ -73,7 +87,10 @@ public final class ModHelper {
      * Returns the mod ID of the calling class's {@link ModMeta} annotation.
      *
      * @return the mod ID (i.e. {@link ModMeta#value()})
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @SuppressWarnings("unused")
     public static String modId() {
         return modId(StackLocatorUtil.getCallerClass(2));
@@ -83,9 +100,13 @@ public final class ModHelper {
      * Returns the mod ID from the {@link ModMeta} annotation on {@code modClass}.
      *
      * @param modClass the class annotated with {@link ModMeta}
+     *
      * @return the mod ID
+     *
      * @throws NullPointerException if {@code modClass} has no {@link ModMeta} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static String modId(final Class<?> modClass) {
         return Objects.requireNonNull(findModId(modClass));
     }
@@ -94,12 +115,25 @@ public final class ModHelper {
      * Returns the mod display name of the calling class's {@link ModMeta} annotation.
      *
      * @return the value of {@link ModMeta#name()}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static String name() {
         return name(StackLocatorUtil.getCallerClass(2));
     }
 
-    @Api public static String name(final Class<?> modClass) {
+    /**
+     * Returns the mod display name from the {@link ModMeta} annotation on {@code modClass}.
+     *
+     * @param modClass the class annotated with {@link ModMeta}
+     *
+     * @return the value of {@link ModMeta#name()}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static String name(final Class<?> modClass) {
         return Objects.requireNonNull(findName(modClass));
     }
 
@@ -107,8 +141,12 @@ public final class ModHelper {
      * Creates a {@link ResourceLocation} scoped to the calling class's mod ID.
      *
      * @param path the resource path
+     *
      * @return a {@link ResourceLocation} with the mod's namespace and the given path
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @SuppressWarnings("unused")
     public static ResourceLocation resource(String path) {
         return resource(StackLocatorUtil.getCallerClass(2), path);
@@ -119,9 +157,13 @@ public final class ModHelper {
      *
      * @param modClass the class annotated with {@link ModMeta}
      * @param path     the resource path
+     *
      * @return a {@link ResourceLocation} with the mod's namespace and the given path
+     *
      * @throws NullPointerException if {@code modClass} has no {@link ModMeta} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static ResourceLocation resource(Class<?> modClass, String path) throws NullPointerException {
         final @Nullable String modId = modId(modClass);
         return resource(modId, path);
@@ -132,9 +174,12 @@ public final class ModHelper {
      *
      * @param meta the metadata annotation supplying the namespace
      * @param path the resource path
+     *
      * @return a {@link ResourceLocation} with the mod's namespace and the given path
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static ResourceLocation resource(ModMeta meta, String path) {
         final @Nullable String modId = meta.value();
         return resource(modId, path);
@@ -145,9 +190,13 @@ public final class ModHelper {
      *
      * @param modId the namespace (mod ID)
      * @param path  the resource path
+     *
      * @return the constructed {@link ResourceLocation}
+     *
      * @throws NullPointerException if {@code modId} or {@code path} produce an invalid location
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static ResourceLocation resource(String modId, String path) throws NullPointerException {
         LepidopteraAPI.debug("Registering new resource location {}:{}", modId, path);
         return Objects.requireNonNull(ResourceLocation.tryBuild(modId, path));
@@ -157,9 +206,11 @@ public final class ModHelper {
      * Returns the {@link SemVer} of the calling class's mod.
      *
      * @return the parsed semantic version
+     *
      * @throws NullPointerException if the annotation is absent or the version cannot be parsed
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static SemVer version() {
         return version(StackLocatorUtil.getCallerClass(2));
     }
@@ -168,8 +219,11 @@ public final class ModHelper {
      * Returns the {@link ModMeta} annotation of the calling class's mod.
      *
      * @return the annotation
+     *
      * @throws NullPointerException if the calling class has no {@link ModMeta} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @SuppressWarnings("unused")
     public static ModMeta metadata() {
         return metadata(StackLocatorUtil.getCallerClass(2));
@@ -179,9 +233,13 @@ public final class ModHelper {
      * Returns the {@link ModMeta} annotation present on {@code modClass}.
      *
      * @param modClass the annotated class
+     *
      * @return the annotation
+     *
      * @throws NullPointerException if the class has no {@link ModMeta} annotation
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static ModMeta metadata(final Class<?> modClass) {
         return Objects.requireNonNull(findMetadata(modClass));
     }
@@ -190,9 +248,13 @@ public final class ModHelper {
      * Returns the {@link SemVer} parsed from {@code modClass}'s {@link ModMeta} annotation.
      *
      * @param modClass the class annotated with {@link ModMeta}
+     *
      * @return the parsed version
+     *
      * @throws NullPointerException if the annotation is absent or the version cannot be parsed
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static SemVer version(final Class<?> modClass) {
         return Objects.requireNonNull(findVersion(modClass));
     }
@@ -216,8 +278,12 @@ public final class ModHelper {
      * Parses the version from the given {@link ModMeta}.
      *
      * @param modMeta the metadata annotation
+     *
      * @return the parsed {@link SemVer}, or {@code null} if {@link ModMeta#semVer()} is unparseable
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable SemVer version(final ModMeta modMeta) {
         return SemVer.tryParse(modMeta.semVer());
     }

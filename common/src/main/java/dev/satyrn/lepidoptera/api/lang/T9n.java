@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.lang;
 
 import dev.satyrn.lepidoptera.api.ModHelper;
+import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.NotInitializable;
 import dev.satyrn.lepidoptera.api.annotations.Api;
-import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.config.ConfigHelper;
 import me.shedaniel.autoconfig.annotation.Config;
 import net.minecraft.Util;
@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -24,9 +23,13 @@ import java.util.function.Supplier;
  * <p>Use these helpers from your platform-specific language provider (e.g.
  * NeoForge's {@code ModLanguageProvider} or Fabric's {@code FabricLanguageProvider})
  * to stay consistent with Lepidoptera API key conventions.</p>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api
+@Api("1.0.0-SNAPSHOT.1+1.21.1")
 public final class T9n {
+
+    @Contract("-> fail")
     private T9n() {
         NotInitializable.staticClass(this);
     }
@@ -39,9 +42,12 @@ public final class T9n {
      * Returns the Cloth Config GUI title key: {@code text.autoconfig.<configName>.title}.
      *
      * @param configName the value of {@link Config#name()} on the config class
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTitle(final String configName) {
+    public static String configTitle(final String configName) {
         return String.format("text.autoconfig.%s.title", configName);
     }
 
@@ -49,9 +55,11 @@ public final class T9n {
      * Returns the Cloth Config GUI title key for a config annotation.
      *
      * @see #configTitle(String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTitle(final Config config) {
+    public static String configTitle(final Config config) {
         return configTitle(config.name());
     }
 
@@ -60,9 +68,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTitle(String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTitle(final Class<?> configClass) {
+    public static String configTitle(final Class<?> configClass) {
         return configTitle(ConfigHelper.name(configClass));
     }
 
@@ -78,9 +88,12 @@ public final class T9n {
      *
      * @param configName the value of {@link Config#name()} on the config class
      * @param key        the key suffix within the config's namespace
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final String configName, final String key) {
+    public static String configKey(final String configName, final String key) {
         return String.format("text.autoconfig.%s.%s", configName, key);
     }
 
@@ -88,9 +101,11 @@ public final class T9n {
      * Returns an arbitrary Cloth Config key for a config annotation.
      *
      * @see #configKey(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Config config, final String key) {
+    public static String configKey(final Config config, final String key) {
         return configKey(config.name(), key);
     }
 
@@ -99,9 +114,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configKey(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Class<?> configClass, final String key) {
+    public static String configKey(final Class<?> configClass, final String key) {
         return configKey(ConfigHelper.name(configClass), key);
     }
 
@@ -111,9 +128,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parent     the intermediate path segment (e.g. a sub-section name)
      * @param key        the leaf key
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final String configName, final String parent, final String key) {
+    public static String configKey(final String configName, final String parent, final String key) {
         return String.format("text.autoconfig.%s.%s.%s", configName, parent, key);
     }
 
@@ -121,9 +141,11 @@ public final class T9n {
      * Returns a nested Cloth Config key for a config annotation.
      *
      * @see #configKey(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Config config, final String parent, final String key) {
+    public static String configKey(final Config config, final String parent, final String key) {
         return configKey(config.name(), parent, key);
     }
 
@@ -132,9 +154,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configKey(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Class<?> configClass, final String parent, final String key) {
+    public static String configKey(final Class<?> configClass, final String parent, final String key) {
         return configKey(ConfigHelper.name(configClass), parent, key);
     }
 
@@ -145,9 +169,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parents    ordered path segments above {@code key}
      * @param key        the leaf key
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final String configName, final String[] parents, final String key) {
+    public static String configKey(final String configName, final String[] parents, final String key) {
         return configKey(configName, String.join(".", parents), key);
     }
 
@@ -155,9 +182,11 @@ public final class T9n {
      * Returns a deeply nested Cloth Config key for a config annotation.
      *
      * @see #configKey(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Config config, final String[] parents, final String key) {
+    public static String configKey(final Config config, final String[] parents, final String key) {
         return configKey(config.name(), parents, key);
     }
 
@@ -166,9 +195,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configKey(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configKey(final Class<?> configClass, final String[] parents, final String key) {
+    public static String configKey(final Class<?> configClass, final String[] parents, final String key) {
         return configKey(ConfigHelper.name(configClass), parents, key);
     }
 
@@ -184,9 +215,12 @@ public final class T9n {
      *
      * @param configName the value of {@link Config#name()} on the config class
      * @param option     the config field name
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final String configName, final String option) {
+    public static String configOption(final String configName, final String option) {
         return String.format("text.autoconfig.%s.option.%s", configName, option);
     }
 
@@ -194,9 +228,11 @@ public final class T9n {
      * Returns a Cloth Config option key for a config annotation.
      *
      * @see #configOption(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Config config, final String option) {
+    public static String configOption(final Config config, final String option) {
         return configOption(config.name(), option);
     }
 
@@ -205,9 +241,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configOption(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Class<?> configClass, final String option) {
+    public static String configOption(final Class<?> configClass, final String option) {
         return configOption(ConfigHelper.name(configClass), option);
     }
 
@@ -221,9 +259,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parent     the sub-section field name
      * @param option     the config field name within the sub-section
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final String configName, final String parent, final String option) {
+    public static String configOption(final String configName, final String parent, final String option) {
         return String.format("text.autoconfig.%s.option.%s.%s", configName, parent, option);
     }
 
@@ -231,9 +272,11 @@ public final class T9n {
      * Returns a nested Cloth Config option key for a config annotation.
      *
      * @see #configOption(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Config config, final String parent, final String option) {
+    public static String configOption(final Config config, final String parent, final String option) {
         return configOption(config.name(), parent, option);
     }
 
@@ -242,9 +285,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configOption(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Class<?> configClass, final String parent, final String option) {
+    public static String configOption(final Class<?> configClass, final String parent, final String option) {
         return configOption(ConfigHelper.name(configClass), parent, option);
     }
 
@@ -256,9 +301,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parents    ordered sub-section field names above {@code option}
      * @param option     the config field name at the leaf
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final String configName, final String[] parents, final String option) {
+    public static String configOption(final String configName, final String[] parents, final String option) {
         return configOption(configName, String.join(".", parents), option);
     }
 
@@ -266,9 +314,11 @@ public final class T9n {
      * Returns a deeply nested Cloth Config option key for a config annotation.
      *
      * @see #configOption(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Config config, final String[] parents, final String option) {
+    public static String configOption(final Config config, final String[] parents, final String option) {
         return configOption(config.name(), parents, option);
     }
 
@@ -277,9 +327,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configOption(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configOption(final Class<?> configClass, final String[] parents, final String option) {
+    public static String configOption(final Class<?> configClass, final String[] parents, final String option) {
         return configOption(ConfigHelper.name(configClass), parents, option);
     }
 
@@ -297,9 +349,12 @@ public final class T9n {
      *
      * @param configName the value of {@link Config#name()} on the config class
      * @param option     the config field name
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName, final String option) {
+    public static String configTooltip(final String configName, final String option) {
         return String.format("text.autoconfig.%s.option.%s.@Tooltip", configName, option);
     }
 
@@ -307,9 +362,11 @@ public final class T9n {
      * Returns a Cloth Config single-line tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config, final String option) {
+    public static String configTooltip(final Config config, final String option) {
         return configTooltip(config.name(), option);
     }
 
@@ -318,9 +375,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass, final String option) {
+    public static String configTooltip(final Class<?> configClass, final String option) {
         return configTooltip(ConfigHelper.name(configClass), option);
     }
 
@@ -334,9 +393,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param option     the config field name
      * @param line       the 0-based tooltip line index
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName, final String option, final int line) {
+    public static String configTooltip(final String configName, final String option, final int line) {
         return String.format("text.autoconfig.%s.option.%s.@Tooltip[%d]", configName, option, line);
     }
 
@@ -344,9 +406,11 @@ public final class T9n {
      * Returns an indexed Cloth Config tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config, final String option, final int line) {
+    public static String configTooltip(final Config config, final String option, final int line) {
         return configTooltip(config.name(), option, line);
     }
 
@@ -355,9 +419,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass, final String option, final int line) {
+    public static String configTooltip(final Class<?> configClass, final String option, final int line) {
         return configTooltip(ConfigHelper.name(configClass), option, line);
     }
 
@@ -368,9 +434,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parent     the sub-section field name
      * @param option     the config field name within the sub-section
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName, final String parent, final String option) {
+    public static String configTooltip(final String configName, final String parent, final String option) {
         return String.format("text.autoconfig.%s.option.%s.%s.@Tooltip", configName, parent, option);
     }
 
@@ -378,9 +447,11 @@ public final class T9n {
      * Returns a nested single-line Cloth Config tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config, final String parent, final String option) {
+    public static String configTooltip(final Config config, final String parent, final String option) {
         return configTooltip(config.name(), parent, option);
     }
 
@@ -389,9 +460,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass, final String parent, final String option) {
+    public static String configTooltip(final Class<?> configClass, final String parent, final String option) {
         return configTooltip(ConfigHelper.name(configClass), parent, option);
     }
 
@@ -403,9 +476,12 @@ public final class T9n {
      * @param configName the value of {@link Config#name()} on the config class
      * @param parents    ordered sub-section field names above {@code option}
      * @param option     the config field name at the leaf
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName, final String[] parents, final String option) {
+    public static String configTooltip(final String configName, final String[] parents, final String option) {
         return configTooltip(configName, String.join(".", parents), option);
     }
 
@@ -413,9 +489,11 @@ public final class T9n {
      * Returns a deeply nested single-line Cloth Config tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config, final String[] parents, final String option) {
+    public static String configTooltip(final Config config, final String[] parents, final String option) {
         return configTooltip(config.name(), parents, option);
     }
 
@@ -424,9 +502,11 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String[], String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass, final String[] parents, final String option) {
+    public static String configTooltip(final Class<?> configClass, final String[] parents, final String option) {
         return configTooltip(ConfigHelper.name(configClass), parents, option);
     }
 
@@ -438,12 +518,15 @@ public final class T9n {
      * @param parent     the sub-section field name
      * @param option     the config field name within the sub-section
      * @param line       the 0-based tooltip line index
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName,
-                                            final String parent,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final String configName,
+                                       final String parent,
+                                       final String option,
+                                       final int line) {
         return String.format("text.autoconfig.%s.option.%s.%s.@Tooltip[%d]", configName, parent, option, line);
     }
 
@@ -451,12 +534,11 @@ public final class T9n {
      * Returns a nested indexed Cloth Config tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String, String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config,
-                                            final String parent,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final Config config, final String parent, final String option, final int line) {
         return configTooltip(config.name(), parent, option, line);
     }
 
@@ -465,12 +547,14 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String, String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass,
-                                            final String parent,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final Class<?> configClass,
+                                       final String parent,
+                                       final String option,
+                                       final int line) {
         return configTooltip(ConfigHelper.name(configClass), parent, option, line);
     }
 
@@ -483,12 +567,15 @@ public final class T9n {
      * @param parents    ordered sub-section field names above {@code option}
      * @param option     the config field name at the leaf
      * @param line       the 0-based tooltip line index
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final String configName,
-                                            final String[] parents,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final String configName,
+                                       final String[] parents,
+                                       final String option,
+                                       final int line) {
         return configTooltip(configName, String.join(".", parents), option, line);
     }
 
@@ -496,12 +583,14 @@ public final class T9n {
      * Returns a deeply nested indexed Cloth Config tooltip key for a config annotation.
      *
      * @see #configTooltip(String, String[], String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Config config,
-                                            final String[] parents,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final Config config,
+                                       final String[] parents,
+                                       final String option,
+                                       final int line) {
         return configTooltip(config.name(), parents, option, line);
     }
 
@@ -510,12 +599,14 @@ public final class T9n {
      * The class must be annotated with {@link Config}.
      *
      * @see #configTooltip(String, String[], String, int)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String configTooltip(final Class<?> configClass,
-                                            final String[] parents,
-                                            final String option,
-                                            final int line) {
+    public static String configTooltip(final Class<?> configClass,
+                                       final String[] parents,
+                                       final String option,
+                                       final int line) {
         return configTooltip(ConfigHelper.name(configClass), parents, option, line);
     }
 
@@ -532,9 +623,12 @@ public final class T9n {
      *
      * @param modId the mod's ID
      * @param key   the message identifier within the mod
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final String modId, final String key) {
+    public static String netMsg(final String modId, final String key) {
         return String.format("network.%s.%s", modId, key);
     }
 
@@ -542,9 +636,11 @@ public final class T9n {
      * Returns a mod network message key scoped to the given mod's ID.
      *
      * @see #netMsg(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final ModMeta metadata, final String key) {
+    public static String netMsg(final ModMeta metadata, final String key) {
         return netMsg(metadata.value(), key);
     }
 
@@ -552,9 +648,11 @@ public final class T9n {
      * Returns a mod network message key scoped to the mod class's {@link ModMeta} annotation.
      *
      * @see #netMsg(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final Class<?> modClass, final String key) {
+    public static String netMsg(final Class<?> modClass, final String key) {
         return netMsg(ModHelper.modId(modClass), key);
     }
 
@@ -563,9 +661,11 @@ public final class T9n {
      * The namespace becomes the mod ID and the path becomes the key, with {@code /} replaced by {@code .}.
      *
      * @see #netMsg(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final ResourceLocation location) {
+    public static String netMsg(final ResourceLocation location) {
         return netMsg(location.getNamespace(), location.getPath().replace('/', '.'));
     }
 
@@ -573,9 +673,11 @@ public final class T9n {
      * Returns a mod network message key from a ResourceKey.
      *
      * @see #netMsg(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final ResourceKey<?> key) {
+    public static String netMsg(final ResourceKey<?> key) {
         return netMsg(key.location());
     }
 
@@ -584,9 +686,11 @@ public final class T9n {
      *
      * @throws net.minecraft.ResourceLocationException if {@code location} is not a valid resource location
      * @see #netMsg(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String netMsg(final String location) {
+    public static String netMsg(final String location) {
         return netMsg(ResourceLocation.parse(location));
     }
 
@@ -599,9 +703,12 @@ public final class T9n {
      *
      * @param modId the mod's ID
      * @param key   the tip identifier within the mod
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final String modId, final String key) {
+    public static String tip(final String modId, final String key) {
         return String.format("%s.tip.%s", modId, key);
     }
 
@@ -609,9 +716,11 @@ public final class T9n {
      * Returns a tip key scoped to the given mod's ID.
      *
      * @see #tip(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final ModMeta metadata, final String key) {
+    public static String tip(final ModMeta metadata, final String key) {
         return tip(metadata.value(), key);
     }
 
@@ -619,9 +728,11 @@ public final class T9n {
      * Returns a tip key scoped to the mod class's {@link ModMeta} annotation.
      *
      * @see #tip(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final Class<?> modClass, final String key) {
+    public static String tip(final Class<?> modClass, final String key) {
         return tip(ModHelper.modId(modClass), key);
     }
 
@@ -630,9 +741,11 @@ public final class T9n {
      * The namespace becomes the mod ID and the path becomes the key, with {@code /} replaced by {@code .}.
      *
      * @see #tip(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final ResourceLocation location) {
+    public static String tip(final ResourceLocation location) {
         return tip(location.getNamespace(), location.getPath().replace('/', '.'));
     }
 
@@ -640,9 +753,11 @@ public final class T9n {
      * Returns a tip key from a ResourceKey.
      *
      * @see #tip(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final ResourceKey<?> key) {
+    public static String tip(final ResourceKey<?> key) {
         return tip(key.location());
     }
 
@@ -651,9 +766,11 @@ public final class T9n {
      *
      * @throws net.minecraft.ResourceLocationException if {@code location} is not a valid resource location
      * @see #tip(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String tip(final String location) {
+    public static String tip(final String location) {
         return tip(ResourceLocation.parse(location));
     }
 
@@ -666,9 +783,12 @@ public final class T9n {
      *
      * @param modId the mod's ID
      * @param key   the item's registry name within the mod
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final String modId, final String key) {
+    public static String item(final String modId, final String key) {
         return String.format("item.%s.%s", modId, key);
     }
 
@@ -676,9 +796,11 @@ public final class T9n {
      * Returns an item translation key scoped to the given mod's ID.
      *
      * @see #item(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final ModMeta metadata, final String key) {
+    public static String item(final ModMeta metadata, final String key) {
         return item(metadata.value(), key);
     }
 
@@ -686,18 +808,23 @@ public final class T9n {
      * Returns an item translation key scoped to the mod class's {@link ModMeta} annotation.
      *
      * @see #item(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final Class<?> modClass, final String key) {
+    public static String item(final Class<?> modClass, final String key) {
         return item(ModHelper.modId(modClass), key);
     }
 
     /**
      * Returns an item translation key from a ResourceLocation via
      * {@link Util#makeDescriptionId(String, ResourceLocation)}: {@code item.<namespace>.<path>}.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final ResourceLocation location) {
+    public static String item(final ResourceLocation location) {
         return Util.makeDescriptionId("item", location);
     }
 
@@ -705,9 +832,11 @@ public final class T9n {
      * Returns an item translation key from a ResourceKey.
      *
      * @see #item(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final ResourceKey<?> key) {
+    public static String item(final ResourceKey<?> key) {
         return item(key.location());
     }
 
@@ -716,24 +845,32 @@ public final class T9n {
      *
      * @throws net.minecraft.ResourceLocationException if {@code location} is not a valid resource location
      * @see #item(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final String location) {
+    public static String item(final String location) {
         return item(ResourceLocation.parse(location));
     }
 
     /**
      * Returns the translation key for an item via its own {@link net.minecraft.world.item.Item#getDescriptionId()}.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String item(final ItemLike itemLike) {
+    public static String item(final ItemLike itemLike) {
         return itemLike.asItem().getDescriptionId();
     }
 
     /**
      * Returns the translation key for an item obtained from a supplier.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static String item(final Supplier<? extends ItemLike> supplier) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static String item(final Supplier<? extends ItemLike> supplier) {
         return supplier.get().asItem().getDescriptionId();
     }
 
@@ -744,9 +881,12 @@ public final class T9n {
      *
      * @param modId the mod's ID
      * @param key   the item's registry name within the mod
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final String modId, final String key) {
+    public static String itemDesc(final String modId, final String key) {
         return String.format("item.%s.%s.desc", modId, key);
     }
 
@@ -754,9 +894,11 @@ public final class T9n {
      * Returns an item description key scoped to the given mod's ID.
      *
      * @see #itemDesc(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final ModMeta metadata, final String key) {
+    public static String itemDesc(final ModMeta metadata, final String key) {
         return itemDesc(metadata.value(), key);
     }
 
@@ -764,9 +906,11 @@ public final class T9n {
      * Returns an item description key scoped to the mod class's {@link ModMeta} annotation.
      *
      * @see #itemDesc(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final Class<?> modClass, final String key) {
+    public static String itemDesc(final Class<?> modClass, final String key) {
         return itemDesc(ModHelper.modId(modClass), key);
     }
 
@@ -774,9 +918,11 @@ public final class T9n {
      * Returns an item description key from a ResourceLocation: {@code item.<namespace>.<path>.desc}.
      *
      * @see #itemDesc(String, String)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final ResourceLocation key) {
+    public static String itemDesc(final ResourceLocation key) {
         return String.format("%s.desc", Util.makeDescriptionId("item", key));
     }
 
@@ -784,9 +930,11 @@ public final class T9n {
      * Returns an item description key from a ResourceKey.
      *
      * @see #itemDesc(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final ResourceKey<?> key) {
+    public static String itemDesc(final ResourceKey<?> key) {
         return itemDesc(key.location());
     }
 
@@ -795,25 +943,33 @@ public final class T9n {
      *
      * @throws net.minecraft.ResourceLocationException if {@code location} is not a valid resource location
      * @see #itemDesc(ResourceLocation)
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final String location) {
+    public static String itemDesc(final String location) {
         return itemDesc(ResourceLocation.parse(location));
     }
 
     /**
      * Returns the description key for an item via its own
      * {@link net.minecraft.world.item.Item#getDescriptionId()}, appending {@code .desc}.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String itemDesc(final ItemLike itemLike) {
+    public static String itemDesc(final ItemLike itemLike) {
         return String.format("%s.desc", itemLike.asItem().getDescriptionId());
     }
 
     /**
      * Returns the description key for an item obtained from a supplier, appending {@code .desc}.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api public static String itemDesc(final Supplier<? extends ItemLike> supplier) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    public static String itemDesc(final Supplier<? extends ItemLike> supplier) {
         return String.format("%s.desc", supplier.get().asItem().getDescriptionId());
     }
 
@@ -827,9 +983,12 @@ public final class T9n {
      * Returns a game rule translation key: {@code gamerule.<key>}.
      *
      * @param key the game rule's registered name (e.g. {@code "doAnimalStarvation"})
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String gamerule(final String key) {
+    public static String gamerule(final String key) {
         return String.format("gamerule.%s", key);
     }
 
@@ -837,9 +996,12 @@ public final class T9n {
      * Returns a game rule description key: {@code gamerule.<key>.description}.
      *
      * @param key the game rule's registered name (e.g. {@code "doAnimalStarvation"})
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    @Api public static String gameruleDesc(final String key) {
+    public static String gameruleDesc(final String key) {
         return String.format("gamerule.%s.description", key);
     }
 

@@ -32,6 +32,7 @@ public interface PacketSender {
      * {@code false} for vanilla clients/servers that have not loaded Lepidoptera.</p>
      *
      * @param id the channel to test
+     *
      * @return whether the remote side can receive on that channel
      */
     boolean canSend(ResourceLocation id);

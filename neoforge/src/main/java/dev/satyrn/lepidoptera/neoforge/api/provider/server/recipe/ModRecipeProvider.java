@@ -4,10 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import dev.satyrn.lepidoptera.api.ModHelper;
+import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
 import dev.satyrn.lepidoptera.api.annotations.Api;
-import dev.satyrn.lepidoptera.api.ModMeta;
-import dev.satyrn.lepidoptera.api.ModHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -34,69 +34,62 @@ import java.util.concurrent.CompletableFuture;
  * {@code event.createProvider((output, lookup) -> new YourRecipeProvider(output, lookup))}.
  */
 @Api
-public abstract class ModRecipeProvider
-        extends RecipeProvider
-        implements WithLocation {
+public abstract class ModRecipeProvider extends RecipeProvider implements WithLocation {
     protected final ModMeta metadata;
     private final PackOutput packOutput;
 
-    protected ModRecipeProvider(Class<?> modClass, PackOutput output,
-            CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    protected ModRecipeProvider(Class<?> modClass,
+                                PackOutput output,
+                                CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
         this.packOutput = output;
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    @Override
-    protected final CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
-        return CompletableFuture.allOf(
-                super.run(arg, arg2),
-                runModded(arg, arg2)
-        );
+    protected final @Override CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
+        return CompletableFuture.allOf(super.run(arg, arg2), runModded(arg, arg2));
     }
 
-    @Override
-    protected final void buildRecipes(RecipeOutput output) {
+    protected final @Override void buildRecipes(RecipeOutput output) {
         buildModRecipes(output);
     }
 
-    protected void buildModRecipes(RecipeOutput output) { }
+    protected void buildModRecipes(RecipeOutput output) {
+    }
 
     @Api
     protected CompletableFuture<?> runModded(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
         // Defaults to no-op
-        return CompletableFuture.runAsync(() -> {});
+        return CompletableFuture.runAsync(() -> {
+        });
     }
 
     @Api
-    protected <T> CompletableFuture<?> recipeWithConditions(
-            CachedOutput cachedOutput,
-            ResourceLocation id,
-            T recipe,
-            MapCodec<T> codec,
-            ResourceLocation typeId,
-            RecipeCategory category,
-            Map<String, Criterion<?>> criteria,
-            HolderLookup.Provider registryAccess,
-            ResourceLocation... conditions) {
-        PackOutput.PathProvider recipePaths =
-                packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
-        PackOutput.PathProvider advancementPaths =
-                packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "advancement");
+    protected <T> CompletableFuture<?> recipeWithConditions(CachedOutput cachedOutput,
+                                                            ResourceLocation id,
+                                                            T recipe,
+                                                            MapCodec<T> codec,
+                                                            ResourceLocation typeId,
+                                                            RecipeCategory category,
+                                                            Map<String, Criterion<?>> criteria,
+                                                            HolderLookup.Provider registryAccess,
+                                                            ResourceLocation... conditions) {
+        PackOutput.PathProvider recipePaths = packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
+        PackOutput.PathProvider advancementPaths = packOutput.createPathProvider(PackOutput.Target.DATA_PACK,
+                "advancement");
 
         return CompletableFuture.allOf(
-                buildRecipeWithConditions(cachedOutput, id, recipe, codec, typeId, recipePaths, registryAccess, conditions),
-                buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess)
-        );
+                buildRecipeWithConditions(cachedOutput, id, recipe, codec, typeId, recipePaths, registryAccess,
+                        conditions),
+                buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess));
     }
 
-    private static <T> CompletableFuture<?> buildRecipeAchievement(
-            CachedOutput cachedOutput,
-            ResourceLocation id,
-            PackOutput.PathProvider advancementPaths,
-            RecipeCategory category,
-            Map<String, Criterion<?>> criteria,
-            HolderLookup.Provider registryAccess) {
+    private static <T> CompletableFuture<?> buildRecipeAchievement(CachedOutput cachedOutput,
+                                                                   ResourceLocation id,
+                                                                   PackOutput.PathProvider advancementPaths,
+                                                                   RecipeCategory category,
+                                                                   Map<String, Criterion<?>> criteria,
+                                                                   HolderLookup.Provider registryAccess) {
         Advancement.Builder builder = Advancement.Builder.recipeAdvancement()
                 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
                 .rewards(AdvancementRewards.Builder.recipe(id))
@@ -104,24 +97,21 @@ public abstract class ModRecipeProvider
         criteria.forEach(builder::addCriterion);
         Advancement advancement = builder.build(id).value();
 
-        JsonObject json = Advancement.CODEC
-                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), advancement)
-                .getOrThrow()
-                .getAsJsonObject();
+        JsonObject json = Advancement.CODEC.encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE),
+                advancement).getOrThrow().getAsJsonObject();
 
         Path path = advancementPaths.json(id.withPrefix("recipes/" + category.getFolderName() + "/"));
         return DataProvider.saveStable(cachedOutput, json, path);
     }
 
-    private static <T> CompletableFuture<?> buildRecipeWithConditions(
-            CachedOutput cachedOutput,
-            ResourceLocation id,
-            T recipe,
-            MapCodec<T> codec,
-            ResourceLocation typeId,
-            PackOutput.PathProvider recipePaths,
-            HolderLookup.Provider registryAccess,
-            ResourceLocation... conditions) {
+    private static <T> CompletableFuture<?> buildRecipeWithConditions(CachedOutput cachedOutput,
+                                                                      ResourceLocation id,
+                                                                      T recipe,
+                                                                      MapCodec<T> codec,
+                                                                      ResourceLocation typeId,
+                                                                      PackOutput.PathProvider recipePaths,
+                                                                      HolderLookup.Provider registryAccess,
+                                                                      ResourceLocation... conditions) {
         JsonArray fabricConditions = new JsonArray();
         JsonArray neoConditions = new JsonArray();
 
@@ -147,8 +137,7 @@ public abstract class ModRecipeProvider
         return DataProvider.saveStable(cachedOutput, json, path);
     }
 
-    @Override
-    public ResourceLocation location() {
+    public @Override ResourceLocation location() {
         return ModHelper.resource(metadata, "providers/recipe");
     }
 }

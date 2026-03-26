@@ -2,7 +2,6 @@ package dev.satyrn.lepidoptera.api;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.annotations.Api;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -20,20 +19,24 @@ import java.util.Objects;
  * @param metadata   the build metadata label (empty string if absent)
  */
 @Api
-public record SemVer (int major, int minor, int patch, String preRelease, String metadata) implements Comparable<SemVer> {
-    /** A zeroed-out sentinel version ({@code 0.0.0}) used as a safe "no version" default. */
-    @SuppressWarnings("unused")
-    public static final SemVer EMPTY = new SemVer(0, 0, 0, "", "");
+public record SemVer(int major, int minor, int patch, String preRelease,
+                     String metadata) implements Comparable<SemVer> {
+    /**
+     * A zeroed-out sentinel version ({@code 0.0.0}) used as a safe "no version" default.
+     */
+    @SuppressWarnings("unused") public static final SemVer EMPTY = new SemVer(0, 0, 0, "", "");
 
     /**
      * Returns {@code true} if {@code obj} is a {@link SemVer} with the same major, minor, patch,
      * and pre-release label (compared case-insensitively, ignoring leading/trailing whitespace).
      * Build metadata is not considered.
      */
-    @Override
-    public boolean equals(Object obj) {
+    public @Override boolean equals(Object obj) {
         if (obj instanceof SemVer semVer) {
-            return this.major == semVer.major && this.minor == semVer.minor && this.patch == semVer.patch && this.preRelease.trim().equalsIgnoreCase(semVer.preRelease.trim());
+            return this.major == semVer.major &&
+                    this.minor == semVer.minor &&
+                    this.patch == semVer.patch &&
+                    this.preRelease.trim().equalsIgnoreCase(semVer.preRelease.trim());
         }
         return false;
     }
@@ -42,8 +45,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * Returns a hash code consistent with {@link #equals}: based on major, minor, patch,
      * and pre-release (build metadata excluded).
      */
-    @Override
-    public int hashCode() {
+    public @Override int hashCode() {
         return Objects.hash(major, minor, patch, preRelease);
     }
 
@@ -51,9 +53,12 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * Returns the version as a string in {@code MAJOR.MINOR.PATCH[-preRelease][+metadata]} format.
      * Pre-release and metadata segments are omitted when blank.
      */
-    @Override
-    public @NotNull String toString() {
-        StringBuilder builder = new StringBuilder().append(this.major).append(".").append(this.minor).append(".").append(this.patch);
+    public @Override String toString() {
+        StringBuilder builder = new StringBuilder().append(this.major)
+                .append(".")
+                .append(this.minor)
+                .append(".")
+                .append(this.patch);
         if (!this.preRelease.isBlank()) {
             builder.append("-").append(this.preRelease);
         }
@@ -68,8 +73,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * A version with a pre-release label is considered lower than the same version without one
      * (e.g. {@code 1.0.0-alpha} &lt; {@code 1.0.0}). Build metadata is ignored.
      */
-    @Override
-    public int compareTo(@NotNull SemVer other) {
+    public @Override int compareTo(SemVer other) {
         if (this.major != other.major) {
             return Integer.compare(this.major, other.major);
         }
@@ -93,6 +97,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * Creates a version with the given major component and all other components set to zero/empty.
      *
      * @param major the major version number
+     *
      * @return {@code MAJOR.0.0}
      */
     @SuppressWarnings("unused")
@@ -105,6 +110,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      *
      * @param major the major version number
      * @param minor the minor version number
+     *
      * @return {@code MAJOR.MINOR.0}
      */
     @SuppressWarnings("unused")
@@ -118,6 +124,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * @param major the major version number
      * @param minor the minor version number
      * @param patch the patch version number
+     *
      * @return {@code MAJOR.MINOR.PATCH}
      */
     @SuppressWarnings("unused")
@@ -132,6 +139,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * @param minor      the minor version number
      * @param patch      the patch version number
      * @param preRelease the pre-release label (e.g. {@code "alpha"})
+     *
      * @return {@code MAJOR.MINOR.PATCH-preRelease}
      */
     @SuppressWarnings("unused")
@@ -147,6 +155,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * @param patch      the patch version number
      * @param preRelease the pre-release label (empty string for none)
      * @param metadata   the build metadata label (empty string for none)
+     *
      * @return the constructed {@link SemVer}
      */
     public static SemVer create(int major, int minor, int patch, String preRelease, String metadata) {
@@ -161,6 +170,7 @@ public record SemVer (int major, int minor, int patch, String preRelease, String
      * Returns {@code null} (and logs a warning) if the numeric components cannot be parsed.</p>
      *
      * @param semVer the version string to parse
+     *
      * @return the parsed {@link SemVer}, or {@code null} on failure
      */
     public static @Nullable SemVer tryParse(String semVer) {

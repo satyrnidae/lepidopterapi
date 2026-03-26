@@ -2,13 +2,13 @@ package dev.satyrn.lepidoptera.neoforge.data.provider.server.tags;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.item.ApiItemTags;
-import dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.item.ModOnlyItemTagsProvider;
 import dev.satyrn.lepidoptera.item.LepidopteraItems;
+import dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.item.ModOnlyItemTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class LepidopteraItemTags extends ModOnlyItemTagsProvider {
@@ -18,8 +18,7 @@ public class LepidopteraItemTags extends ModOnlyItemTagsProvider {
         super(LepidopteraAPI.class, arg, completableFuture, existingFileHelper);
     }
 
-    @Override
-    protected void addModTags(final HolderLookup.Provider provider) {
+    protected @Override void addModTags(final HolderLookup.Provider provider) {
         this.tag(ApiItemTags.FEET_EQUIPMENT);
         this.tag(ApiItemTags.LEGS_EQUIPMENT);
         this.tag(ApiItemTags.CHEST_EQUIPMENT);

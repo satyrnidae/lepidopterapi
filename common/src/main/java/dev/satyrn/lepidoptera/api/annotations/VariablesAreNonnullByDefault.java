@@ -13,7 +13,10 @@ import java.lang.annotation.RetentionPolicy;
  * {@code @MethodsReturnNonnullByDefault}, {@code @FieldsAreNonnullByDefault}, and
  * {@code @ParametersAreNonnullByDefault} to declare that every variable in the package
  * is non-null unless explicitly annotated with {@link javax.annotation.Nullable}.</p>
+ *
+ * @since 0.4.0+1.19.2
  */
+@Api("0.4.0+1.19.2")
 @Nonnull
 @TypeQualifierDefault(ElementType.LOCAL_VARIABLE)
 @Retention(RetentionPolicy.RUNTIME)

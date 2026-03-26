@@ -1,4 +1,4 @@
-package dev.satyrn.lepidoptera.neoforge.network.play;
+package dev.satyrn.lepidoptera.neoforge.network;
 
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import dev.satyrn.lepidoptera.api.network.PacketReceiver;
@@ -15,8 +15,10 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
      * to the appropriate {@link PacketChannels#CLIENT_RECEIVERS}. The field is {@code volatile}
      * so that the write from {@code FMLClientSetupEvent} is visible to the Netty IO thread.</p>
      */
-    public static volatile ClientPayloadDispatcher clientPayloadDispatcher = null;
+    public static volatile @Nullable ClientPayloadDispatcher clientPayloadDispatcher = null;
 
     /**
      * Dispatcher interface - does not reference any client-only classes, so it is safe to
@@ -61,8 +63,7 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
          * @param payload the received payload
          * @param context the NeoForge payload context
          */
-        void dispatch(ChannelPayload payload,
-                      net.neoforged.neoforge.network.handling.IPayloadContext context);
+        void dispatch(ChannelPayload payload, IPayloadContext context);
     }
 
     /**
@@ -74,18 +75,15 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
         modEventBus.addListener(this::onRegisterPayloads);
     }
 
-    @Override
-    public void onServerChannelRegistered(ResourceLocation id) {
+    public @Override void onServerChannelRegistered(ResourceLocation id) {
         pendingC2S.add(id);
     }
 
-    @Override
-    public void onClientChannelRegistered(ResourceLocation id) {
+    public @Override void onClientChannelRegistered(ResourceLocation id) {
         pendingS2C.add(id);
     }
 
-    @Override
-    public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
+    public @Override void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
         player.connection.send(new ClientboundCustomPayloadPacket(new ChannelPayload(id, bytes)));
@@ -97,59 +95,58 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
 
         // Bidirectional channels appear in both lists (e.g. version handshake).
         // NeoForge does not allow registering the same payload type via both playToServer
-        // and playToClient — use playBidirectional and detect direction via player type.
+        // and playToClient - use playBidirectional and detect direction via player type.
         for (ResourceLocation id : pendingC2S) {
             if (pendingS2C.contains(id)) {
-                registrar.playBidirectional(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id),
-                        (payload, ctx) -> {
-                            if (ctx.player() instanceof ServerPlayer serverPlayer) {
-                                // C2S path
-                                List<PacketReceiver<ServerPlayContext>> receivers =
-                                        PacketChannels.SERVER_RECEIVERS.get(payload.channelId());
-                                if (receivers == null || receivers.isEmpty()) return;
-                                NeoForgeServerPlayContext context =
-                                        new NeoForgeServerPlayContext(serverPlayer);
-                                FriendlyByteBuf buf =
-                                        new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
-                                for (PacketReceiver<ServerPlayContext> receiver : receivers) {
-                                    receiver.receive(context, buf);
-                                }
-                            } else {
-                                // S2C path — delegate to client-only dispatcher
-                                ClientPayloadDispatcher dispatcher = clientPayloadDispatcher;
-                                if (dispatcher != null) {
-                                    dispatcher.dispatch(payload, ctx);
-                                }
-                            }
-                        });
+                registrar.playBidirectional(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id), (payload, ctx) -> {
+                    if (ctx.player() instanceof ServerPlayer serverPlayer) {
+                        // C2S path
+                        List<PacketReceiver<ServerPlayContext>> receivers = PacketChannels.SERVER_RECEIVERS.get(
+                                payload.channelId());
+                        if (receivers == null || receivers.isEmpty()) {
+                            return;
+                        }
+                        NeoForgeServerPlayContext context = new NeoForgeServerPlayContext(serverPlayer);
+                        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
+                        for (PacketReceiver<ServerPlayContext> receiver : receivers) {
+                            receiver.receive(context, buf);
+                        }
+                    } else {
+                        // S2C path - delegate to client-only dispatcher
+                        @Nullable ClientPayloadDispatcher dispatcher = clientPayloadDispatcher;
+                        if (dispatcher != null) {
+                            dispatcher.dispatch(payload, ctx);
+                        }
+                    }
+                });
             } else {
-                registrar.playToServer(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id),
-                        (payload, ctx) -> {
-                            List<PacketReceiver<ServerPlayContext>> receivers =
-                                    PacketChannels.SERVER_RECEIVERS.get(payload.channelId());
-                            if (receivers == null || receivers.isEmpty()) return;
-                            if (!(ctx.player() instanceof ServerPlayer serverPlayer)) return;
-                            NeoForgeServerPlayContext context =
-                                    new NeoForgeServerPlayContext(serverPlayer);
-                            FriendlyByteBuf buf =
-                                    new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
-                            for (PacketReceiver<ServerPlayContext> receiver : receivers) {
-                                receiver.receive(context, buf);
-                            }
-                        });
+                registrar.playToServer(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id), (payload, ctx) -> {
+                    List<PacketReceiver<ServerPlayContext>> receivers = PacketChannels.SERVER_RECEIVERS.get(
+                            payload.channelId());
+                    if (receivers == null || receivers.isEmpty()) {
+                        return;
+                    }
+                    if (!(ctx.player() instanceof ServerPlayer serverPlayer)) {
+                        return;
+                    }
+                    NeoForgeServerPlayContext context = new NeoForgeServerPlayContext(serverPlayer);
+                    FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
+                    for (PacketReceiver<ServerPlayContext> receiver : receivers) {
+                        receiver.receive(context, buf);
+                    }
+                });
             }
         }
 
         // Register S2C-only channels (not already handled as bidirectional).
         for (ResourceLocation id : pendingS2C) {
             if (!pendingC2S.contains(id)) {
-                registrar.playToClient(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id),
-                        (payload, ctx) -> {
-                            ClientPayloadDispatcher dispatcher = clientPayloadDispatcher;
-                            if (dispatcher != null) {
-                                dispatcher.dispatch(payload, ctx);
-                            }
-                        });
+                registrar.playToClient(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id), (payload, ctx) -> {
+                    @Nullable ClientPayloadDispatcher dispatcher = clientPayloadDispatcher;
+                    if (dispatcher != null) {
+                        dispatcher.dispatch(payload, ctx);
+                    }
+                });
             }
         }
     }
@@ -169,34 +166,28 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
             this.player = player;
         }
 
-        @Override
-        public MinecraftServer server() {
+        public @Override MinecraftServer server() {
             return player.server;
         }
 
-        @Override
-        public ServerPlayer player() {
+        public @Override ServerPlayer player() {
             return player;
         }
 
-        @Override
-        public ServerGamePacketListenerImpl handler() {
+        public @Override ServerGamePacketListenerImpl handler() {
             return player.connection;
         }
 
-        @Override
-        public void send(ResourceLocation id, FriendlyByteBuf buf) {
+        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             player.connection.send(new ClientboundCustomPayloadPacket(new ChannelPayload(id, bytes)));
         }
 
-        @Override
-        public boolean canSend(ResourceLocation id) {
+        public @Override boolean canSend(ResourceLocation id) {
             // On NeoForge, all clients are mod-aware; channel availability tracks registration.
             // A more precise check (payload setup negotiation) can be added later.
-            return player.connection.isAcceptingMessages()
-                    && PacketChannels.CLIENT_CHANNELS.contains(id);
+            return player.connection.isAcceptingMessages() && PacketChannels.CLIENT_CHANNELS.contains(id);
         }
     }
 }

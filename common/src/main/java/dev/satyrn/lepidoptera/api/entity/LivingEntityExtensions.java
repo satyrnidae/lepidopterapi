@@ -15,8 +15,10 @@ import org.jetbrains.annotations.Contract;
  * <p>The hunger methods ({@link #getFoodData()} and {@link #addExhaustion(float)}) are
  * always available on every living entity. Food data is only ticked for entity types
  * registered in {@link HungryEntityRegistry}.</p>
+ *
+ * @since 0.4.0+1.19.2
  */
-@Api
+@Api("0.4.0+1.19.2")
 public interface LivingEntityExtensions {
 
     /**
@@ -24,9 +26,12 @@ public interface LivingEntityExtensions {
      * its maximum health).
      *
      * @return {@code true} if the entity needs healing
+     *
+     * @since 0.4.0+1.19.2
      */
+    @Api("0.4.0+1.19.2")
     @Contract(pure = true)
-    @Api default boolean isHurt() {
+    default boolean isHurt() {
         throw new UnsupportedOperationException("Not Implemented");
     }
 
@@ -38,9 +43,12 @@ public interface LivingEntityExtensions {
      * advanced each tick for entity types registered in {@link HungryEntityRegistry}.</p>
      *
      * @return the food data for this entity
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @Contract(pure = true)
-    @Api default EntityFoodData getFoodData() {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    default EntityFoodData getFoodData() {
         throw new UnsupportedOperationException("Not Implemented");
     }
 
@@ -57,10 +65,14 @@ public interface LivingEntityExtensions {
      * out with {@code false} then delegate to the interface default implementation at the end.</p>
      *
      * @param itemStack the item stack being eaten
+     *
      * @return {@code true} if the entity accepted and ate the food; {@code false} if it was full or rejected
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "this")
-    @Api default boolean eat(final ItemStack itemStack) {
+    default boolean eat(final ItemStack itemStack) {
         final EntityFoodData foodData = this.getFoodData();
         if (foodData.needsFood()) {
             return getFoodData().eat(itemStack);
@@ -73,8 +85,11 @@ public interface LivingEntityExtensions {
      * food level over time.
      *
      * @param exhaustion the amount of exhaustion to add (clamped to a maximum of 40)
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api default void addExhaustion(final float exhaustion) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    default void addExhaustion(final float exhaustion) {
         throw new UnsupportedOperationException("Not Implemented");
     }
 
@@ -84,10 +99,14 @@ public interface LivingEntityExtensions {
      * <p>Safe because the mixin always injects this interface onto {@code LivingEntity}.</p>
      *
      * @param livingEntity the entity to cast
+     *
      * @return the entity as a {@link LivingEntityExtensions}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Contract(pure = true)
-    @Api static LivingEntityExtensions cast(final LivingEntity livingEntity) {
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(value = "_ -> param1", pure = true)
+    static LivingEntityExtensions cast(final LivingEntity livingEntity) {
         return (LivingEntityExtensions) livingEntity;
     }
 }

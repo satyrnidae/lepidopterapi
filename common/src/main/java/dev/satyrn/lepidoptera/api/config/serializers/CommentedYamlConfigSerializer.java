@@ -2,8 +2,8 @@ package dev.satyrn.lepidoptera.api.config.serializers;
 
 import com.google.common.collect.Maps;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.accessors.autoconfig.YamlConfigSerializerAccessor;
+import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.config.serializers.YamlCommentInjector;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -13,7 +13,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.Yaml;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.constructor.Constructor;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.representer.Representer;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,19 +35,32 @@ import java.util.Map;
  * in a subdirectory.</p>
  *
  * @param <T> the config data type
+ *
+ * @since 0.4.0+1.19.2
  */
-@Api
+@Api("0.4.0+1.19.2")
 public final class CommentedYamlConfigSerializer<T extends ConfigData> extends YamlConfigSerializer<T> {
-    /** The default maximum line length for word-wrapped comments (120 characters). */
-    @Api public static final int DEFAULT_LINE_LENGTH = YamlCommentInjector.DEFAULT_LINE_LENGTH;
 
-    /** The minimum allowable line length for word-wrapped comments (60 characters). */
-    @Api public static final int MIN_LINE_LENGTH = YamlCommentInjector.MIN_LINE_LENGTH;
+    /**
+     * The default maximum line length for word-wrapped comments (120 characters).
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @Api("0.4.0+1.19.2")
+    public static final int DEFAULT_LINE_LENGTH = YamlCommentInjector.DEFAULT_LINE_LENGTH;
+
+    /**
+     * The minimum allowable line length for word-wrapped comments (60 characters).
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @Api("0.4.0+1.19.2")
+    public static final int MIN_LINE_LENGTH = YamlCommentInjector.MIN_LINE_LENGTH;
 
     private static final String YAML_DIRECTIVE_PREFIX = "!!";
     private static final int INDENT = 4;
 
-    private final YamlConfigSerializerAccessor accessor = (YamlConfigSerializerAccessor)(Object)this;
+    private final YamlConfigSerializerAccessor accessor = (YamlConfigSerializerAccessor) (Object) this;
     private final YamlCommentInjector injector;
 
     /**
@@ -60,8 +72,10 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      * @param definition  the Cloth Config {@code @Config} definition for this config
      * @param configClass the config data class
      * @param lineLength  the maximum comment line length; clamped to at least {@link #MIN_LINE_LENGTH}
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Api
+    @Api("0.4.0+1.19.2")
     public CommentedYamlConfigSerializer(final Config definition, final Class<T> configClass, final int lineLength) {
         super(definition, configClass, getYaml(configClass));
         this.injector = new YamlCommentInjector(lineLength);
@@ -72,8 +86,10 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @param definition  the Cloth Config {@code @Config} definition for this config
      * @param configClass the config data class
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Api
+    @Api("0.4.0+1.19.2")
     public CommentedYamlConfigSerializer(final Config definition, final Class<T> configClass) {
         this(definition, configClass, DEFAULT_LINE_LENGTH);
     }
@@ -90,7 +106,7 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
     }
 
     @Contract("-> new")
-    private static @NotNull DumperOptions getDumperOptions() {
+    private static DumperOptions getDumperOptions() {
         final DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setPrettyFlow(true);
         dumperOptions.setCanonical(false);
@@ -109,15 +125,17 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      * Logs an error (without throwing) if the write fails.
      *
      * @param config the config object to serialize
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Override
-    @Api public void serialize(final T config) {
+    @Api("0.4.0+1.19.2")
+    public @Override void serialize(final T config) {
         final Path configPath = this.accessor.callGetConfigPath();
 
         try {
             final Map<String, String> commentMap = this.injector.buildNestedCommentMap(config.getClass());
-            final String yaml = this.injector.injectComments(
-                    this.accessor.getYaml().dump(config), commentMap, config.getClass());
+            final String yaml = this.injector.injectComments(this.accessor.getYaml().dump(config), commentMap,
+                    config.getClass());
             Files.createDirectories(configPath.getParent());
             Files.writeString(configPath, yaml, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
@@ -130,9 +148,11 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      * Returns a default config instance if the file does not exist or cannot be read.
      *
      * @return the deserialized config, or a default instance on failure
+     *
+     * @since 0.4.0+1.19.2
      */
-    @Override
-    @Api public T deserialize() {
+    @Api("0.4.0+1.19.2")
+    public @Override T deserialize() {
         Path configPath = this.accessor.callGetConfigPath();
         if (Files.exists(configPath)) {
             try {
