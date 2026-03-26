@@ -57,11 +57,44 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
     protected void buildModRecipes(RecipeOutput output) {
     }
 
+    /**
+     * Returns the {@link PackOutput} for this provider, for use with
+     * {@link ConditionalDataBuilder#save}.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    protected PackOutput packOutput() {
+        return this.packOutput;
+    }
+
     @Api
     protected CompletableFuture<?> runModded(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
         // Defaults to no-op
         return CompletableFuture.runAsync(() -> {
         });
+    }
+
+    /**
+     * Convenience overload that delegates to
+     * {@link ConditionalDataBuilder#save(CachedOutput, ResourceLocation, HolderLookup.Provider, PackOutput)}
+     * using this provider's {@link PackOutput}.
+     *
+     * @param cachedOutput   the data-gen output cache
+     * @param builder        the conditional builder to save
+     * @param id             the primary resource location for this data entry
+     * @param registryAccess the current registry lookup context
+     *
+     * @return a future that completes when all files have been written
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    protected CompletableFuture<?> saveWithConditions(final CachedOutput cachedOutput,
+                                                      final ConditionalDataBuilder builder,
+                                                      final ResourceLocation id,
+                                                      final HolderLookup.Provider registryAccess) {
+        return builder.save(cachedOutput, id, registryAccess, this.packOutput);
     }
 
     @Api

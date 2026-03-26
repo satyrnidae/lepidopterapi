@@ -1,4 +1,9 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
   "criteria": {
     "has_the_alembic": {
       "conditions": {
@@ -57,14 +62,19 @@
       "trigger": "minecraft:inventory_changed"
     }
   },
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
   "requirements": [
     [
       "has_the_recipe",
-      "has_the_candle",
-      "has_the_depleted_alembic",
       "has_the_alembic",
+      "has_the_soul_soil",
+      "has_the_candle",
       "has_the_glowstone_dust",
-      "has_the_soul_soil"
+      "has_the_depleted_alembic"
     ]
   ],
   "rewards": {

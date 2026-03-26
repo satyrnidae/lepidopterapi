@@ -1,4 +1,9 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
   "criteria": {
     "has_the_alembic": {
       "conditions": {
@@ -17,6 +22,11 @@
       "trigger": "minecraft:recipe_unlocked"
     }
   },
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
   "requirements": [
     [
       "has_the_recipe",
