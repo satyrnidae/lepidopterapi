@@ -50,8 +50,11 @@ public class LepidopteraRecipeProvider extends ModRecipeProvider {
                                 .requires(LepidopteraItems.DEPLETED_ALEMBIC.get())
                                 .requires(ItemTags.CANDLES)
                                 .requires(Items.GLOWSTONE_DUST)
+                                .requires(Items.BLAZE_POWDER)
                                 .group("alchemical_alembic")
                                 .unlockedBy("has_the_alembic", hasAlembic)
+                                .unlockedBy("has_the_blaze_powder", inventoryChange(
+                                        ItemPredicate.Builder.item().of(Items.BLAZE_POWDER).build()))
                                 .unlockedBy("has_the_soul_soil", inventoryChange(
                                         ItemPredicate.Builder.item().of(ItemTags.SOUL_FIRE_BASE_BLOCKS).build()))
                                 .unlockedBy("has_the_candle", inventoryChange(

@@ -15,6 +15,16 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "has_the_blaze_powder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:blaze_powder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "has_the_candle": {
       "conditions": {
         "items": [
@@ -71,6 +81,7 @@
     [
       "has_the_recipe",
       "has_the_alembic",
+      "has_the_blaze_powder",
       "has_the_soul_soil",
       "has_the_candle",
       "has_the_glowstone_dust",
