@@ -54,7 +54,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      * @param group       the recipe group (may be empty)
      * @param category    the crafting book category
      * @param result      the output item stack
-     * @param ingredients the list of required ingredients (1–9 entries)
+     * @param ingredients the list of required ingredients (1-9 entries)
      * @param damage      the damage applied to damageable crafting-remaining items
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
