@@ -31,14 +31,6 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
 
         // nasin pi Lepidoptera API = rules/settings of Lepidoptera API
         this.add(T9n.configTitle(LepidopteraConfig.class), "nasin pi Lepidoptera API");
-        // sitelen pi pakala = writing of errors (debug logging)
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "sitelen pi pakala");
-        // o sona e ni! = know this! (WARNING!); ni li sitelen e pali ale = this writes all interactions
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("o sona e ni! ", ChatFormatting.RED).append("ni li sitelen e pali ale!"));
-        // o open e ni taso la sina sona e pali sina = open this only if you know your work
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("o open e ni taso la sina sona e pali sina.", ChatFormatting.YELLOW));
         // o open e nasin pali pi ilo telo nasa = enable the crafting-ways of the alembic
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "o open e nasin pali pi ilo telo nasa");

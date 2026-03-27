@@ -32,13 +32,6 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
                 "Les versions de Lepidoptera API sont dépareillées entre le serveur et le client. Serveur : %s, Client : %s");
 
         this.add(T9n.configTitle(LepidopteraConfig.class), "Lepidoptera API configuration");
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "Journalisation de débogage");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("AVERTISSEMENT ! ", ChatFormatting.RED).append(
-                        "Toutes les interactions d'API seront journalisées."));
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("À n'activer que si vous comprenez les conséquences.",
-                        ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "Activer les recettes de l'alambic alchimiste");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0),

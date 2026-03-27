@@ -30,12 +30,6 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
                 "Incompatible Lepidoptera API version. Server: %s, Client: %s");
 
         this.add(T9n.configTitle(LepidopteraConfig.class), "Lepidoptera API Configuration");
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "Debug logging");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("WARNING! ", ChatFormatting.RED).append(
-                        "This will log every API interaction! "));
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("Only enable this if you know what you are doing.", ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "Enable alembic crafting recipes");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0),
