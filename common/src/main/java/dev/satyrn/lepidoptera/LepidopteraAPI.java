@@ -95,7 +95,8 @@ public class LepidopteraAPI implements LepidopteraMod {
         LOGGER.error(message, e);
     }
 
-    public @Override void preInit() {
+    @Override
+    public void preInit() {
         debug("PRE-INIT: {} entered the pre-initialization phase.", ModHelper.friendlyName());
 
         AutoConfig.register(LepidopteraConfig.class, (def, cls) -> new CommentedYamlConfigSerializer<>(def, cls,
@@ -106,7 +107,8 @@ public class LepidopteraAPI implements LepidopteraMod {
         debug("PRE-INIT: {} completed the pre-initialization phase.", ModHelper.friendlyName());
     }
 
-    public @Override void init() {
+    @Override
+    public void init() {
         debug("INIT: {} entered the initialization phase.", ModHelper.friendlyName());
 
         RULE_ENTITY_STARVATION = GameRules.register("doAnimalStarvation", GameRules.Category.MOBS,
@@ -146,7 +148,8 @@ public class LepidopteraAPI implements LepidopteraMod {
         debug("INIT: {} completed the initialization phase.", ModHelper.friendlyName());
     }
 
-    public @Override void postInit() {
+    @Override
+    public void postInit() {
         debug("POST-INIT: {} entered the post-initialization phase.", ModHelper.friendlyName());
 
         LepidopteraConfig cfg = AutoConfig.getConfigHolder(LepidopteraConfig.class).getConfig();
@@ -180,21 +183,24 @@ public class LepidopteraAPI implements LepidopteraMod {
         debug("POST-INIT: {} completed the post-initialization phase.", ModHelper.friendlyName());
     }
 
-    public @Override void serverStarted(MinecraftServer server) {
+    @Override
+    public void serverStarted(MinecraftServer server) {
         currentServer = server;
         if (CONFIG_SYNC != null) {
             CONFIG_SYNC.startWatching(server);
         }
     }
 
-    public @Override void serverStopped() {
+    @Override
+    public void serverStopped() {
         if (CONFIG_SYNC != null) {
             CONFIG_SYNC.stopWatching();
         }
         currentServer = null;
     }
 
-    public @Override void onTagsLoaded(final RegistryAccess registryAccess) {
+    @Override
+    public void onTagsLoaded(final RegistryAccess registryAccess) {
         HungryEntityRegistry.onTagsLoaded(registryAccess);
         EquipmentRegistry.onTagsLoaded(registryAccess);
     }

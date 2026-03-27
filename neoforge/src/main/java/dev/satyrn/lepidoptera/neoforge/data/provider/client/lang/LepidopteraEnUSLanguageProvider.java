@@ -18,7 +18,8 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, locale);
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alchemical Alembic");
         this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Depleted Alembic");
 

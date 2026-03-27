@@ -35,9 +35,11 @@ public abstract class AnimalMixin extends AgeableMob {
         NotInitializable.mixinClass(this);
     }
 
-    public abstract @Shadow boolean isFood(ItemStack stack);
+    @Shadow
+    public abstract boolean isFood(ItemStack stack);
 
-    protected abstract @Shadow void usePlayerItem(Player player, InteractionHand hand, ItemStack stack);
+    @Shadow
+    protected abstract void usePlayerItem(Player player, InteractionHand hand, ItemStack stack);
 
     /**
      * Intercepts {@code Animal.mobInteract} inside the {@code isFood} block, before breeding/aging

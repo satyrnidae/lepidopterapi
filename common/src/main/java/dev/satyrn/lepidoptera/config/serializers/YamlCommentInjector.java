@@ -46,7 +46,7 @@ public class YamlCommentInjector {
      * @param lineLength the maximum line length for word-wrapped comments;
      *                   effectively clamped to at least {@link #MIN_LINE_LENGTH}
      */
-    public YamlCommentInjector(int lineLength) {
+    public YamlCommentInjector(final int lineLength) {
         this.lineLength = lineLength;
     }
 
@@ -54,8 +54,8 @@ public class YamlCommentInjector {
      * Builds a flat comment map keyed by YAML path from a config class's {@link YamlComment} annotations.
      * Section header entries are stored at {@code path.__SECTION}.
      */
-    public Map<String, String> buildNestedCommentMap(Class<?> clazz) throws Exception {
-        Map<String, String> comments = new HashMap<>();
+    public Map<String, String> buildNestedCommentMap(final Class<?> clazz) throws Exception {
+        final Map<String, String> comments = new HashMap<>();
         if (BeanInspection.isBean(clazz)) {
             buildCommentsRecursive(clazz, "", comments);
         }
@@ -66,8 +66,10 @@ public class YamlCommentInjector {
      * Injects comments from the comment map into a YAML string. Optionally prepends a file-level header comment
      * from {@code configClass}'s {@link YamlComment} annotation if present.
      */
-    public String injectComments(String yaml, Map<String, String> commentMap, @Nullable Class<?> configClass) {
-        List<String> lines = new ArrayList<>(Arrays.asList(yaml.split("\\r?\\n")));
+    public String injectComments(final String yaml,
+                                 final Map<String, String> commentMap,
+                                 final @Nullable Class<?> configClass) {
+        final List<String> lines = new ArrayList<>(Arrays.asList(yaml.split("\\r?\\n")));
         if (lines.isEmpty()) {
             return yaml;
         }
@@ -75,10 +77,10 @@ public class YamlCommentInjector {
         if (configClass != null) {
             final @Nullable YamlComment classComment = configClass.getAnnotation(YamlComment.class);
             if (classComment != null) {
-                int startIndex = lines.get(0).startsWith(YAML_DIRECTIVE_PREFIX) ? 1 : 0;
+                final int startIndex = lines.get(0).startsWith(YAML_DIRECTIVE_PREFIX) ? 1 : 0;
                 lines.add(startIndex, "");
 
-                String[] commentLines = wordWrap(classComment.value()).split("\\r?\\n");
+                final String[] commentLines = wordWrap(classComment.value()).split("\\r?\\n");
                 for (int i = commentLines.length - 1; i >= 0; i--) {
                     lines.add(startIndex, COMMENT_PREFIX + commentLines[i]);
                 }
@@ -87,11 +89,11 @@ public class YamlCommentInjector {
             }
         }
 
-        Deque<String> pathStack = new ArrayDeque<>();
+        final Deque<String> pathStack = new ArrayDeque<>();
 
         for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            String trimmed = line.trim();
+            final String line = lines.get(i);
+            final String trimmed = line.trim();
 
             if (trimmed.startsWith(YAML_DIRECTIVE_PREFIX)) {
                 lines.remove(i--);
@@ -109,12 +111,12 @@ public class YamlCommentInjector {
             }
 
             if (trimmed.endsWith(":")) {
-                String key = trimmed.substring(0, trimmed.length() - 1).trim();
-                String fullPath = getCurrentPath(pathStack, key);
-                String sectionPath = fullPath + "." + SECTION_IDENTIFIER;
+                final String key = trimmed.substring(0, trimmed.length() - 1).trim();
+                final String fullPath = getCurrentPath(pathStack, key);
+                final String sectionPath = fullPath + "." + SECTION_IDENTIFIER;
 
                 if (commentMap.containsKey(sectionPath)) {
-                    String[] commentLines = commentMap.get(sectionPath).split("\\r?\\n");
+                    final String[] commentLines = commentMap.get(sectionPath).split("\\r?\\n");
                     for (int j = commentLines.length - 1; j >= 0; j--) {
                         lines.add(i, COMMENT_PREFIX + commentLines[j]);
                     }
@@ -124,7 +126,7 @@ public class YamlCommentInjector {
                     }
                     i += commentLines.length;
                 } else if (commentMap.containsKey(fullPath)) {
-                    String[] commentLines = commentMap.get(fullPath).split("\\r?\\n");
+                    final String[] commentLines = commentMap.get(fullPath).split("\\r?\\n");
                     int indent = line.indexOf(key);
 
                     for (int j = commentLines.length - 1; j >= 0; j--) {
@@ -137,12 +139,12 @@ public class YamlCommentInjector {
                     pathStack.push(key);
                 }
             } else if (trimmed.contains(":")) {
-                String property = trimmed.split(":", 2)[0].trim();
-                String fullPath = getCurrentPath(pathStack, property);
+                final String property = trimmed.split(":", 2)[0].trim();
+                final String fullPath = getCurrentPath(pathStack, property);
 
                 if (commentMap.containsKey(fullPath)) {
-                    int indent = line.indexOf(property);
-                    String[] commentLines = commentMap.get(fullPath).split("\\r?\\n");
+                    final int indent = line.indexOf(property);
+                    final String[] commentLines = commentMap.get(fullPath).split("\\r?\\n");
 
                     for (int j = commentLines.length - 1; j >= 0; j--) {
                         lines.add(i, " ".repeat(indent) + COMMENT_PREFIX + commentLines[j]);
@@ -154,17 +156,19 @@ public class YamlCommentInjector {
         return String.join("\n", lines);
     }
 
-    private void buildCommentsRecursive(Class<?> clazz, String currentPath, Map<String, String> comments)
+    private void buildCommentsRecursive(final Class<?> clazz,
+                                        final String currentPath,
+                                        final Map<String, String> comments)
             throws Exception {
-        BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
-        Set<String> handledNames = new HashSet<>();
+        final BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
+        final Set<String> handledNames = new HashSet<>();
 
         for (PropertyDescriptor prop : beanInfo.getPropertyDescriptors()) {
             if (prop.getName().equals("class")) {
                 continue;
             }
 
-            Method getter = prop.getReadMethod();
+            final Method getter = prop.getReadMethod();
             if (getter != null) {
                 handledNames.add(prop.getName());
 
@@ -172,24 +176,24 @@ public class YamlCommentInjector {
                 @Nullable YamlComment comment = getter.getAnnotation(YamlComment.class);
                 if (comment == null) {
                     try {
-                        Field field = clazz.getDeclaredField(prop.getName());
+                        final Field field = clazz.getDeclaredField(prop.getName());
                         comment = field.getAnnotation(YamlComment.class);
                     } catch (NoSuchFieldException ignored) {
                     }
                 }
 
-                String fullPath = currentPath.isEmpty() ? prop.getName() : currentPath + "." + prop.getName();
-                int indentLevel = fullPath.split("\\.").length - 1;
+                final String fullPath = currentPath.isEmpty() ? prop.getName() : currentPath + "." + prop.getName();
+                final int indentLevel = fullPath.split("\\.").length - 1;
 
                 buildFieldComments(comments, comment, fullPath, indentLevel, getter.getReturnType());
 
                 if (prop.getPropertyType().isEnum()) {
                     String enumComments = getEnumComments(prop.getPropertyType(), indentLevel);
                     if (!enumComments.isEmpty()) {
-                        String entryPath = (comment != null && comment.sectionHeader()) ? fullPath +
+                        final String entryPath = (comment != null && comment.sectionHeader()) ? fullPath +
                                 "." +
                                 SECTION_IDENTIFIER : fullPath;
-                        String existing = comments.getOrDefault(entryPath, "");
+                        final String existing = comments.getOrDefault(entryPath, "");
                         comments.put(entryPath, (existing.isEmpty() ? "" : existing + "\n") + enumComments);
                     }
                 }
@@ -201,8 +205,8 @@ public class YamlCommentInjector {
         }
 
         // Also handle public instance fields not covered by bean getter/setter pairs.
-        for (Field field : clazz.getDeclaredFields()) {
-            int mods = field.getModifiers();
+        for (final Field field : clazz.getDeclaredFields()) {
+            final int mods = field.getModifiers();
             if (!Modifier.isPublic(mods) || Modifier.isStatic(mods)) {
                 continue;
             }
@@ -211,8 +215,8 @@ public class YamlCommentInjector {
             }
 
             final @Nullable YamlComment comment = field.getAnnotation(YamlComment.class);
-            String fullPath = currentPath.isEmpty() ? field.getName() : currentPath + "." + field.getName();
-            int indentLevel = fullPath.split("\\.").length - 1;
+            final String fullPath = currentPath.isEmpty() ? field.getName() : currentPath + "." + field.getName();
+            final int indentLevel = fullPath.split("\\.").length - 1;
 
             buildFieldComments(comments, comment, fullPath, indentLevel, field.getType());
 

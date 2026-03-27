@@ -44,7 +44,8 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     @YamlComment("[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.")
     public String demoInventorySize = new InventorySize(9, 3).toString();
 
-    public @Override void copyFrom(LepidopteraConfig other) {
+    @Override
+    public void copyFrom(LepidopteraConfig other) {
         this.debug = other.debug;
         this.enableAlchemicalAlembicRecipes = other.enableAlchemicalAlembicRecipes;
         this.alchemicalAlembicCanShiftClick = other.alchemicalAlembicCanShiftClick;
@@ -57,12 +58,14 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     public enum Codec implements ConfigCodec<LepidopteraConfig> {
         INSTANCE;
 
-        public @Override void encode(LepidopteraConfig value, FriendlyByteBuf buf) {
+        @Override
+        public void encode(LepidopteraConfig value, FriendlyByteBuf buf) {
             buf.writeBoolean(value.enableAlchemicalAlembicRecipes);
             buf.writeBoolean(value.alchemicalAlembicCanShiftClick);
         }
 
-        public @Override LepidopteraConfig decode(FriendlyByteBuf buf) {
+        @Override
+        public LepidopteraConfig decode(FriendlyByteBuf buf) {
             LepidopteraConfig config = new LepidopteraConfig();
             config.enableAlchemicalAlembicRecipes = buf.readBoolean();
             config.alchemicalAlembicCanShiftClick = buf.readBoolean();

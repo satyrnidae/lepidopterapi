@@ -41,7 +41,8 @@ public class LepidopteraRecipeProvider extends ModRecipeProvider {
                         InventoryChangeTrigger.TriggerInstance.Slots.ANY, List.of(predicate)));
     }
 
-    protected @Override CompletableFuture<?> runModded(final CachedOutput cacheOutput,
+    @Override
+    protected CompletableFuture<?> runModded(final CachedOutput cacheOutput,
                                                        final HolderLookup.Provider registryAccess) {
         // Shared criteria - reused across multiple recipes
         final Criterion<?> hasAlembic = inventoryChange(

@@ -14,7 +14,8 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, "tok");
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         // ilo telo nasa = tool-liquid-strange
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "ilo telo nasa");
         // ilo telo nasa weka = tool-liquid-strange-gone

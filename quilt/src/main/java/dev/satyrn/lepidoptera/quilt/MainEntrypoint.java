@@ -19,7 +19,8 @@ import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 @SuppressWarnings({"unused", "deprecation"})
 public class MainEntrypoint implements ModInitializer {
 
-    public @Override void onInitialize() {
+    @Override
+    public void onInitialize() {
         info("Initializing Lepidoptera API for Quilt MC.");
 
         PacketChannels.setImpl(new QuiltPacketChannelsImpl());

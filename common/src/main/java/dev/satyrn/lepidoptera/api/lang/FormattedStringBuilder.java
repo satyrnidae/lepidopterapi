@@ -114,7 +114,8 @@ public final class FormattedStringBuilder {
      *
      * @return the built string
      */
-    public @Override String toString() {
+    @Override
+    public String toString() {
         return build();
     }
 }

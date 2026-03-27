@@ -29,8 +29,8 @@ public abstract class ModTagProvider<T> extends TagsProvider<T> implements WithL
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    protected @Override
-    final void addTags(HolderLookup.Provider provider) {
+    @Override
+    protected final void addTags(HolderLookup.Provider provider) {
         addModTags(provider);
     }
 
@@ -38,12 +38,14 @@ public abstract class ModTagProvider<T> extends TagsProvider<T> implements WithL
     protected abstract void addModTags(HolderLookup.Provider provider);
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override String getName() {
+    @Override
+    public String getName() {
         return location().toString();
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return ModHelper.resource(metadata, "tags/" + this.registryKey.location().getPath());
     }
 }

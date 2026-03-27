@@ -99,11 +99,13 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         return DataProvider.saveStable(cachedOutput, json, path);
     }
 
-    protected final @Override CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
+    @Override
+    protected final CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
         return CompletableFuture.allOf(super.run(arg, arg2), runModded(arg, arg2));
     }
 
-    protected final @Override void buildRecipes(RecipeOutput output) {
+    @Override
+    protected final void buildRecipes(RecipeOutput output) {
         buildModRecipes(output);
     }
 
@@ -170,7 +172,8 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
                 buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess));
     }
 
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return ModHelper.resource(metadata, "providers/recipe");
     }
 }

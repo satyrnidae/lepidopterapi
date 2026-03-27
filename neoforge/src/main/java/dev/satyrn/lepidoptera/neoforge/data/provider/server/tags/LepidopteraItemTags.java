@@ -18,7 +18,8 @@ public class LepidopteraItemTags extends ModOnlyItemTagsProvider {
         super(LepidopteraAPI.class, arg, completableFuture, existingFileHelper);
     }
 
-    protected @Override void addModTags(final HolderLookup.Provider provider) {
+    @Override
+    protected void addModTags(final HolderLookup.Provider provider) {
         this.tag(ApiItemTags.FEET_EQUIPMENT);
         this.tag(ApiItemTags.LEGS_EQUIPMENT);
         this.tag(ApiItemTags.CHEST_EQUIPMENT);

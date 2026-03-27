@@ -243,7 +243,8 @@ public final class EquipmentRegistry {
      *
      * @param tags the tag or tags to protect
      */
-    public static @SafeVarargs void protect(final TagKey<Item>... tags) {
+    @SafeVarargs
+    public static void protect(final TagKey<Item>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 

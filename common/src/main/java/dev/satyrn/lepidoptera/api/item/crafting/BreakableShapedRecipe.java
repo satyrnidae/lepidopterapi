@@ -105,7 +105,8 @@ public class BreakableShapedRecipe extends ShapedRecipe {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 
         for (int i = 0; i < remaining.size(); i++) {
@@ -127,7 +128,8 @@ public class BreakableShapedRecipe extends ShapedRecipe {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override RecipeSerializer<?> getSerializer() {
+    @Override
+    public RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 
@@ -191,7 +193,8 @@ public class BreakableShapedRecipe extends ShapedRecipe {
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override MapCodec<BreakableShapedRecipe> codec() {
+        @Override
+        public MapCodec<BreakableShapedRecipe> codec() {
             return CODEC;
         }
 
@@ -201,7 +204,8 @@ public class BreakableShapedRecipe extends ShapedRecipe {
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> streamCodec() {
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> streamCodec() {
             return STREAM_CODEC;
         }
     }

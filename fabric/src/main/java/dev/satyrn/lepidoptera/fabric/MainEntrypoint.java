@@ -20,7 +20,8 @@ import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
  * ModMeta initializer for Fabric loader.
  */
 public final class MainEntrypoint implements ModInitializer {
-    public @Override void onInitialize() {
+    @Override
+    public void onInitialize() {
         info("Initializing Lepidoptera API for Fabric MC.");
 
         // Inject the Fabric networking impl before init() so any registrations

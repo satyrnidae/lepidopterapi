@@ -87,7 +87,8 @@ public record InventorySize(int width, int height) {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    public @Override int width() {
+    @Override
+    public int width() {
         return this.width;
     }
 
@@ -98,7 +99,8 @@ public record InventorySize(int width, int height) {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    public @Override int height() {
+    @Override
+    public int height() {
         return this.height;
     }
 
@@ -109,7 +111,8 @@ public record InventorySize(int width, int height) {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
-    public @Override String toString() {
+    @Override
+    public String toString() {
         return this.width + "x" + this.height;
     }
 
@@ -120,7 +123,8 @@ public record InventorySize(int width, int height) {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(value = "null -> false", pure = true)
-    public @Override boolean equals(final @Nullable Object o) {
+    @Override
+    public boolean equals(final @Nullable Object o) {
         if (this == o) {
             return true;
         }

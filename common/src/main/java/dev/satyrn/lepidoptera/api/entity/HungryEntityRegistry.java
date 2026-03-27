@@ -181,7 +181,8 @@ public final class HungryEntityRegistry {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public static @SafeVarargs void protect(final TagKey<EntityType<?>>... tags) {
+    @SafeVarargs
+    public static void protect(final TagKey<EntityType<?>>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 

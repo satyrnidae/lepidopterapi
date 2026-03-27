@@ -34,7 +34,8 @@ public abstract class ModSoundDefinitionsProvider extends SoundDefinitionsProvid
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override String getName() {
+    @Override
+    public String getName() {
         return "Sound Definitions Provider for " + ModHelper.friendlyName(this.metadata);
     }
 }

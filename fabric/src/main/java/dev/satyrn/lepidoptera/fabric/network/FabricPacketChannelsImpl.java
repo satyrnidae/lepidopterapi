@@ -27,7 +27,8 @@ import java.util.List;
  */
 public final class FabricPacketChannelsImpl implements PacketChannelsImpl {
 
-    public @Override void onServerChannelRegistered(ResourceLocation id) {
+    @Override
+    public void onServerChannelRegistered(ResourceLocation id) {
         // Register payload type for C2S
         PayloadTypeRegistry.playC2S().register(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id));
         // Register server-side receiver - handler does a live lookup so receivers registered
@@ -46,12 +47,14 @@ public final class FabricPacketChannelsImpl implements PacketChannelsImpl {
         });
     }
 
-    public @Override void onClientChannelRegistered(ResourceLocation id) {
+    @Override
+    public void onClientChannelRegistered(ResourceLocation id) {
         // Register payload type for S2C; client receiver wiring done in ClientEntrypoint
         PayloadTypeRegistry.playS2C().register(ChannelPayload.typeFor(id), ChannelPayload.codecFor(id));
     }
 
-    public @Override void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
+    @Override
+    public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
         ServerPlayNetworking.send(player, new ChannelPayload(id, bytes));
@@ -66,25 +69,30 @@ public final class FabricPacketChannelsImpl implements PacketChannelsImpl {
      */
     public record FabricServerPlayContext(ServerPlayer player, MinecraftServer server) implements ServerPlayContext {
 
-        public @Override MinecraftServer server() {
+        @Override
+        public MinecraftServer server() {
             return server;
         }
 
-        public @Override ServerPlayer player() {
+        @Override
+        public ServerPlayer player() {
             return player;
         }
 
-        public @Override ServerGamePacketListenerImpl handler() {
+        @Override
+        public ServerGamePacketListenerImpl handler() {
             return player.connection;
         }
 
-        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
+        @Override
+        public void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ServerPlayNetworking.send(player, new ChannelPayload(id, bytes));
         }
 
-        public @Override boolean canSend(ResourceLocation id) {
+        @Override
+        public boolean canSend(ResourceLocation id) {
             CustomPacketPayload.Type<ChannelPayload> type = ChannelPayload.typeFor(id);
             return ServerPlayNetworking.canSend(player, type);
         }

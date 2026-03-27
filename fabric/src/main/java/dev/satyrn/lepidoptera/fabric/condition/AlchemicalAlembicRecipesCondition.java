@@ -33,11 +33,13 @@ public final class AlchemicalAlembicRecipesCondition implements ResourceConditio
     private AlchemicalAlembicRecipesCondition() {
     }
 
-    public @Override ResourceConditionType<?> getType() {
+    @Override
+    public ResourceConditionType<?> getType() {
         return TYPE;
     }
 
-    public @Override boolean test(HolderLookup.Provider registryLookup) {
+    @Override
+    public boolean test(HolderLookup.Provider registryLookup) {
         return LepidopteraAPI.alchemicalAlembicRecipesEnabled();
     }
 }

@@ -85,12 +85,14 @@ public abstract class ModJukeboxSongProvider extends DatapackBuiltinEntriesProvi
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override String getName() {
+    @Override
+    public String getName() {
         return location().toString();
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return ModHelper.resource(this.metadata, "providers/jukebox_song");
     }
 }

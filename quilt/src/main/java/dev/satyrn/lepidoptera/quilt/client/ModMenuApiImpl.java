@@ -10,7 +10,8 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public class ModMenuApiImpl implements ModMenuApi {
 
-    public @Override ConfigScreenFactory<?> getModConfigScreenFactory() {
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> AutoConfig.getConfigScreen(LepidopteraConfig.class, parent).get();
     }
 }

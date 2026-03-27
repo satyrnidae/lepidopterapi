@@ -9,7 +9,8 @@ public class LepidopteraFrCALanguageProvider extends LepidopteraFrFRLanguageProv
         super(output, "fr_ca");
     }
 
-    protected @Override void addAlchemicalAlembicCanShiftClick() {
+    @Override
+    protected void addAlchemicalAlembicCanShiftClick() {
         this.add(T9n.configOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick"),
                 "Maj-clic droit pour équiper l'alambic dans le casque");
     }

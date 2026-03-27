@@ -96,21 +96,25 @@ public final class FabricClientNetworking {
             this.handler = handler;
         }
 
-        public @Override Minecraft client() {
+        @Override
+        public Minecraft client() {
             return client;
         }
 
-        public @Override ClientPacketListener handler() {
+        @Override
+        public ClientPacketListener handler() {
             return handler;
         }
 
-        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
+        @Override
+        public void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ClientPlayNetworking.send(new ChannelPayload(id, bytes));
         }
 
-        public @Override boolean canSend(ResourceLocation id) {
+        @Override
+        public boolean canSend(ResourceLocation id) {
             CustomPacketPayload.Type<ChannelPayload> type = ChannelPayload.typeFor(id);
             return ClientPlayNetworking.canSend(type);
         }

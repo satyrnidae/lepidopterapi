@@ -25,7 +25,8 @@ public abstract class ModLootTableProvider extends LootTableProvider implements 
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return ModHelper.resource(metadata, "providers/loot_table");
     }
 }

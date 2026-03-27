@@ -147,7 +147,8 @@ public record SemVer(int major,
      * and pre-release label (compared case-insensitively, ignoring leading/trailing whitespace).
      * Build metadata is not considered.
      */
-    public @Override boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (obj instanceof SemVer semVer) {
             return this.major == semVer.major &&
                     this.minor == semVer.minor &&
@@ -161,7 +162,8 @@ public record SemVer(int major,
      * Returns a hash code consistent with {@link #equals}: based on major, minor, patch,
      * and pre-release (build metadata excluded).
      */
-    public @Override int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(major, minor, patch, preRelease);
     }
 
@@ -169,7 +171,8 @@ public record SemVer(int major,
      * Returns the version as a string in {@code MAJOR.MINOR.PATCH[-preRelease][+metadata]} format.
      * Pre-release and metadata segments are omitted when blank.
      */
-    public @Override String toString() {
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder().append(this.major)
                 .append(".")
                 .append(this.minor)
@@ -189,7 +192,8 @@ public record SemVer(int major,
      * A version with a pre-release label is considered lower than the same version without one
      * (e.g. {@code 1.0.0-alpha} &lt; {@code 1.0.0}). Build metadata is ignored.
      */
-    public @Override int compareTo(SemVer other) {
+    @Override
+    public int compareTo(SemVer other) {
         if (this.major != other.major) {
             return Integer.compare(this.major, other.major);
         }

@@ -22,7 +22,8 @@ public abstract class ModOnlyItemTagsProvider extends ModItemTagsProvider {
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return super.location().withSuffix("_only");
     }
 }

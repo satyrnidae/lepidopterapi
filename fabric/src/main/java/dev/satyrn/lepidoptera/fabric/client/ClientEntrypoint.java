@@ -13,7 +13,8 @@ import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
  */
 @Environment(EnvType.CLIENT)
 public final class ClientEntrypoint implements ClientModInitializer {
-    public @Override void onInitializeClient() {
+    @Override
+    public void onInitializeClient() {
         info("Initializing client-sided code for Lepidoptera API for Fabric MC.");
 
         LepidopteraAPIClient.INSTANCE.preInit();

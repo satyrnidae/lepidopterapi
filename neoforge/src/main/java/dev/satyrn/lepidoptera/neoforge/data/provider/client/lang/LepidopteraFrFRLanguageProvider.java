@@ -18,7 +18,8 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, locale);
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         // I tried with this lol
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alambic alchimiste");
         this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Alambic alchimiste éteint");
