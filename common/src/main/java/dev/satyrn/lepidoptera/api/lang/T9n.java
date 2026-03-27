@@ -988,8 +988,8 @@ public final class T9n {
      */
     @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    public static String gamerule(final String key) {
-        return String.format("gamerule.%s", key);
+    public static String gamerule(final String... key) {
+        return String.format("gamerule.%s", String.join(".", key));
     }
 
     /**
@@ -1001,9 +1001,31 @@ public final class T9n {
      */
     @Api("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    public static String gameruleDesc(final String key) {
-        return String.format("gamerule.%s.description", key);
+    public static String gameruleDesc(final String... key) {
+        return String.format("gamerule.%s.description", String.join(".", key));
     }
 
     //#endregion Gamerules
+
+    //#region Gui
+
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String gui(final String modId, final String... key) {
+        return String.format("gui.%s.%s", modId, String.join(".", key));
+    }
+
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String gui(final ModMeta metadata, final String... key) {
+        return gui(metadata.value(), key);
+    }
+
+    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String gui(final Class<?> modClass, final String... key) {
+        return gui(ModHelper.modId(modClass), key);
+    }
+
+    //#endregion Gui
 }

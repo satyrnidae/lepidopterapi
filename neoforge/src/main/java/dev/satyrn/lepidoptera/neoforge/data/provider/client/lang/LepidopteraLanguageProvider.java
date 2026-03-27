@@ -50,5 +50,16 @@ public class LepidopteraLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1),
                 new FormattedStringBuilder("Changing this value requires a full server restart.",
                         ChatFormatting.YELLOW));
+
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "Demo inventory size");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
+                "[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.");
+        this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
+                "Format: WxH (e.g. 9x3). Max width: 18, max height: 9.");
+        this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "Width: %s");
+        this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"), "W: %s");
+        this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Height: %s");
+        this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H: %s");
+        this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
     }
 }

@@ -1,5 +1,7 @@
 package dev.satyrn.lepidoptera.config;
 
+import dev.satyrn.lepidoptera.api.config.InventorySize;
+import dev.satyrn.lepidoptera.api.config.InventorySizeField;
 import dev.satyrn.lepidoptera.api.config.NestingConfigData;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import dev.satyrn.lepidoptera.api.config.sync.ConfigCodec;
@@ -15,24 +17,32 @@ import net.minecraft.network.FriendlyByteBuf;
 @Config(name = "lepidoptera/config")
 public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
 
-    @ConfigEntry.Gui.Tooltip(count = 2) @YamlComment("Enables debug logging for Lepidoptera API.")
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @YamlComment("Enables debug logging for Lepidoptera API.")
     public boolean debug = false;
 
-    @ConfigEntry.Gui.Tooltip(count = 2) @YamlComment("Enables recipes for and using the alembic items. " +
-            "Changing this requires a server restart or /reload to take effect. " +
-            "The server value is pushed to clients on join and on config reload.")
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @YamlComment("Enables recipes for and using the alembic items. " +
+                 "Changing this requires a server restart or /reload to take effect. " +
+                 "The server value is pushed to clients on join and on config reload.")
     public boolean enableAlchemicalAlembicRecipes = false;
 
-    @ConfigEntry.Gui.Tooltip(count = 2) @YamlComment(
-            "Allows the alembics to be shift-click equipped into the helmet slot. " +
-                    "Changes take effect when the config is reloaded; no server restart required. " +
-                    "The server value is pushed to clients on join and on config reload.")
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @YamlComment("Allows the alembics to be shift-click equipped into the helmet slot. " +
+                 "Changes take effect when the config is reloaded; no server restart required. " +
+                 "The server value is pushed to clients on join and on config reload.")
     public boolean alchemicalAlembicCanShiftClick = true;
 
-    @ConfigEntry.Gui.RequiresRestart @ConfigEntry.Gui.Tooltip(count = 2) @YamlComment(
-            "Allows the Alchemical Alembic to show in the Creative tabs. " +
-                    "Changing this value requires a full restart to take effect.")
+    @ConfigEntry.Gui.RequiresRestart
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @YamlComment("Allows the Alchemical Alembic to show in the Creative tabs. " +
+                 "Changing this value requires a full restart to take effect.")
     public boolean showAlembicInCreativeTabs = false;
+
+    @InventorySizeField(maxWidth = 5, maxHeight = 3)
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @YamlComment("[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.")
+    public String demoInventorySize = new InventorySize(9, 3).toString();
 
     public @Override void copyFrom(LepidopteraConfig other) {
         this.debug = other.debug;

@@ -1,5 +1,7 @@
 package dev.satyrn.lepidoptera.api.annotations;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.lang.annotation.*;
 
 /**

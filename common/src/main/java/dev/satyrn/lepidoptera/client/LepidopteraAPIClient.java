@@ -1,6 +1,10 @@
 package dev.satyrn.lepidoptera.client;
 
 import dev.satyrn.lepidoptera.api.LepidopteraMod;
+import dev.satyrn.lepidoptera.api.client.config.InventorySizeEntry;
+import dev.satyrn.lepidoptera.api.config.InventorySizeField;
+import dev.satyrn.lepidoptera.config.LepidopteraConfig;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -14,5 +18,15 @@ public class LepidopteraAPIClient implements LepidopteraMod {
     public static LepidopteraMod INSTANCE = new LepidopteraAPIClient();
 
     private LepidopteraAPIClient() {
+    }
+
+    public @Override void postInit() {
+        // Register the InventorySize GUI entry type provider for the demo field in LepidopteraConfig.
+        // Downstream mods should make their own equivalent call for their own config classes.
+        AutoConfig.getGuiRegistry(LepidopteraConfig.class)
+                .registerPredicateProvider(
+                        InventorySizeEntry.TYPE_PROVIDER,
+                        field -> field.getType() == String.class
+                                && field.isAnnotationPresent(InventorySizeField.class));
     }
 }
