@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.entity;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.world.entity.TamableAnimal;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -17,6 +17,23 @@ import org.jetbrains.annotations.Contract;
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface TamableAnimalExtensions {
+    /**
+     * Casts a {@link TamableAnimal} to {@link TamableAnimalExtensions}.
+     *
+     * <p>Safe because the mixin always injects this interface onto {@code TamableAnimal}.</p>
+     *
+     * @param tamableAnimal the entity to cast
+     *
+     * @return the entity as a {@link TamableAnimalExtensions}
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @Contract(value = "_ -> param1", pure = true)
+    static TamableAnimalExtensions cast(TamableAnimal tamableAnimal) {
+        return (TamableAnimalExtensions) tamableAnimal;
+    }
+
     /**
      * Returns the value of the entity data flag at the given bit index.
      *
@@ -42,23 +59,6 @@ public interface TamableAnimalExtensions {
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default void setFlag(int flagId, boolean value) {
         throw new UnsupportedOperationException("Not Implemented");
-    }
-
-    /**
-     * Casts a {@link TamableAnimal} to {@link TamableAnimalExtensions}.
-     *
-     * <p>Safe because the mixin always injects this interface onto {@code TamableAnimal}.</p>
-     *
-     * @param tamableAnimal the entity to cast
-     *
-     * @return the entity as a {@link TamableAnimalExtensions}
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @Contract(value = "_ -> param1", pure = true)
-    static TamableAnimalExtensions cast(TamableAnimal tamableAnimal) {
-        return (TamableAnimalExtensions) tamableAnimal;
     }
 
 }

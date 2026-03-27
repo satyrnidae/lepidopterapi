@@ -31,7 +31,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
-
 import java.util.Arrays;
 
 import static net.minecraft.world.level.GameRules.BooleanValue;
@@ -41,14 +40,12 @@ import static net.minecraft.world.level.GameRules.Key;
 @ModMeta(value = LepidopteraAPI.MOD_ID, name = "Lepidoptera API", semVer = "1.0.0-SNAPSHOT+1.21.1")
 public class LepidopteraAPI implements LepidopteraMod {
     public static final String MOD_ID = "lepidoptera_api";
-    private static final Logger LOGGER = LogManager.getLogger();
-
     /**
      * Condition ID for the alchemical alembic recipe load condition (all platforms).
      */
     public static final ResourceLocation ALCHEMICAL_ALEMBIC_RECIPES_CONDITION = ResourceLocation.fromNamespaceAndPath(
             MOD_ID, "alchemical_alembic_recipes");
-
+    private static final Logger LOGGER = LogManager.getLogger();
     public static LepidopteraMod INSTANCE = new LepidopteraAPI();
     public static @Nullable Key<BooleanValue> RULE_ENTITY_STARVATION;
     public static @Nullable MinecraftServer currentServer = null;
@@ -64,6 +61,38 @@ public class LepidopteraAPI implements LepidopteraMod {
 
     @Contract(pure = true)
     private LepidopteraAPI() {
+    }
+
+    /**
+     * Returns {@code true} if alchemical alembic breakable recipes should be loaded.
+     */
+    public static boolean alchemicalAlembicRecipesEnabled() {
+        return SYNCED_CONFIG.get().enableAlchemicalAlembicRecipes;
+    }
+
+    public static void info(String message, Object... params) {
+        LOGGER.info(message, params);
+    }
+
+    public static void debug(String message, Object... params) {
+        LOGGER.debug(message, params);
+    }
+
+    public static void debug(String message, Throwable throwable) {
+        LOGGER.debug("{}: {}\n\t{}", message, throwable.getMessage(), String.join("\n\t",
+                Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString).toList()));
+    }
+
+    public static void warn(String message, Object... params) {
+        LOGGER.warn(message, params);
+    }
+
+    public static void error(String message, Object... params) {
+        LOGGER.error(message, params);
+    }
+
+    public static void error(String message, Throwable e) {
+        LOGGER.error(message, e);
     }
 
     public @Override void preInit() {
@@ -168,37 +197,5 @@ public class LepidopteraAPI implements LepidopteraMod {
     public @Override void onTagsLoaded(final RegistryAccess registryAccess) {
         HungryEntityRegistry.onTagsLoaded(registryAccess);
         EquipmentRegistry.onTagsLoaded(registryAccess);
-    }
-
-    /**
-     * Returns {@code true} if alchemical alembic breakable recipes should be loaded.
-     */
-    public static boolean alchemicalAlembicRecipesEnabled() {
-        return SYNCED_CONFIG.get().enableAlchemicalAlembicRecipes;
-    }
-
-    public static void info(String message, Object... params) {
-        LOGGER.info(message, params);
-    }
-
-    public static void debug(String message, Object... params) {
-        LOGGER.debug(message, params);
-    }
-
-    public static void debug(String message, Throwable throwable) {
-        LOGGER.debug("{}: {}\n\t{}", message, throwable.getMessage(),
-                String.join("\n\t", Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString).toList()));
-    }
-
-    public static void warn(String message, Object... params) {
-        LOGGER.warn(message, params);
-    }
-
-    public static void error(String message, Object... params) {
-        LOGGER.error(message, params);
-    }
-
-    public static void error(String message, Throwable e) {
-        LOGGER.error(message, e);
     }
 }

@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.tags;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
@@ -11,6 +10,7 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;

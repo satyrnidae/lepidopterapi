@@ -1,13 +1,13 @@
 package dev.satyrn.lepidoptera.api.item.crafting;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.item.ItemExtensions;
 import dev.satyrn.lepidoptera.api.item.ItemStackExtensions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;

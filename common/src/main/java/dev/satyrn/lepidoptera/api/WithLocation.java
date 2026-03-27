@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Provides a {@link ResourceLocation} identity for data-gen providers and other

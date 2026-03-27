@@ -78,21 +78,6 @@ public class LepidopteraNeo {
         info("Lepidoptera API for NeoForge initialized.");
     }
 
-    private void onGatherData(GatherDataEvent event) {
-        event.createProvider(LepidopteraRecipeProvider::new);
-        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg));
-        event.createProvider((arg, completableFuture) -> new LepidopteraFrFRLanguageProvider(arg));
-        event.createProvider((arg, completableFuture) -> new LepidopteraFrCALanguageProvider(arg));
-        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_ca"));
-        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_gb"));
-        event.createProvider((arg, completableFuture) -> new LepidopteraTokLanguageProvider(arg));
-        event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture,
-                event.getExistingFileHelper()));
-        event.createProvider((arg, completableFuture) -> new LepidopteraItemTags(arg, completableFuture,
-                event.getExistingFileHelper()));
-    }
-
-
     private static void onFurnaceFuelBurnTime(FurnaceFuelBurnTimeEvent event) {
         if (event.getItemStack().getItem() == LepidopteraItems.ALCHEMICAL_ALEMBIC.get()) {
             event.setBurnTime(200);
@@ -115,5 +100,19 @@ public class LepidopteraNeo {
         for (PacketReadyCallback<ServerPlayContext> callback : PacketChannels.SERVER_READY_CALLBACKS) {
             callback.onReady(ctx);
         }
+    }
+
+    private void onGatherData(GatherDataEvent event) {
+        event.createProvider(LepidopteraRecipeProvider::new);
+        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg));
+        event.createProvider((arg, completableFuture) -> new LepidopteraFrFRLanguageProvider(arg));
+        event.createProvider((arg, completableFuture) -> new LepidopteraFrCALanguageProvider(arg));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_ca"));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_gb"));
+        event.createProvider((arg, completableFuture) -> new LepidopteraTokLanguageProvider(arg));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture,
+                event.getExistingFileHelper()));
+        event.createProvider((arg, completableFuture) -> new LepidopteraItemTags(arg, completableFuture,
+                event.getExistingFileHelper()));
     }
 }

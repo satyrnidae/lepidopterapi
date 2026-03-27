@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.lang;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.ChatFormatting;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * A fluent builder for strings that contain Minecraft legacy section-sign ({@code §}) color and

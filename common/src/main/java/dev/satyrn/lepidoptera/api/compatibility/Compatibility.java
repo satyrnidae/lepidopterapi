@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.compatibility;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;

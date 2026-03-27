@@ -1,7 +1,6 @@
 package dev.satyrn.lepidoptera.api.item;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.compatibility.Provider;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -104,8 +104,7 @@ public final class EquipmentRegistry {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, boolean canShiftClick,
-                                         short priority) {
+    public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, boolean canShiftClick, short priority) {
         final PrioritizedEntry existing = TAG_KEY_REGISTRY.get(tag);
         if (existing == null || priority > existing.priority()) {
             TAG_KEY_REGISTRY.put(tag, new PrioritizedEntry(slot, canShiftClick, priority));
@@ -173,8 +172,7 @@ public final class EquipmentRegistry {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick,
-                                         short priority) {
+    public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick, short priority) {
         final var key = item.asItem();
         final PrioritizedEntry existing = ITEM_REGISTRY.get(key);
         if (existing == null || priority > existing.priority()) {
@@ -317,13 +315,12 @@ public final class EquipmentRegistry {
         final var itemLookup = registryAccess.lookupOrThrow(Registries.ITEM);
         for (final var tagEntry : TAG_KEY_REGISTRY.entrySet()) {
             final PrioritizedEntry tagPEntry = tagEntry.getValue();
-            itemLookup.get(tagEntry.getKey())
-                    .ifPresent(holders -> holders.forEach(h -> {
-                        final PrioritizedEntry existing = resolved.get(h.value());
-                        if (existing == null || tagPEntry.priority() > existing.priority()) {
-                            resolved.put(h.value(), tagPEntry);
-                        }
-                    }));
+            itemLookup.get(tagEntry.getKey()).ifPresent(holders -> holders.forEach(h -> {
+                final PrioritizedEntry existing = resolved.get(h.value());
+                if (existing == null || tagPEntry.priority() > existing.priority()) {
+                    resolved.put(h.value(), tagPEntry);
+                }
+            }));
         }
         RESOLVED_TAG_ITEMS = resolved;
     }

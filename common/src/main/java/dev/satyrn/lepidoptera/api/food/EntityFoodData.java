@@ -1,7 +1,6 @@
 package dev.satyrn.lepidoptera.api.food;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.entity.LivingEntityExtensions;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -202,6 +202,19 @@ public class EntityFoodData {
     }
 
     /**
+     * Directly sets the food level without triggering any side effects.
+     *
+     * @param foodLevel the new food level
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @Contract(mutates = "this")
+    public void setFoodLevel(int foodLevel) {
+        this.foodLevel = foodLevel;
+    }
+
+    /**
      * Returns the food level from the previous tick, used to detect changes.
      *
      * @return the food level recorded at the start of the last {@link #tick(LivingEntity)} call
@@ -266,19 +279,6 @@ public class EntityFoodData {
     @Contract(pure = true)
     public float getSaturationLevel() {
         return this.saturationLevel;
-    }
-
-    /**
-     * Directly sets the food level without triggering any side effects.
-     *
-     * @param foodLevel the new food level
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @Contract(mutates = "this")
-    public void setFoodLevel(int foodLevel) {
-        this.foodLevel = foodLevel;
     }
 
     /**

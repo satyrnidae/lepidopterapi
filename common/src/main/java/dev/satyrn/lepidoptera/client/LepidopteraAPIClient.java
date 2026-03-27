@@ -24,9 +24,7 @@ public class LepidopteraAPIClient implements LepidopteraMod {
         // Register the InventorySize GUI entry type provider for the demo field in LepidopteraConfig.
         // Downstream mods should make their own equivalent call for their own config classes.
         AutoConfig.getGuiRegistry(LepidopteraConfig.class)
-                .registerPredicateProvider(
-                        InventorySizeEntry.TYPE_PROVIDER,
-                        field -> field.getType() == String.class
-                                && field.isAnnotationPresent(InventorySizeField.class));
+                .registerPredicateProvider(InventorySizeEntry.TYPE_PROVIDER, field -> field.getType() == String.class &&
+                        field.isAnnotationPresent(InventorySizeField.class));
     }
 }

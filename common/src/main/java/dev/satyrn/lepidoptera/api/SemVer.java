@@ -19,79 +19,16 @@ import java.util.Objects;
  * @param metadata   the build metadata label (empty string if absent)
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
-public record SemVer(int major, int minor, int patch, String preRelease,
+public record SemVer(int major,
+                     int minor,
+                     int patch,
+                     String preRelease,
                      String metadata) implements Comparable<SemVer> {
     /**
      * A zeroed-out sentinel version ({@code 0.0.0}) used as a safe "no version" default.
      */
-    @SuppressWarnings("unused") public static final SemVer EMPTY = new SemVer(0, 0, 0, "", "");
-
-    /**
-     * Returns {@code true} if {@code obj} is a {@link SemVer} with the same major, minor, patch,
-     * and pre-release label (compared case-insensitively, ignoring leading/trailing whitespace).
-     * Build metadata is not considered.
-     */
-    public @Override boolean equals(Object obj) {
-        if (obj instanceof SemVer semVer) {
-            return this.major == semVer.major &&
-                    this.minor == semVer.minor &&
-                    this.patch == semVer.patch &&
-                    this.preRelease.trim().equalsIgnoreCase(semVer.preRelease.trim());
-        }
-        return false;
-    }
-
-    /**
-     * Returns a hash code consistent with {@link #equals}: based on major, minor, patch,
-     * and pre-release (build metadata excluded).
-     */
-    public @Override int hashCode() {
-        return Objects.hash(major, minor, patch, preRelease);
-    }
-
-    /**
-     * Returns the version as a string in {@code MAJOR.MINOR.PATCH[-preRelease][+metadata]} format.
-     * Pre-release and metadata segments are omitted when blank.
-     */
-    public @Override String toString() {
-        StringBuilder builder = new StringBuilder().append(this.major)
-                .append(".")
-                .append(this.minor)
-                .append(".")
-                .append(this.patch);
-        if (!this.preRelease.isBlank()) {
-            builder.append("-").append(this.preRelease);
-        }
-        if (!this.metadata.isBlank()) {
-            builder.append("+").append(this.metadata);
-        }
-        return builder.toString();
-    }
-
-    /**
-     * Compares this version to {@code other} by major, minor, then patch.
-     * A version with a pre-release label is considered lower than the same version without one
-     * (e.g. {@code 1.0.0-alpha} &lt; {@code 1.0.0}). Build metadata is ignored.
-     */
-    public @Override int compareTo(SemVer other) {
-        if (this.major != other.major) {
-            return Integer.compare(this.major, other.major);
-        }
-        if (this.minor != other.minor) {
-            return Integer.compare(this.minor, other.minor);
-        }
-        if (this.patch != other.patch) {
-            return Integer.compare(this.patch, other.patch);
-        }
-        if (!this.preRelease.trim().equalsIgnoreCase(other.preRelease.trim())) {
-            if (this.preRelease.isBlank()) {
-                return 1;
-            } else if (other.preRelease.isBlank()) {
-                return -1;
-            }
-        }
-        return 0;
-    }
+    @SuppressWarnings("unused")
+    public static final SemVer EMPTY = new SemVer(0, 0, 0, "", "");
 
     /**
      * Creates a version with the given major component and all other components set to zero/empty.
@@ -203,5 +140,72 @@ public record SemVer(int major, int minor, int patch, String preRelease,
             }
         }
         return new SemVer(major, minor, patch, preRelease, metadata);
+    }
+
+    /**
+     * Returns {@code true} if {@code obj} is a {@link SemVer} with the same major, minor, patch,
+     * and pre-release label (compared case-insensitively, ignoring leading/trailing whitespace).
+     * Build metadata is not considered.
+     */
+    public @Override boolean equals(Object obj) {
+        if (obj instanceof SemVer semVer) {
+            return this.major == semVer.major &&
+                    this.minor == semVer.minor &&
+                    this.patch == semVer.patch &&
+                    this.preRelease.trim().equalsIgnoreCase(semVer.preRelease.trim());
+        }
+        return false;
+    }
+
+    /**
+     * Returns a hash code consistent with {@link #equals}: based on major, minor, patch,
+     * and pre-release (build metadata excluded).
+     */
+    public @Override int hashCode() {
+        return Objects.hash(major, minor, patch, preRelease);
+    }
+
+    /**
+     * Returns the version as a string in {@code MAJOR.MINOR.PATCH[-preRelease][+metadata]} format.
+     * Pre-release and metadata segments are omitted when blank.
+     */
+    public @Override String toString() {
+        StringBuilder builder = new StringBuilder().append(this.major)
+                .append(".")
+                .append(this.minor)
+                .append(".")
+                .append(this.patch);
+        if (!this.preRelease.isBlank()) {
+            builder.append("-").append(this.preRelease);
+        }
+        if (!this.metadata.isBlank()) {
+            builder.append("+").append(this.metadata);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Compares this version to {@code other} by major, minor, then patch.
+     * A version with a pre-release label is considered lower than the same version without one
+     * (e.g. {@code 1.0.0-alpha} &lt; {@code 1.0.0}). Build metadata is ignored.
+     */
+    public @Override int compareTo(SemVer other) {
+        if (this.major != other.major) {
+            return Integer.compare(this.major, other.major);
+        }
+        if (this.minor != other.minor) {
+            return Integer.compare(this.minor, other.minor);
+        }
+        if (this.patch != other.patch) {
+            return Integer.compare(this.patch, other.patch);
+        }
+        if (!this.preRelease.trim().equalsIgnoreCase(other.preRelease.trim())) {
+            if (this.preRelease.isBlank()) {
+                return 1;
+            } else if (other.preRelease.isBlank()) {
+                return -1;
+            }
+        }
+        return 0;
     }
 }

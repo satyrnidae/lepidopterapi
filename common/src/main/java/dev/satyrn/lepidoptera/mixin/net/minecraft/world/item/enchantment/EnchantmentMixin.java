@@ -20,21 +20,21 @@ import java.util.function.Consumer;
 @Mixin(Enchantment.class)
 @Implements({@Interface(iface = EnchantmentExtensions.class, prefix = "lapix$")})
 public abstract class EnchantmentMixin {
+    private EnchantmentMixin() {
+        NotInitializable.mixinClass(this);
+    }
+
     private static @Shadow <T> void applyEffects(List<ConditionalEffect<T>> list,
                                                  LootContext arg,
                                                  Consumer<T> consumer) {
     }
-
-    public abstract @Shadow <T> List<T> getEffects(DataComponentType<List<T>> arg);
 
     @SuppressWarnings("ALL")
     private static @Shadow @Nonnull LootContext itemContext(ServerLevel arg, int i, ItemStack arg2) {
         return null;
     }
 
-    private EnchantmentMixin() {
-        NotInitializable.mixinClass(this);
-    }
+    public abstract @Shadow <T> List<T> getEffects(DataComponentType<List<T>> arg);
 
     @Intrinsic
     public void lapix$modifyItemFilteredCount(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,

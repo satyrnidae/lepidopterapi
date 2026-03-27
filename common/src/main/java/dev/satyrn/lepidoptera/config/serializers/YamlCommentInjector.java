@@ -25,23 +25,19 @@ public class YamlCommentInjector {
      * {@code "network.__SECTION"}.
      */
     public static final String SECTION_IDENTIFIER = "__SECTION";
-
+    /**
+     * The default maximum comment line length used by {@link CommentedYamlConfigSerializer}.
+     */
+    public static final int DEFAULT_LINE_LENGTH = 120;
+    /**
+     * The minimum enforced comment line length.
+     */
+    public static final int MIN_LINE_LENGTH = 60;
     private static final String COMMENT_PREFIX = "# ";
     private static final String ENUM_LIST_BULLET = "- ";
     private static final String YAML_DIRECTIVE_PREFIX = "!!";
     private static final String TYPE_LEADER = "Type: ";
     private static final int INDENT = 4;
-
-    /**
-     * The default maximum comment line length used by {@link CommentedYamlConfigSerializer}.
-     */
-    public static final int DEFAULT_LINE_LENGTH = 120;
-
-    /**
-     * The minimum enforced comment line length.
-     */
-    public static final int MIN_LINE_LENGTH = 60;
-
     private final int lineLength;
 
     /**

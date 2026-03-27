@@ -594,10 +594,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         }
 
         @Override
-        protected void renderWidget(final GuiGraphics graphics,
-                                    final int mouseX,
-                                    final int mouseY,
-                                    final float delta) {
+        protected void renderWidget(final GuiGraphics graphics, final int mouseX, final int mouseY, final float delta) {
             // -- Track (background) --
             // Rotate 90° CCW so the horizontal slider sprite is drawn vertically.
             // After Axis.ZP.rotationDegrees(90):

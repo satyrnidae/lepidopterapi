@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.datapack;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -18,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.JukeboxSong;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.Objects;

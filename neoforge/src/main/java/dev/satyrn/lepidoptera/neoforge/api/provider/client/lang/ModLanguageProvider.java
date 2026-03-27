@@ -3,11 +3,11 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.client.lang;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Abstract base for mod-specific NeoForge language (translation) data providers.

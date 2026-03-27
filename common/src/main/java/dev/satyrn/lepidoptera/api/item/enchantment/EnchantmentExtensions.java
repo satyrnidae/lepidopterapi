@@ -1,6 +1,5 @@
 package dev.satyrn.lepidoptera.api.item.enchantment;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +9,7 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -21,6 +21,22 @@ import java.util.List;
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface EnchantmentExtensions {
+    /**
+     * Casts an {@link Enchantment} to {@link EnchantmentExtensions}.
+     *
+     * <p>Requires an intermediate cast through {@code Object} because {@code Enchantment}
+     * is a record in 1.21; the mixin injects the interface at the bytecode level.</p>
+     *
+     * @param enchantment the enchantment to cast
+     *
+     * @return the enchantment as {@link EnchantmentExtensions}
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @SuppressWarnings("DataFlowIssue")
+    static EnchantmentExtensions cast(Enchantment enchantment) {
+        return (EnchantmentExtensions) (Object) enchantment;
+    }
+
     /**
      * Modifies the durability change value for this enchantment using its
      * {@link EnchantmentEffectComponents#ITEM_DAMAGE} component.
@@ -58,21 +74,5 @@ public interface EnchantmentExtensions {
                                          ItemStack itemStack,
                                          MutableFloat value) {
         throw new NotImplementedException("Enchantment extensions mixin apply failed!");
-    }
-
-    /**
-     * Casts an {@link Enchantment} to {@link EnchantmentExtensions}.
-     *
-     * <p>Requires an intermediate cast through {@code Object} because {@code Enchantment}
-     * is a record in 1.21; the mixin injects the interface at the bytecode level.</p>
-     *
-     * @param enchantment the enchantment to cast
-     *
-     * @return the enchantment as {@link EnchantmentExtensions}
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @SuppressWarnings("DataFlowIssue")
-    static EnchantmentExtensions cast(Enchantment enchantment) {
-        return (EnchantmentExtensions) (Object) enchantment;
     }
 }

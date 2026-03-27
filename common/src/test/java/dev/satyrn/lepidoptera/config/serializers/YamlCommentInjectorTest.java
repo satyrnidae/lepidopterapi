@@ -21,10 +21,6 @@ class YamlCommentInjectorTest {
         injector = new YamlCommentInjector(80);
     }
 
-    // -------------------------------------------------------------------------
-    // getCurrentPath
-    // -------------------------------------------------------------------------
-
     @Nested
     class GetCurrentPath {
         @Test
@@ -51,10 +47,6 @@ class YamlCommentInjectorTest {
             assertEquals("a.b.c.leaf", injector.getCurrentPath(stack, "leaf"));
         }
     }
-
-    // -------------------------------------------------------------------------
-    // wordWrap
-    // -------------------------------------------------------------------------
 
     @Nested
     class WordWrap {
@@ -133,18 +125,8 @@ class YamlCommentInjectorTest {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // getEnumComments
-    // -------------------------------------------------------------------------
-
     @Nested
     class GetEnumComments {
-        enum SimpleEnum {ALPHA, BETA, GAMMA}
-
-        enum AnnotatedEnum {
-            @YamlComment("First option") ONE, @YamlComment("Second option") TWO
-        }
-
         @Test
         void nonEnumClass_returnsEmpty() {
             assertEquals("", injector.getEnumComments(String.class, 0));
@@ -171,14 +153,58 @@ class YamlCommentInjectorTest {
             assertTrue(result.contains("First option"));
             assertTrue(result.contains("Second option"));
         }
-    }
 
-    // -------------------------------------------------------------------------
-    // buildNestedCommentMap
-    // -------------------------------------------------------------------------
+        enum SimpleEnum {
+            ALPHA,
+            BETA,
+            GAMMA
+        }
+
+        enum AnnotatedEnum {
+            @YamlComment("First option")
+            ONE,
+            @YamlComment("Second option")
+            TWO
+        }
+    }
 
     @Nested
     class BuildNestedCommentMap {
+
+        @Test
+        void simpleBean_mapContainsExpectedKeys() throws Exception {
+            Map<String, String> map = injector.buildNestedCommentMap(SimpleConfig.class);
+            assertTrue(map.containsKey("name"), "Expected key 'name'");
+            assertTrue(map.containsKey("count"), "Expected key 'count'");
+        }
+
+        @Test
+        void simpleBean_commentValuesPresent() throws Exception {
+            Map<String, String> map = injector.buildNestedCommentMap(SimpleConfig.class);
+            assertTrue(map.get("name").contains("The name value"));
+            assertTrue(map.get("count").contains("The count value"));
+        }
+
+        @Test
+        void sectionHeader_storedAtSectionPath() throws Exception {
+            Map<String, String> map = injector.buildNestedCommentMap(SectionConfig.class);
+            String sectionKey = "inner." + YamlCommentInjector.SECTION_IDENTIFIER;
+            assertTrue(map.containsKey(sectionKey), "Expected section key: " + sectionKey);
+            assertTrue(map.get(sectionKey).contains("Inner section"));
+        }
+
+        @Test
+        void nestedBeanProperty_hasNestedKey() throws Exception {
+            Map<String, String> map = injector.buildNestedCommentMap(SectionConfig.class);
+            assertTrue(map.containsKey("inner.flag"), "Expected nested key 'inner.flag'");
+        }
+
+        @Test
+        void nonBeanClass_returnsEmptyMap() throws Exception {
+            // String is not a bean per BeanInspection
+            Map<String, String> map = injector.buildNestedCommentMap(String.class);
+            assertTrue(map.isEmpty());
+        }
 
         // A minimal bean: public no-arg constructor + getters
         public static class SimpleConfig {
@@ -238,46 +264,7 @@ class YamlCommentInjectorTest {
                 }
             }
         }
-
-        @Test
-        void simpleBean_mapContainsExpectedKeys() throws Exception {
-            Map<String, String> map = injector.buildNestedCommentMap(SimpleConfig.class);
-            assertTrue(map.containsKey("name"), "Expected key 'name'");
-            assertTrue(map.containsKey("count"), "Expected key 'count'");
-        }
-
-        @Test
-        void simpleBean_commentValuesPresent() throws Exception {
-            Map<String, String> map = injector.buildNestedCommentMap(SimpleConfig.class);
-            assertTrue(map.get("name").contains("The name value"));
-            assertTrue(map.get("count").contains("The count value"));
-        }
-
-        @Test
-        void sectionHeader_storedAtSectionPath() throws Exception {
-            Map<String, String> map = injector.buildNestedCommentMap(SectionConfig.class);
-            String sectionKey = "inner." + YamlCommentInjector.SECTION_IDENTIFIER;
-            assertTrue(map.containsKey(sectionKey), "Expected section key: " + sectionKey);
-            assertTrue(map.get(sectionKey).contains("Inner section"));
-        }
-
-        @Test
-        void nestedBeanProperty_hasNestedKey() throws Exception {
-            Map<String, String> map = injector.buildNestedCommentMap(SectionConfig.class);
-            assertTrue(map.containsKey("inner.flag"), "Expected nested key 'inner.flag'");
-        }
-
-        @Test
-        void nonBeanClass_returnsEmptyMap() throws Exception {
-            // String is not a bean per BeanInspection
-            Map<String, String> map = injector.buildNestedCommentMap(String.class);
-            assertTrue(map.isEmpty());
-        }
     }
-
-    // -------------------------------------------------------------------------
-    // injectComments
-    // -------------------------------------------------------------------------
 
     @Nested
     class InjectComments {

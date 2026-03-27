@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.api.config.serializers;
 import com.google.common.collect.Maps;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.accessors.autoconfig.YamlConfigSerializerAccessor;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.config.serializers.YamlCommentInjector;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -12,6 +11,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.DumperOptions;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.Yaml;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.constructor.Constructor;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.representer.Representer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.nio.file.Files;

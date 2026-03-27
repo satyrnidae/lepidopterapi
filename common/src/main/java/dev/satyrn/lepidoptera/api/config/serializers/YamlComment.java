@@ -22,6 +22,37 @@ import java.lang.annotation.Target;
 public @interface YamlComment {
 
     /**
+     * Leader string used to introduce a valid-values list in a comment (e.g. for enums).
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    String VALID_VALUES_LEADER = "Valid values: ";
+    /**
+     * Default leader string prepended to {@link #note()} text.
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    String NOTE_LEADER = "Note: ";
+    /**
+     * Default leader string prepended to a default-value hint.
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    String DEFAULT_VALUE_LEADER = "Default value: ";
+    /**
+     * Leader string used to introduce a "see also" reference in a comment.
+     *
+     * @since 0.4.0+1.19.2
+     */
+    // TODO: Implement See also: emitting
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @SuppressWarnings("unused") // Public API member
+    String SEE_ALSO_LEADER = "See also: ";
+
+    /**
      * The primary comment text to emit above the YAML key. Defaults to empty (no comment).
      *
      * @since 0.4.0+1.19.2
@@ -90,38 +121,4 @@ public @interface YamlComment {
      */
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
     boolean emitChildren() default true;
-
-    /**
-     * Leader string used to introduce a valid-values list in a comment (e.g. for enums).
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    String VALID_VALUES_LEADER = "Valid values: ";
-
-    /**
-     * Default leader string prepended to {@link #note()} text.
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    String NOTE_LEADER = "Note: ";
-
-    /**
-     * Default leader string prepended to a default-value hint.
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    String DEFAULT_VALUE_LEADER = "Default value: ";
-
-    /**
-     * Leader string used to introduce a "see also" reference in a comment.
-     *
-     * @since 0.4.0+1.19.2
-     */
-    // TODO: Implement See also: emitting
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @SuppressWarnings("unused") // Public API member
-    String SEE_ALSO_LEADER = "See also: ";
 }

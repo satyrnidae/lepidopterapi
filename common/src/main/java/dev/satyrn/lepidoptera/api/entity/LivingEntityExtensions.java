@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.entity;
 
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.food.EntityFoodData;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -20,6 +20,23 @@ import org.jetbrains.annotations.Contract;
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface LivingEntityExtensions {
+
+    /**
+     * Casts a {@link LivingEntity} to {@link LivingEntityExtensions}.
+     *
+     * <p>Safe because the mixin always injects this interface onto {@code LivingEntity}.</p>
+     *
+     * @param livingEntity the entity to cast
+     *
+     * @return the entity as a {@link LivingEntityExtensions}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(value = "_ -> param1", pure = true)
+    static LivingEntityExtensions cast(final LivingEntity livingEntity) {
+        return (LivingEntityExtensions) livingEntity;
+    }
 
     /**
      * Returns {@code true} if the entity is currently hurt (i.e. its health is below
@@ -91,22 +108,5 @@ public interface LivingEntityExtensions {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void addExhaustion(final float exhaustion) {
         throw new UnsupportedOperationException("Not Implemented");
-    }
-
-    /**
-     * Casts a {@link LivingEntity} to {@link LivingEntityExtensions}.
-     *
-     * <p>Safe because the mixin always injects this interface onto {@code LivingEntity}.</p>
-     *
-     * @param livingEntity the entity to cast
-     *
-     * @return the entity as a {@link LivingEntityExtensions}
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    @Contract(value = "_ -> param1", pure = true)
-    static LivingEntityExtensions cast(final LivingEntity livingEntity) {
-        return (LivingEntityExtensions) livingEntity;
     }
 }

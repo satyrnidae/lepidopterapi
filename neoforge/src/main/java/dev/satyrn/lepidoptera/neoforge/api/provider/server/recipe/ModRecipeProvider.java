@@ -7,7 +7,6 @@ import com.mojang.serialization.MapCodec;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -21,6 +20,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -44,6 +44,59 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         super(output, lookupProvider);
         this.packOutput = output;
         this.metadata = ModHelper.metadata(modClass);
+    }
+
+    private static <T> CompletableFuture<?> buildRecipeAchievement(CachedOutput cachedOutput,
+                                                                   ResourceLocation id,
+                                                                   PackOutput.PathProvider advancementPaths,
+                                                                   RecipeCategory category,
+                                                                   Map<String, Criterion<?>> criteria,
+                                                                   HolderLookup.Provider registryAccess) {
+        Advancement.Builder builder = Advancement.Builder.recipeAdvancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
+                .requirements(AdvancementRequirements.Strategy.OR);
+        criteria.forEach(builder::addCriterion);
+        Advancement advancement = builder.build(id).value();
+
+        JsonObject json = Advancement.CODEC.encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE),
+                advancement).getOrThrow().getAsJsonObject();
+
+        Path path = advancementPaths.json(id.withPrefix("recipes/" + category.getFolderName() + "/"));
+        return DataProvider.saveStable(cachedOutput, json, path);
+    }
+
+    private static <T> CompletableFuture<?> buildRecipeWithConditions(CachedOutput cachedOutput,
+                                                                      ResourceLocation id,
+                                                                      T recipe,
+                                                                      MapCodec<T> codec,
+                                                                      ResourceLocation typeId,
+                                                                      PackOutput.PathProvider recipePaths,
+                                                                      HolderLookup.Provider registryAccess,
+                                                                      ResourceLocation... conditions) {
+        JsonArray fabricConditions = new JsonArray();
+        JsonArray neoConditions = new JsonArray();
+
+        for (var condition : conditions) {
+            JsonObject fabricCondition = new JsonObject();
+            fabricCondition.addProperty("condition", condition.toString());
+            fabricConditions.add(fabricCondition);
+
+            JsonObject neoCondition = new JsonObject();
+            neoCondition.addProperty("type", condition.toString());
+            neoConditions.add(neoCondition);
+        }
+
+        JsonObject json = codec.codec()
+                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), recipe)
+                .getOrThrow()
+                .getAsJsonObject();
+        json.addProperty("type", typeId.toString());
+        json.add("neoforge:conditions", neoConditions);
+        json.add("fabric:load_conditions", fabricConditions);
+
+        Path path = recipePaths.json(id);
+        return DataProvider.saveStable(cachedOutput, json, path);
     }
 
     protected final @Override CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
@@ -115,59 +168,6 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
                 buildRecipeWithConditions(cachedOutput, id, recipe, codec, typeId, recipePaths, registryAccess,
                         conditions),
                 buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess));
-    }
-
-    private static <T> CompletableFuture<?> buildRecipeAchievement(CachedOutput cachedOutput,
-                                                                   ResourceLocation id,
-                                                                   PackOutput.PathProvider advancementPaths,
-                                                                   RecipeCategory category,
-                                                                   Map<String, Criterion<?>> criteria,
-                                                                   HolderLookup.Provider registryAccess) {
-        Advancement.Builder builder = Advancement.Builder.recipeAdvancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
-                .rewards(AdvancementRewards.Builder.recipe(id))
-                .requirements(AdvancementRequirements.Strategy.OR);
-        criteria.forEach(builder::addCriterion);
-        Advancement advancement = builder.build(id).value();
-
-        JsonObject json = Advancement.CODEC.encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE),
-                advancement).getOrThrow().getAsJsonObject();
-
-        Path path = advancementPaths.json(id.withPrefix("recipes/" + category.getFolderName() + "/"));
-        return DataProvider.saveStable(cachedOutput, json, path);
-    }
-
-    private static <T> CompletableFuture<?> buildRecipeWithConditions(CachedOutput cachedOutput,
-                                                                      ResourceLocation id,
-                                                                      T recipe,
-                                                                      MapCodec<T> codec,
-                                                                      ResourceLocation typeId,
-                                                                      PackOutput.PathProvider recipePaths,
-                                                                      HolderLookup.Provider registryAccess,
-                                                                      ResourceLocation... conditions) {
-        JsonArray fabricConditions = new JsonArray();
-        JsonArray neoConditions = new JsonArray();
-
-        for (var condition : conditions) {
-            JsonObject fabricCondition = new JsonObject();
-            fabricCondition.addProperty("condition", condition.toString());
-            fabricConditions.add(fabricCondition);
-
-            JsonObject neoCondition = new JsonObject();
-            neoCondition.addProperty("type", condition.toString());
-            neoConditions.add(neoCondition);
-        }
-
-        JsonObject json = codec.codec()
-                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), recipe)
-                .getOrThrow()
-                .getAsJsonObject();
-        json.addProperty("type", typeId.toString());
-        json.add("neoforge:conditions", neoConditions);
-        json.add("fabric:load_conditions", fabricConditions);
-
-        Path path = recipePaths.json(id);
-        return DataProvider.saveStable(cachedOutput, json, path);
     }
 
     public @Override ResourceLocation location() {

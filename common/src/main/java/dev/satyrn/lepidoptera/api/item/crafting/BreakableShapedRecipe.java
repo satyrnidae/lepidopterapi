@@ -3,12 +3,12 @@ package dev.satyrn.lepidoptera.api.item.crafting;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -145,7 +145,8 @@ public class BreakableShapedRecipe extends ShapedRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final MapCodec<BreakableShapedRecipe> CODEC = RecordCodecBuilder.mapCodec(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public static final MapCodec<BreakableShapedRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(Codec.STRING.optionalFieldOf("group", "").forGetter(r -> r.group),
                                 CraftingBookCategory.CODEC.optionalFieldOf("category", CraftingBookCategory.MISC)
                                         .forGetter(r -> r.category), ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.pattern),
@@ -159,28 +160,9 @@ public class BreakableShapedRecipe extends ShapedRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> STREAM_CODEC = StreamCodec.of(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> STREAM_CODEC = StreamCodec.of(
                 BreakableShapedRecipe.Serializer::toNetwork, BreakableShapedRecipe.Serializer::fromNetwork);
-
-        /**
-         * Gets the codec instance.
-         *
-         * @since 1.0.0-SNAPSHOT.1+1.21.1
-         */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override MapCodec<BreakableShapedRecipe> codec() {
-            return CODEC;
-        }
-
-        /**
-         * Gets the stream codec instance.
-         *
-         * @since 1.0.0-SNAPSHOT.1+1.21.1
-         */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
 
         @Contract("_ -> new")
         private static BreakableShapedRecipe fromNetwork(final RegistryFriendlyByteBuf buffer) {
@@ -201,6 +183,26 @@ public class BreakableShapedRecipe extends ShapedRecipe {
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
             buffer.writeInt(recipe.damage);
             buffer.writeBoolean(recipe.showNotification());
+        }
+
+        /**
+         * Gets the codec instance.
+         *
+         * @since 1.0.0-SNAPSHOT.1+1.21.1
+         */
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public @Override MapCodec<BreakableShapedRecipe> codec() {
+            return CODEC;
+        }
+
+        /**
+         * Gets the stream codec instance.
+         *
+         * @since 1.0.0-SNAPSHOT.1+1.21.1
+         */
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public @Override StreamCodec<RegistryFriendlyByteBuf, BreakableShapedRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

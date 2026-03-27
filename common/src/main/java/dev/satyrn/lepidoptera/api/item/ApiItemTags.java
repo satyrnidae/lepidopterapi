@@ -3,10 +3,10 @@ package dev.satyrn.lepidoptera.api.item;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**

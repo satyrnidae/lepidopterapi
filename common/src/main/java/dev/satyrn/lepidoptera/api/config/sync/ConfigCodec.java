@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.config.sync;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Encodes and decodes a config value to/from a network buffer.

@@ -22,7 +22,9 @@ public abstract class RepairItemRecipeMixin extends CustomRecipe {
         NotInitializable.mixinClass(this);
     }
 
-    @Inject(method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
+            at = @At("HEAD"),
+            cancellable = true)
     public void lapi$matches(final CraftingInput input, final Level level, final CallbackInfoReturnable<Boolean> ci) {
         for (int slot = 0; slot < input.size(); ++slot) {
             final ItemStack item = input.getItem(slot);

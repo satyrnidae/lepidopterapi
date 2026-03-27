@@ -1,6 +1,5 @@
 package dev.satyrn.lepidoptera.api.item.crafting.builder;
 
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.item.crafting.BreakableShapelessRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -39,8 +39,8 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
     private final int count;
     private final NonNullList<Ingredient> ingredients = NonNullList.create();
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
-    private @Nullable String group;
     private final int damage;
+    private @Nullable String group;
 
     private BreakableShapelessRecipeBuilder(final RecipeCategory category,
                                             final ItemLike result,

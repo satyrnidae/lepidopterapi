@@ -24,11 +24,29 @@ import javax.annotation.Nullable;
 @Implements({@Interface(iface = LivingEntityExtensions.class, prefix = "lapix$")})
 public abstract class LivingEntityMixin extends Entity {
 
-    @Unique private final EntityFoodData lapi$foodData = new EntityFoodData();
+    @Unique
+    private final EntityFoodData lapi$foodData = new EntityFoodData();
 
     private LivingEntityMixin(final EntityType<?> entityType, final Level level) {
         super(entityType, level);
         NotInitializable.mixinClass(this);
+    }
+
+    /**
+     * Allows items registered in {@link EquipmentRegistry} to be drag-placed into the matching
+     * inventory armor slot. Vanilla returns {@code MAINHAND} when no specific slot is found;
+     * we fall through to the registry only in that case so real armor items are unaffected.
+     */
+    @Inject(method = "getEquipmentSlotForItem", at = @At("RETURN"), cancellable = true)
+    private static void lapi$onGetEquipmentSlotForItem(final ItemStack stack,
+                                                       final CallbackInfoReturnable<EquipmentSlot> cir) {
+        if (cir.getReturnValue() != EquipmentSlot.MAINHAND) {
+            return;
+        }
+        @Nullable EquipmentSlot slot = EquipmentRegistry.getSlot(stack);
+        if (slot != null) {
+            cir.setReturnValue(slot);
+        }
     }
 
     public abstract @Shadow float getHealth();
@@ -68,23 +86,6 @@ public abstract class LivingEntityMixin extends Entity {
     private void lapi$onAddAdditionalSaveData(final CompoundTag tag, final CallbackInfo ci) {
         if (HungryEntityRegistry.isRegistered(this.getType())) {
             this.lapi$foodData.addAdditionalSaveData(tag);
-        }
-    }
-
-    /**
-     * Allows items registered in {@link EquipmentRegistry} to be drag-placed into the matching
-     * inventory armor slot. Vanilla returns {@code MAINHAND} when no specific slot is found;
-     * we fall through to the registry only in that case so real armor items are unaffected.
-     */
-    @Inject(method = "getEquipmentSlotForItem", at = @At("RETURN"), cancellable = true)
-    private static void lapi$onGetEquipmentSlotForItem(final ItemStack stack,
-                                                       final CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (cir.getReturnValue() != EquipmentSlot.MAINHAND) {
-            return;
-        }
-        @Nullable EquipmentSlot slot = EquipmentRegistry.getSlot(stack);
-        if (slot != null) {
-            cir.setReturnValue(slot);
         }
     }
 }

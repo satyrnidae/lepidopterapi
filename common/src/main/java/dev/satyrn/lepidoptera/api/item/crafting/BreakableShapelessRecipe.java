@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * A shapeless crafting recipe that applies damage to any damageable crafting-remaining items
@@ -39,7 +39,8 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final Serializer SERIALIZER = new Serializer();
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    public static final Serializer SERIALIZER = new Serializer();
 
     // Fields are stored locally for codec access since ShapelessRecipe's fields are package-private.
     private final String group;
@@ -121,7 +122,8 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final MapCodec<BreakableShapelessRecipe> CODEC = RecordCodecBuilder.mapCodec(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public static final MapCodec<BreakableShapelessRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(Codec.STRING.optionalFieldOf("group", "").forGetter(r -> r.group),
                                 CraftingBookCategory.CODEC.fieldOf("category")
                                         .orElse(CraftingBookCategory.MISC)
@@ -144,29 +146,9 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> STREAM_CODEC = StreamCodec.of(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> STREAM_CODEC = StreamCodec.of(
                 BreakableShapelessRecipe.Serializer::toNetwork, BreakableShapelessRecipe.Serializer::fromNetwork);
-
-
-        /**
-         * Gets the codec instance
-         *
-         * @since 1.0.0-SNAPSHOT.1+1.21.1
-         */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override MapCodec<BreakableShapelessRecipe> codec() {
-            return CODEC;
-        }
-
-        /**
-         * Gets the stream codec instance
-         *
-         * @since 1.0.0-SNAPSHOT.1+1.21.1
-         */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
 
         private static BreakableShapelessRecipe fromNetwork(final RegistryFriendlyByteBuf buf) {
             String group = buf.readUtf();
@@ -188,6 +170,26 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
             }
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
             buf.writeVarInt(recipe.damage);
+        }
+
+        /**
+         * Gets the codec instance
+         *
+         * @since 1.0.0-SNAPSHOT.1+1.21.1
+         */
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public @Override MapCodec<BreakableShapelessRecipe> codec() {
+            return CODEC;
+        }
+
+        /**
+         * Gets the stream codec instance
+         *
+         * @since 1.0.0-SNAPSHOT.1+1.21.1
+         */
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        public StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

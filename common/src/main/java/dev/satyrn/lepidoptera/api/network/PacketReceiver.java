@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Receives an incoming packet on a registered channel.

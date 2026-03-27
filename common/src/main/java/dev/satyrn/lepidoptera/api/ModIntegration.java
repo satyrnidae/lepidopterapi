@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api;
 
 import dev.architectury.platform.Platform;
-import org.jetbrains.annotations.ApiStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -82,8 +82,9 @@ public final class ModIntegration {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public static @Nullable <T> T fromModOrDefault(final String modId, final Supplier<T> supplier,
-                                                    final @Nullable T fallback) {
+    public static @Nullable <T> T fromModOrDefault(final String modId,
+                                                   final Supplier<T> supplier,
+                                                   final @Nullable T fallback) {
         return Platform.isModLoaded(modId) ? supplier.get() : fallback;
     }
 

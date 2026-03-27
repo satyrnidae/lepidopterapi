@@ -37,9 +37,6 @@ import java.util.List;
  */
 public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
 
-    private final List<ResourceLocation> pendingC2S = new ArrayList<>();
-    private final List<ResourceLocation> pendingS2C = new ArrayList<>();
-
     /**
      * Client-side dispatcher for S2C payloads. Set from a client-only class so that
      * client-specific imports ({@code Minecraft}, {@code ClientPlayNetworking}) are never
@@ -50,21 +47,8 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
      * so that the write from {@code FMLClientSetupEvent} is visible to the Netty IO thread.</p>
      */
     public static volatile @Nullable ClientPayloadDispatcher clientPayloadDispatcher = null;
-
-    /**
-     * Dispatcher interface - does not reference any client-only classes, so it is safe to
-     * declare in this server-visible class.
-     */
-    @FunctionalInterface
-    public interface ClientPayloadDispatcher {
-        /**
-         * Dispatches an incoming S2C payload to registered client receivers.
-         *
-         * @param payload the received payload
-         * @param context the NeoForge payload context
-         */
-        void dispatch(ChannelPayload payload, IPayloadContext context);
-    }
+    private final List<ResourceLocation> pendingC2S = new ArrayList<>();
+    private final List<ResourceLocation> pendingS2C = new ArrayList<>();
 
     /**
      * Subscribes this instance to {@link RegisterPayloadHandlersEvent} on the given mod event bus.
@@ -149,6 +133,21 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
                 });
             }
         }
+    }
+
+    /**
+     * Dispatcher interface - does not reference any client-only classes, so it is safe to
+     * declare in this server-visible class.
+     */
+    @FunctionalInterface
+    public interface ClientPayloadDispatcher {
+        /**
+         * Dispatches an incoming S2C payload to registered client receivers.
+         *
+         * @param payload the received payload
+         * @param context the NeoForge payload context
+         */
+        void dispatch(ChannelPayload payload, IPayloadContext context);
     }
 
     // -------------------------------------------------------------------------

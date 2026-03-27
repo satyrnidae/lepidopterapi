@@ -22,8 +22,10 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
  */
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class AbstractFurnaceBlockEntityMixin {
-    @Unique private static final int LAPI$FUEL_SLOT = 1;
-    @Unique private static final RandomSource LAPI$RANDOM_SOURCE = RandomSource.create();
+    @Unique
+    private static final int LAPI$FUEL_SLOT = 1;
+    @Unique
+    private static final RandomSource LAPI$RANDOM_SOURCE = RandomSource.create();
 
     private AbstractFurnaceBlockEntityMixin() {
         NotInitializable.mixinClass(this);

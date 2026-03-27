@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**

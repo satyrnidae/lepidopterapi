@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import org.jetbrains.annotations.ApiStatus;
 import me.shedaniel.autoconfig.ConfigData;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Extension of Cloth Config's {@link ConfigData} for nested config sub-objects.

@@ -2,11 +2,11 @@ package dev.satyrn.lepidoptera.api.network;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.network.PacketChannelsImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -34,13 +34,8 @@ import java.util.Map;
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
 @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.Internal
 public final class PacketChannels {
-
-    // -------------------------------------------------------------------------
-    // Internal static state - NOT @ApiStatus.AvailableSince("0.4.0+1.19.2"), but public so platform impls can read.
-    // All writes happen during single-threaded mod init; reads are concurrent but
-    // structurally unchanged by the time any packet is received.
-    // -------------------------------------------------------------------------
 
     /**
      * Registered C2S channel IDs.
@@ -77,11 +72,15 @@ public final class PacketChannels {
      */
     public static final List<Runnable> CLIENT_DISCONNECT_CALLBACKS = new ArrayList<>();
 
-    // -------------------------------------------------------------------------
-    // Platform impl injection
-    // -------------------------------------------------------------------------
-
+    /**
+     * Calls buffered before {@link #setImpl} is called.
+     */
+    private static final List<Runnable> pendingCalls = new ArrayList<>();
     private static @Nullable PacketChannelsImpl impl = null;
+
+    private PacketChannels() {
+        NotInitializable.staticClass(this);
+    }
 
     /**
      * Injects the platform-specific implementation and replays all buffered registrations.
@@ -99,11 +98,6 @@ public final class PacketChannels {
         pendingCalls.clear();
     }
 
-    /**
-     * Calls buffered before {@link #setImpl} is called.
-     */
-    private static final List<Runnable> pendingCalls = new ArrayList<>();
-
     private static synchronized void dispatch(Runnable call) {
         if (impl != null) {
             call.run();
@@ -111,10 +105,6 @@ public final class PacketChannels {
             pendingCalls.add(call);
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Public @ApiStatus.AvailableSince("0.4.0+1.19.2") methods
-    // -------------------------------------------------------------------------
 
     /**
      * Registers a client-to-server channel. Must be called on <em>both</em> sides before
@@ -242,9 +232,5 @@ public final class PacketChannels {
             return;
         }
         impl.sendToPlayer(player, id, buf);
-    }
-
-    private PacketChannels() {
-        NotInitializable.staticClass(this);
     }
 }

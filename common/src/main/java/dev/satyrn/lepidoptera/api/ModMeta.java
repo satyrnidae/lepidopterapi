@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

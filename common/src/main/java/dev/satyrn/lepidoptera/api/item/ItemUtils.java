@@ -1,10 +1,10 @@
 package dev.satyrn.lepidoptera.api.item;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Utility methods for item stack manipulation.

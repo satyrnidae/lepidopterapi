@@ -1,6 +1,5 @@
 package dev.satyrn.lepidoptera.api.item.crafting.builder;
 
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.item.crafting.BreakableShapedRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -38,9 +38,9 @@ public final class BreakableShapedRecipeBuilder implements RecipeBuilder {
     private final List<String> rows = new ArrayList<>();
     private final Map<Character, Ingredient> key = new LinkedHashMap<>();
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
-    private @Nullable String group;
     private final int damage;
     private final boolean showNotification;
+    private @Nullable String group;
 
     private BreakableShapedRecipeBuilder(final RecipeCategory category,
                                          final ItemLike result,

@@ -1,8 +1,4 @@
-@ApiStatus.Internal
-@MethodsReturnNonnullByDefault
-@FieldsAreNonnullByDefault
-@ParametersAreNonnullByDefault
-@VariablesAreNonnullByDefault
+@ApiStatus.Internal @MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
 package dev.satyrn.lepidoptera.neoforge.data.provider.server.recipe;
 
 import dev.satyrn.lepidoptera.api.VariablesAreNonnullByDefault;

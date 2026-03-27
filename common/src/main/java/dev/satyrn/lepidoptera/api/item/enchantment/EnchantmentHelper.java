@@ -1,7 +1,6 @@
 package dev.satyrn.lepidoptera.api.item.enchantment;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
@@ -9,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Utilities for processing enchantment effects on item stacks.

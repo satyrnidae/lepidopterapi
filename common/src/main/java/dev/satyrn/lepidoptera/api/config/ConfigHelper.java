@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.config;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import org.jetbrains.annotations.ApiStatus;
 import me.shedaniel.autoconfig.annotation.Config;
 import org.apache.logging.log4j.util.StackLocatorUtil;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;

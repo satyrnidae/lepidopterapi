@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.util.StackLocatorUtil;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;

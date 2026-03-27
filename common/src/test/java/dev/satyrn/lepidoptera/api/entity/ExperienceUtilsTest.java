@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExperienceUtilsTest {
 
@@ -45,8 +45,7 @@ class ExperienceUtilsTest {
 
         @Test
         void intOverload_matchesBigIntegerOverload() {
-            assertEquals(ExperienceUtils.getXPForLevel(BigInteger.valueOf(10)),
-                ExperienceUtils.getXPForLevel(10));
+            assertEquals(ExperienceUtils.getXPForLevel(BigInteger.valueOf(10)), ExperienceUtils.getXPForLevel(10));
         }
     }
 
@@ -81,7 +80,7 @@ class ExperienceUtilsTest {
         @Test
         void intOverload_matchesBigIntegerOverload() {
             assertEquals(ExperienceUtils.getXPSpanForLevel(BigInteger.valueOf(20)),
-                ExperienceUtils.getXPSpanForLevel(20));
+                    ExperienceUtils.getXPSpanForLevel(20));
         }
     }
 
@@ -90,28 +89,25 @@ class ExperienceUtilsTest {
 
         @Test
         void zeroProgress_returns0ForAllTiers() {
-            assertEquals(BigInteger.ZERO,
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(5), BigDecimal.ZERO));
-            assertEquals(BigInteger.ZERO,
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(20), BigDecimal.ZERO));
-            assertEquals(BigInteger.ZERO,
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(35), BigDecimal.ZERO));
+            assertEquals(BigInteger.ZERO, ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(5), BigDecimal.ZERO));
+            assertEquals(BigInteger.ZERO, ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(20), BigDecimal.ZERO));
+            assertEquals(BigInteger.ZERO, ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(35), BigDecimal.ZERO));
         }
 
         @Test
         void fullProgress_equalsSpanForAllTiers() {
             assertEquals(ExperienceUtils.getXPSpanForLevel(5),
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(5), BigDecimal.ONE));
+                    ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(5), BigDecimal.ONE));
             assertEquals(ExperienceUtils.getXPSpanForLevel(20),
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(20), BigDecimal.ONE));
+                    ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(20), BigDecimal.ONE));
             assertEquals(ExperienceUtils.getXPSpanForLevel(35),
-                ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(35), BigDecimal.ONE));
+                    ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(35), BigDecimal.ONE));
         }
 
         @Test
         void intFloatOverload_matchesBigIntegerOverload() {
             assertEquals(ExperienceUtils.getXPWithinLevel(BigInteger.valueOf(10), BigDecimal.valueOf(0.5f)),
-                ExperienceUtils.getXPWithinLevel(10, 0.5f));
+                    ExperienceUtils.getXPWithinLevel(10, 0.5f));
         }
     }
 
@@ -122,15 +118,14 @@ class ExperienceUtilsTest {
         void zeroProgress_equalsXPForLevelAtAllTierBoundaries() {
             for (final int level : new int[]{0, 1, 16, 17, 31, 32}) {
                 assertEquals(ExperienceUtils.getXPForLevel(BigInteger.valueOf(level)),
-                    ExperienceUtils.getTotalXP(BigInteger.valueOf(level), BigDecimal.ZERO),
-                    "level " + level);
+                        ExperienceUtils.getTotalXP(BigInteger.valueOf(level), BigDecimal.ZERO), "level " + level);
             }
         }
 
         @Test
         void intFloatOverload_matchesBigIntegerOverload() {
             assertEquals(ExperienceUtils.getTotalXP(BigInteger.valueOf(15), BigDecimal.ZERO),
-                ExperienceUtils.getTotalXP(15, 0.0f));
+                    ExperienceUtils.getTotalXP(15, 0.0f));
         }
     }
 

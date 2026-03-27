@@ -49,11 +49,6 @@ public interface Provider {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     final class Priority {
 
-        @Contract("-> fail")
-        private Priority() {
-            NotInitializable.staticClass(this);
-        }
-
         /**
          * The highest possible priority ({@value Short#MAX_VALUE}).
          * Use when your registration must always win regardless of load order.
@@ -62,7 +57,6 @@ public interface Provider {
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short HIGHEST = Short.MAX_VALUE;
-
         /**
          * High priority ({@code 100}).
          *
@@ -70,7 +64,6 @@ public interface Provider {
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short HIGH = 100;
-
         /**
          * Normal (default) priority ({@code 0}).
          * This is the priority used by all no-priority overloads of
@@ -80,7 +73,6 @@ public interface Provider {
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short NORMAL = 0;
-
         /**
          * Low priority ({@code -100}).
          *
@@ -88,7 +80,6 @@ public interface Provider {
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short LOW = -100;
-
         /**
          * The lowest possible priority ({@value Short#MIN_VALUE}).
          * This is the default priority returned by {@link Provider#getPriority()}.
@@ -97,6 +88,11 @@ public interface Provider {
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short LOWEST = Short.MIN_VALUE;
+
+        @Contract("-> fail")
+        private Priority() {
+            NotInitializable.staticClass(this);
+        }
     }
 
     /**
@@ -118,7 +114,6 @@ public interface Provider {
          * is less than, equal to, or greater than {@code o2}'s
          *
          * @throws NullPointerException if either argument is {@code null}
-         *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")

@@ -1,10 +1,10 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Context provided to S2C {@link PacketReceiver} instances and client-side

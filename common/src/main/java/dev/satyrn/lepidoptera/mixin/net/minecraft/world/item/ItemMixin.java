@@ -19,16 +19,20 @@ import javax.annotation.Nullable;
 @Mixin(Item.class)
 @Implements({@Interface(iface = ItemExtensions.class, prefix = "lapix$")})
 public class ItemMixin {
-    @Unique private @Nullable Item lapi$craftingRemainingItemOverride;
+    @Unique
+    private @Nullable Item lapi$craftingRemainingItemOverride;
 
     /**
      * The remainder item when crafting destroys an item
      */
-    @Unique private @Nullable Item lapi$craftingDepletionRemainingItem;
+    @Unique
+    private @Nullable Item lapi$craftingDepletionRemainingItem;
 
-    @Unique private @Nullable Item lapi$fuelDepletionRemainingItem;
+    @Unique
+    private @Nullable Item lapi$fuelDepletionRemainingItem;
 
-    @Unique private int lapi$damageOnFuelUse = 1;
+    @Unique
+    private int lapi$damageOnFuelUse = 1;
 
     private ItemMixin() {
         NotInitializable.mixinClass(this);
@@ -42,7 +46,9 @@ public class ItemMixin {
         }
     }
 
-    @Inject(method = "getCraftingRemainingItem()Lnet/minecraft/world/item/Item;", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getCraftingRemainingItem()Lnet/minecraft/world/item/Item;",
+            at = @At("RETURN"),
+            cancellable = true)
     private void lapi$onGetCraftingRemainingItem(CallbackInfoReturnable<Item> cir) {
         if (this.lapi$craftingRemainingItemOverride != null) {
             cir.setReturnValue(lapi$craftingRemainingItemOverride);
@@ -55,7 +61,9 @@ public class ItemMixin {
      * Fires at TAIL so any existing {@code use()} behaviour (food, tools, etc.) takes priority;
      * we only act when vanilla returned {@code PASS} (nothing else claimed the interaction).
      */
-    @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;",
+            at = @At("TAIL"),
+            cancellable = true)
     private void lapi$onUse(Level level,
                             Player player,
                             InteractionHand hand,

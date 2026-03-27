@@ -1,8 +1,4 @@
-@ApiStatus.Internal
-@MethodsReturnNonnullByDefault
-@FieldsAreNonnullByDefault
-@ParametersAreNonnullByDefault
-@VariablesAreNonnullByDefault
+@ApiStatus.Internal @MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
 package dev.satyrn.lepidoptera.neoforge.events;
 
 import dev.satyrn.lepidoptera.api.VariablesAreNonnullByDefault;

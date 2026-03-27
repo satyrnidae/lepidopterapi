@@ -1,8 +1,8 @@
 package dev.satyrn.lepidoptera.api;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Lifecycle interface for mods built on the Lepidoptera API.

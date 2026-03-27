@@ -10,9 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NotInitializableTest {
 
-    private static class Foo {
-    }
-
     @Test
     void staticClass_throwsAssertionError() {
         AssertionError ex = assertThrows(AssertionError.class, () -> NotInitializable.staticClass(new Foo()));
@@ -32,5 +29,8 @@ class NotInitializableTest {
         InvocationTargetException ex = assertThrows(InvocationTargetException.class, ctor::newInstance);
         assertInstanceOf(AssertionError.class, ex.getCause());
         assertTrue(ex.getCause().getMessage().contains(NotInitializable.class.getName()));
+    }
+
+    private static class Foo {
     }
 }

@@ -13,11 +13,18 @@ import java.util.function.Consumer;
 @Mixin(ItemStack.class)
 @Implements({@Interface(iface = ItemStackExtensions.class, prefix = "lapix$")})
 public abstract class ItemStackMixin {
+    private ItemStackMixin() {
+        NotInitializable.mixinClass(this);
+    }
+
     @Shadow
     public abstract boolean isDamageableItem();
 
     @Shadow
     public abstract int getDamageValue();
+
+    @Shadow
+    public abstract void setDamageValue(int damage);
 
     @Shadow
     public abstract int getMaxDamage();
@@ -27,13 +34,6 @@ public abstract class ItemStackMixin {
 
     @Shadow
     public abstract void shrink(int i);
-
-    @Shadow
-    public abstract void setDamageValue(int damage);
-
-    private ItemStackMixin() {
-        NotInitializable.mixinClass(this);
-    }
 
     @Intrinsic
     public void lapix$hurtAndBreak(int damage, RandomSource randomSource, Consumer<Item> onBreak) {

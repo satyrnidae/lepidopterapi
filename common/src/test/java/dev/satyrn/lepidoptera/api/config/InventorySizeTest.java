@@ -7,10 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InventorySizeTest {
 
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
-
     @Nested
     class Construction {
         @Test
@@ -29,32 +25,24 @@ class InventorySizeTest {
 
         @Test
         void widthBelowMin_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> new InventorySize(0, 1));
+            assertThrows(IllegalArgumentException.class, () -> new InventorySize(0, 1));
         }
 
         @Test
         void heightBelowMin_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> new InventorySize(1, 0));
+            assertThrows(IllegalArgumentException.class, () -> new InventorySize(1, 0));
         }
 
         @Test
         void negativeWidth_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> new InventorySize(-5, 3));
+            assertThrows(IllegalArgumentException.class, () -> new InventorySize(-5, 3));
         }
 
         @Test
         void negativeHeight_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> new InventorySize(3, -1));
+            assertThrows(IllegalArgumentException.class, () -> new InventorySize(3, -1));
         }
     }
-
-    // -------------------------------------------------------------------------
-    // toString
-    // -------------------------------------------------------------------------
 
     @Nested
     class ToStringTests {
@@ -73,10 +61,6 @@ class InventorySizeTest {
             assertEquals("27x27", new InventorySize(27, 27).toString());
         }
     }
-
-    // -------------------------------------------------------------------------
-    // parse — valid inputs
-    // -------------------------------------------------------------------------
 
     @Nested
     class ParseValid {
@@ -108,70 +92,53 @@ class InventorySizeTest {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // parse — invalid inputs
-    // -------------------------------------------------------------------------
-
     @Nested
     class ParseInvalid {
         @Test
         void emptyString_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse(""));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse(""));
         }
 
         @Test
         void nullString_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse(null));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse(null));
         }
 
         @Test
         void noSeparator_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("96"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("96"));
         }
 
         @Test
         void missingHeight_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("9x"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("9x"));
         }
 
         @Test
         void missingWidth_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("x6"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("x6"));
         }
 
         @Test
         void nonNumericWidth_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("axb"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("axb"));
         }
 
         @Test
         void zeroWidth_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("0x5"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("0x5"));
         }
 
         @Test
         void zeroHeight_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("5x0"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("5x0"));
         }
 
         @Test
         void negativeWidth_throws() {
-            assertThrows(IllegalArgumentException.class,
-                    () -> InventorySize.parse("-1x5"));
+            assertThrows(IllegalArgumentException.class, () -> InventorySize.parse("-1x5"));
         }
     }
-
-    // -------------------------------------------------------------------------
-    // equals / hashCode
-    // -------------------------------------------------------------------------
 
     @Nested
     class Equality {
@@ -192,9 +159,7 @@ class InventorySizeTest {
 
         @Test
         void sameValues_sameHashCode() {
-            assertEquals(
-                    new InventorySize(9, 6).hashCode(),
-                    new InventorySize(9, 6).hashCode());
+            assertEquals(new InventorySize(9, 6).hashCode(), new InventorySize(9, 6).hashCode());
         }
 
         @Test

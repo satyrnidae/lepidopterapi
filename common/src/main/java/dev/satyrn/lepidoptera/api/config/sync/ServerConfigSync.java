@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.api.config.sync;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
-import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -13,15 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -136,6 +134,49 @@ public final class ServerConfigSync {
         return new Builder(ModHelper.name(modClass));
     }
 
+    // Generic helpers to avoid unchecked-cast warnings on the raw entry lists
+    private static <T> void encodeCommon(final CommonConfigEntry<T> entry, final FriendlyByteBuf buf) {
+        entry.codec().encode(entry.source().get(), buf);
+    }
+
+    private static <T> void decodeCommon(final CommonConfigEntry<T> entry, final FriendlyByteBuf buf) {
+        T value = entry.codec().decode(buf);
+        if (entry.synced() != null) {
+            entry.synced().applyOverlay(value);
+        } else {
+            entry.overlay().set(value);
+        }
+    }
+
+    private static <T> void encodeOverride(final ClientOverrideEntry<T> entry, final FriendlyByteBuf buf) {
+        entry.codec().encode(entry.source().get(), buf);
+    }
+
+    private static <T> void decodeOverride(final ClientOverrideEntry<T> entry, final FriendlyByteBuf buf) {
+        T value = entry.codec().decode(buf);
+        if (entry.synced() != null) {
+            entry.synced().applyOverlay(value);
+        } else {
+            entry.overlay().set(value);
+        }
+    }
+
+    private static <T> void clearEntry(final CommonConfigEntry<T> entry) {
+        if (entry.synced() != null) {
+            entry.synced().clearOverlay();
+        } else {
+            entry.overlay().clear();
+        }
+    }
+
+    private static <T> void clearEntry(final ClientOverrideEntry<T> entry) {
+        if (entry.synced() != null) {
+            entry.synced().clearOverlay();
+        } else {
+            entry.overlay().clear();
+        }
+    }
+
     /**
      * Re-sends the current config to all connected players.
      * Use this after a server-side config reload.
@@ -165,10 +206,6 @@ public final class ServerConfigSync {
     public void sendTo(final ServerPlayer player) {
         PacketChannels.sendToPlayer(player, configChannel, buildConfigPacket());
     }
-
-    // -------------------------------------------------------------------------
-    // File watcher lifecycle (called by platform entrypoints)
-    // -------------------------------------------------------------------------
 
     /**
      * Starts watching registered config files for changes. Called by the platform entrypoint
@@ -250,10 +287,6 @@ public final class ServerConfigSync {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Registration
-    // -------------------------------------------------------------------------
-
     private void registerChannels() {
         // Register version channel as both C2S and S2C
         PacketChannels.registerServerChannel(versionChannel);
@@ -308,10 +341,6 @@ public final class ServerConfigSync {
         PacketChannels.registerClientDisconnectCallback(this::clearAllOverlays);
     }
 
-    // -------------------------------------------------------------------------
-    // Packet encode / decode
-    // -------------------------------------------------------------------------
-
     private FriendlyByteBuf buildConfigPacket() {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         // Snapshot enabled flags first to avoid a race between the flags pass and data pass
@@ -359,53 +388,6 @@ public final class ServerConfigSync {
         }
     }
 
-    // Generic helpers to avoid unchecked-cast warnings on the raw entry lists
-    private static <T> void encodeCommon(final CommonConfigEntry<T> entry, final FriendlyByteBuf buf) {
-        entry.codec().encode(entry.source().get(), buf);
-    }
-
-    private static <T> void decodeCommon(final CommonConfigEntry<T> entry, final FriendlyByteBuf buf) {
-        T value = entry.codec().decode(buf);
-        if (entry.synced() != null) {
-            entry.synced().applyOverlay(value);
-        } else {
-            entry.overlay().set(value);
-        }
-    }
-
-    private static <T> void encodeOverride(final ClientOverrideEntry<T> entry, final FriendlyByteBuf buf) {
-        entry.codec().encode(entry.source().get(), buf);
-    }
-
-    private static <T> void decodeOverride(final ClientOverrideEntry<T> entry, final FriendlyByteBuf buf) {
-        T value = entry.codec().decode(buf);
-        if (entry.synced() != null) {
-            entry.synced().applyOverlay(value);
-        } else {
-            entry.overlay().set(value);
-        }
-    }
-
-    private static <T> void clearEntry(final CommonConfigEntry<T> entry) {
-        if (entry.synced() != null) {
-            entry.synced().clearOverlay();
-        } else {
-            entry.overlay().clear();
-        }
-    }
-
-    private static <T> void clearEntry(final ClientOverrideEntry<T> entry) {
-        if (entry.synced() != null) {
-            entry.synced().clearOverlay();
-        } else {
-            entry.overlay().clear();
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // Entry records
-    // -------------------------------------------------------------------------
-
     private record CommonConfigEntry<T>(ConfigCodec<T> codec,
                                         Supplier<T> source,
                                         ConfigOverlay<T> overlay,
@@ -422,10 +404,6 @@ public final class ServerConfigSync {
     private record WatchEntry(ConfigHolder<?> holder, Path configPath) {
     }
 
-    // -------------------------------------------------------------------------
-    // Builder
-    // -------------------------------------------------------------------------
-
     /**
      * Fluent builder for {@link ServerConfigSync}.
      *
@@ -435,11 +413,11 @@ public final class ServerConfigSync {
     public static final class Builder {
 
         private final String modId;
-        private int networkVersion = 1;
-        private String mismatchKey = "";
         private final List<CommonConfigEntry<?>> commonConfigs = new ArrayList<>();
         private final List<ClientOverrideEntry<?>> clientOverrides = new ArrayList<>();
         private final List<WatchEntry> watchEntries = new ArrayList<>();
+        private int networkVersion = 1;
+        private String mismatchKey = "";
 
         private Builder(final String modId) {
             this.modId = modId;

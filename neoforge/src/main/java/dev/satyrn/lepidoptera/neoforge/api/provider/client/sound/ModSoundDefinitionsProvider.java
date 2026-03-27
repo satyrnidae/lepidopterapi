@@ -2,11 +2,11 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.client.sound;
 
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +21,8 @@ public abstract class ModSoundDefinitionsProvider extends SoundDefinitionsProvid
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override final CompletableFuture<?> run(CachedOutput output) {
+    @Override
+    public final CompletableFuture<?> run(CachedOutput output) {
         return CompletableFuture.allOf(super.run(output), runModded(output));
     }
 

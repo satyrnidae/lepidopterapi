@@ -1,8 +1,4 @@
-@ApiStatus.Internal
-@MethodsReturnNonnullByDefault
-@FieldsAreNonnullByDefault
-@ParametersAreNonnullByDefault
-@VariablesAreNonnullByDefault
+@ApiStatus.Internal @MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
 package dev.satyrn.lepidoptera.mixin.net.minecraft.world.item;
 
 import dev.satyrn.lepidoptera.api.VariablesAreNonnullByDefault;

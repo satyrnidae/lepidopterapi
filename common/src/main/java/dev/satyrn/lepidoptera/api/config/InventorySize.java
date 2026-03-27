@@ -49,28 +49,6 @@ public record InventorySize(int width, int height) {
     }
 
     /**
-     * Returns the number of columns.
-     *
-     * @since 1.0.0-SNAPSHOT+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
-    @Contract(pure = true)
-    public @Override int width() {
-        return this.width;
-    }
-
-    /**
-     * Returns the number of rows.
-     *
-     * @since 1.0.0-SNAPSHOT+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
-    @Contract(pure = true)
-    public @Override int height() {
-        return this.height;
-    }
-
-    /**
      * Parses an inventory size from the compact {@code "WxH"} string format.
      *
      * @param s a string of the form {@code "<width>x<height>"} where both values are
@@ -100,6 +78,28 @@ public record InventorySize(int width, int height) {
             throw new IllegalArgumentException(
                     "Invalid inventory size \"" + s + "\": width and height must be integers", e);
         }
+    }
+
+    /**
+     * Returns the number of columns.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    public @Override int width() {
+        return this.width;
+    }
+
+    /**
+     * Returns the number of rows.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    public @Override int height() {
+        return this.height;
     }
 
     /**

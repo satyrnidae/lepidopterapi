@@ -23,12 +23,10 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         // moli soweli wile moku = death of food-wanting animal
         this.add(T9n.gamerule("doAnimalStarvation"), "moli soweli wile moku");
         // soweli li ken moli tan moku ala = animal can die because-of eating-not
-        this.add(T9n.gameruleDesc("doAnimalStarvation"),
-                "Lepidoptera API: soweli li ken moli tan moku ala.");
+        this.add(T9n.gameruleDesc("doAnimalStarvation"), "Lepidoptera API: soweli li ken moli tan moku ala.");
 
         // nanpa ... li ante = number ... is-different; ma tomo = place-home (server); ilo = tool (client)
-        this.add(T9n.netMsg(this.metadata, "versionMismatch"),
-                "nanpa Lepidoptera API li ante. ma tomo: %s, ilo: %s");
+        this.add(T9n.netMsg(this.metadata, "versionMismatch"), "nanpa Lepidoptera API li ante. ma tomo: %s, ilo: %s");
 
         // nasin pi Lepidoptera API = rules/settings of Lepidoptera API
         this.add(T9n.configTitle(LepidopteraConfig.class), "nasin pi Lepidoptera API");
@@ -36,8 +34,7 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "sitelen pi pakala");
         // o sona e ni! = know this! (WARNING!); ni li sitelen e pali ale = this writes all interactions
         this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("o sona e ni! ", ChatFormatting.RED).append(
-                        "ni li sitelen e pali ale!"));
+                new FormattedStringBuilder("o sona e ni! ", ChatFormatting.RED).append("ni li sitelen e pali ale!"));
         // o open e ni taso la sina sona e pali sina = open this only if you know your work
         this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
                 new FormattedStringBuilder("o open e ni taso la sina sona e pali sina.", ChatFormatting.YELLOW));

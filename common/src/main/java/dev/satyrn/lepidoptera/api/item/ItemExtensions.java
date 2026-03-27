@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -21,6 +21,22 @@ import javax.annotation.Nullable;
  */
 @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public interface ItemExtensions extends ItemLike {
+
+    /**
+     * Casts an {@link Item} to {@link ItemExtensions}.
+     *
+     * <p>Safe because the mixin always injects this interface onto {@code Item}.</p>
+     *
+     * @param item the item to cast
+     *
+     * @return the item as {@link ItemExtensions}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    static ItemExtensions cast(Item item) {
+        return (ItemExtensions) item;
+    }
 
     /**
      * Sets the item that remains in the crafting grid after this item is consumed.
@@ -53,6 +69,18 @@ public interface ItemExtensions extends ItemLike {
     }
 
     /**
+     * Returns the item set as the crafting depletion remainder, or {@code null} if none.
+     *
+     * @return the crafting depletion remainder item
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    default @Nullable Item getCraftingDepletionRemainingItem() {
+        throw new NotImplementedException("Mixin apply failed!");
+    }
+
+    /**
      * Sets the item that replaces this item in the crafting grid when it is damaged to zero
      * during crafting (depletion remainder). Pass {@code null} to clear.
      *
@@ -65,6 +93,18 @@ public interface ItemExtensions extends ItemLike {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     default ItemExtensions setCraftingDepletionRemainingItem(@Nullable Item item) {
+        throw new NotImplementedException("Mixin apply failed!");
+    }
+
+    /**
+     * Returns the item set as the fuel depletion remainder, or {@code null} if none.
+     *
+     * @return the fuel depletion remainder item
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    default @Nullable Item getFuelDepletionRemainingItem() {
         throw new NotImplementedException("Mixin apply failed!");
     }
 
@@ -85,6 +125,18 @@ public interface ItemExtensions extends ItemLike {
     }
 
     /**
+     * Returns the amount of damage dealt to this item per fuel use.
+     *
+     * @return damage per fuel use
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    default int getDamageOnFuelUse() {
+        throw new NotImplementedException("Mixin apply failed!");
+    }
+
+    /**
      * Sets the amount of damage dealt to this item each time it is used as a fuel source.
      *
      * @param damage the damage per fuel use
@@ -100,42 +152,6 @@ public interface ItemExtensions extends ItemLike {
     }
 
     /**
-     * Returns the item set as the crafting depletion remainder, or {@code null} if none.
-     *
-     * @return the crafting depletion remainder item
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    default @Nullable Item getCraftingDepletionRemainingItem() {
-        throw new NotImplementedException("Mixin apply failed!");
-    }
-
-    /**
-     * Returns the item set as the fuel depletion remainder, or {@code null} if none.
-     *
-     * @return the fuel depletion remainder item
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    default @Nullable Item getFuelDepletionRemainingItem() {
-        throw new NotImplementedException("Mixin apply failed!");
-    }
-
-    /**
-     * Returns the amount of damage dealt to this item per fuel use.
-     *
-     * @return damage per fuel use
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    default int getDamageOnFuelUse() {
-        throw new NotImplementedException("Mixin apply failed!");
-    }
-
-    /**
      * Returns this object as an {@link Item}. Safe because {@code ItemExtensions} is always
      * mixed into {@code Item}.
      *
@@ -146,21 +162,5 @@ public interface ItemExtensions extends ItemLike {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default @Override Item asItem() {
         return (Item) this;
-    }
-
-    /**
-     * Casts an {@link Item} to {@link ItemExtensions}.
-     *
-     * <p>Safe because the mixin always injects this interface onto {@code Item}.</p>
-     *
-     * @param item the item to cast
-     *
-     * @return the item as {@link ItemExtensions}
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    static ItemExtensions cast(Item item) {
-        return (ItemExtensions) item;
     }
 }

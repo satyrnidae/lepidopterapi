@@ -1,9 +1,9 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Context provided to C2S {@link PacketReceiver} instances and server-side

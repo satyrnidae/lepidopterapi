@@ -1,8 +1,8 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Common send interface available on both {@link ServerPlayContext} and {@link ClientPlayContext}.

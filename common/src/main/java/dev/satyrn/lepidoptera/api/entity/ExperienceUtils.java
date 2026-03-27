@@ -63,18 +63,6 @@ public final class ExperienceUtils {
     }
 
     /**
-     * Immutable carrier for the result of {@link #fromTotalXP(BigInteger)}.
-     *
-     * @param level    the whole-number experience level
-     * @param progress the fractional progress within {@code level}, in {@code [0, 1)}
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public record LevelProgress(BigInteger level, BigDecimal progress) {
-    }
-
-    /**
      * Returns the total XP required to reach the given level from zero.
      *
      * <p>Uses the vanilla three-tier piecewise polynomial from the Minecraft Wiki:</p>
@@ -97,24 +85,19 @@ public final class ExperienceUtils {
         final BigDecimal totalXP;
 
         if (level.compareTo(LEVEL_TIER1_MAX) <= 0) {
-            totalXP = x.pow(2)
-                .add(BigDecimal.valueOf(6).multiply(x));
+            totalXP = x.pow(2).add(BigDecimal.valueOf(6).multiply(x));
         } else if (level.compareTo(LEVEL_TIER2_MAX) <= 0) {
             totalXP = BigDecimal.valueOf(5)
-                .divide(BigDecimal.valueOf(2), MATH_CONTEXT)
-                .multiply(x.pow(2))
-                .subtract(BigDecimal.valueOf(81)
                     .divide(BigDecimal.valueOf(2), MATH_CONTEXT)
-                    .multiply(x))
-                .add(BigDecimal.valueOf(360));
+                    .multiply(x.pow(2))
+                    .subtract(BigDecimal.valueOf(81).divide(BigDecimal.valueOf(2), MATH_CONTEXT).multiply(x))
+                    .add(BigDecimal.valueOf(360));
         } else {
             totalXP = BigDecimal.valueOf(9)
-                .divide(BigDecimal.valueOf(2), MATH_CONTEXT)
-                .multiply(x.pow(2))
-                .subtract(BigDecimal.valueOf(325)
                     .divide(BigDecimal.valueOf(2), MATH_CONTEXT)
-                    .multiply(x))
-                .add(BigDecimal.valueOf(2220));
+                    .multiply(x.pow(2))
+                    .subtract(BigDecimal.valueOf(325).divide(BigDecimal.valueOf(2), MATH_CONTEXT).multiply(x))
+                    .add(BigDecimal.valueOf(2220));
         }
 
         return totalXP.setScale(0, RoundingMode.HALF_UP).toBigInteger();
@@ -207,10 +190,9 @@ public final class ExperienceUtils {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPWithinLevel(final BigInteger level, final BigDecimal progress) {
-        return new BigDecimal(getXPSpanForLevel(level))
-            .multiply(progress)
-            .setScale(0, RoundingMode.HALF_UP)
-            .toBigInteger();
+        return new BigDecimal(getXPSpanForLevel(level)).multiply(progress)
+                .setScale(0, RoundingMode.HALF_UP)
+                .toBigInteger();
     }
 
     /**
@@ -298,29 +280,33 @@ public final class ExperienceUtils {
         final BigDecimal levelD;
 
         if (totalXP.compareTo(XP_TIER1_MAX) <= 0) {
-            levelD = x.add(BigDecimal.valueOf(9))
-                .sqrt(MATH_CONTEXT)
-                .subtract(BigDecimal.valueOf(3));
+            levelD = x.add(BigDecimal.valueOf(9)).sqrt(MATH_CONTEXT).subtract(BigDecimal.valueOf(3));
         } else if (totalXP.compareTo(XP_TIER2_MAX) <= 0) {
-            levelD = x.subtract(BigDecimal.valueOf(7839)
-                    .divide(BigDecimal.valueOf(40), MATH_CONTEXT))
-                .multiply(BigDecimal.valueOf(2)
-                    .divide(BigDecimal.valueOf(5), MATH_CONTEXT))
-                .sqrt(MATH_CONTEXT)
-                .add(BigDecimal.valueOf(81)
-                    .divide(BigDecimal.valueOf(10), MATH_CONTEXT));
+            levelD = x.subtract(BigDecimal.valueOf(7839).divide(BigDecimal.valueOf(40), MATH_CONTEXT))
+                    .multiply(BigDecimal.valueOf(2).divide(BigDecimal.valueOf(5), MATH_CONTEXT))
+                    .sqrt(MATH_CONTEXT)
+                    .add(BigDecimal.valueOf(81).divide(BigDecimal.valueOf(10), MATH_CONTEXT));
         } else {
-            levelD = x.subtract(BigDecimal.valueOf(54215)
-                    .divide(BigDecimal.valueOf(72), MATH_CONTEXT))
-                .multiply(BigDecimal.valueOf(2)
-                    .divide(BigDecimal.valueOf(9), MATH_CONTEXT))
-                .sqrt(MATH_CONTEXT)
-                .add(BigDecimal.valueOf(325)
-                    .divide(BigDecimal.valueOf(18), MATH_CONTEXT));
+            levelD = x.subtract(BigDecimal.valueOf(54215).divide(BigDecimal.valueOf(72), MATH_CONTEXT))
+                    .multiply(BigDecimal.valueOf(2).divide(BigDecimal.valueOf(9), MATH_CONTEXT))
+                    .sqrt(MATH_CONTEXT)
+                    .add(BigDecimal.valueOf(325).divide(BigDecimal.valueOf(18), MATH_CONTEXT));
         }
 
         final BigInteger level = levelD.setScale(0, RoundingMode.FLOOR).toBigInteger();
         final BigDecimal progress = levelD.remainder(BigDecimal.ONE);
         return new LevelProgress(level, progress);
+    }
+
+    /**
+     * Immutable carrier for the result of {@link #fromTotalXP(BigInteger)}.
+     *
+     * @param level    the whole-number experience level
+     * @param progress the fractional progress within {@code level}, in {@code [0, 1)}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    public record LevelProgress(BigInteger level, BigDecimal progress) {
     }
 }

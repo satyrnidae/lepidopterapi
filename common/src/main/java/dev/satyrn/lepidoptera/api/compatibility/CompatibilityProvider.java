@@ -77,7 +77,8 @@ public abstract class CompatibilityProvider implements Provider {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public void onPreInit() {}
+    public void onPreInit() {
+    }
 
     /**
      * Called during your mod's main initialization phase. Override to register cross-mod
@@ -86,7 +87,8 @@ public abstract class CompatibilityProvider implements Provider {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public void onInit() {}
+    public void onInit() {
+    }
 
     /**
      * Called during your mod's post-initialization phase, after all mods have
@@ -96,5 +98,6 @@ public abstract class CompatibilityProvider implements Provider {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public void onPostInit() {}
+    public void onPostInit() {
+    }
 }

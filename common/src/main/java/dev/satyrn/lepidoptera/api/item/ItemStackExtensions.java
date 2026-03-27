@@ -1,10 +1,10 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.util.function.Consumer;
@@ -20,6 +20,22 @@ import java.util.function.Consumer;
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface ItemStackExtensions {
     /**
+     * Casts an {@link ItemStack} to {@link ItemStackExtensions}.
+     *
+     * <p>Requires an intermediate cast through {@code Object} because {@code ItemStack}
+     * is a final class; the mixin injects the interface at the bytecode level.</p>
+     *
+     * @param itemStack the stack to cast
+     *
+     * @return the stack as {@link ItemStackExtensions}
+     */
+    @SuppressWarnings("DataFlowIssue")
+    @Contract(pure = true)
+    static ItemStackExtensions cast(final ItemStack itemStack) {
+        return (ItemStackExtensions) (Object) itemStack;
+    }
+
+    /**
      * Damages this item stack by the given amount, breaking it and calling {@code onBreak}
      * if its durability reaches zero.
      *
@@ -34,21 +50,5 @@ public interface ItemStackExtensions {
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default void hurtAndBreak(final int damage, final RandomSource legacyRandomSource, final Consumer<Item> onBreak) {
         throw new NotImplementedException("This functionality is not implemented! Did the mixin fail?");
-    }
-
-    /**
-     * Casts an {@link ItemStack} to {@link ItemStackExtensions}.
-     *
-     * <p>Requires an intermediate cast through {@code Object} because {@code ItemStack}
-     * is a final class; the mixin injects the interface at the bytecode level.</p>
-     *
-     * @param itemStack the stack to cast
-     *
-     * @return the stack as {@link ItemStackExtensions}
-     */
-    @SuppressWarnings("DataFlowIssue")
-    @Contract(pure = true)
-    static ItemStackExtensions cast(final ItemStack itemStack) {
-        return (ItemStackExtensions) (Object) itemStack;
     }
 }

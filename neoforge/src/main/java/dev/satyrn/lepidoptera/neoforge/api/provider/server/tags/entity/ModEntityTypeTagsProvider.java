@@ -3,12 +3,12 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.entity;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
@@ -26,7 +26,8 @@ public abstract class ModEntityTypeTagsProvider extends EntityTypeTagsProvider i
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    protected @Override final void addTags(HolderLookup.Provider provider) {
+    @Override
+    protected final void addTags(HolderLookup.Provider provider) {
         addModTags(provider);
     }
 

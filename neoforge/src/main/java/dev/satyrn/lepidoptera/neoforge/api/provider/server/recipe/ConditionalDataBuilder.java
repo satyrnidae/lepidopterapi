@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
@@ -17,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.common.conditions.ICondition;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -59,57 +59,9 @@ import java.util.concurrent.CompletableFuture;
 @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ConditionalDataBuilder {
 
-    // -------------------------------------------------------------------------
-    // JsonProducer functional interface
-    // -------------------------------------------------------------------------
-
-    /**
-     * Produces one or more data-pack JSON files given the standard data-gen context and
-     * pre-built condition arrays.
-     *
-     * <p>The producer is responsible for deciding which JSON files to write and where to
-     * inject the condition arrays. Both arrays may be empty when no conditions have been
-     * added to the owning {@link ConditionalDataBuilder}.
-     *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
-     */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    @FunctionalInterface
-    public interface JsonProducer {
-        /**
-         * Writes data-pack JSON, injecting the given condition arrays where appropriate.
-         *
-         * @param cachedOutput     the data-gen output cache
-         * @param id               the primary resource location for this data entry
-         * @param registryAccess   the current registry lookup context
-         * @param packOutput       the data-pack output root
-         * @param neoForgeConditions pre-built {@code neoforge:conditions} array (may be empty)
-         * @param fabricConditions   pre-built {@code fabric:load_conditions} array (may be empty)
-         *
-         * @return a future that completes when all files have been written
-         *
-         * @since 1.0.0-SNAPSHOT.1+1.21.1
-         */
-        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        CompletableFuture<?> produce(CachedOutput cachedOutput,
-                                     ResourceLocation id,
-                                     HolderLookup.Provider registryAccess,
-                                     PackOutput packOutput,
-                                     JsonArray neoForgeConditions,
-                                     JsonArray fabricConditions);
-    }
-
-    // -------------------------------------------------------------------------
-    // Fields
-    // -------------------------------------------------------------------------
-
     private final JsonProducer producer;
     private final List<ResourceLocation> neoForgeConditions = new ArrayList<>();
     private final List<ResourceLocation> fabricConditions = new ArrayList<>();
-
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
 
     private ConditionalDataBuilder(final JsonProducer producer) {
         this.producer = producer;
@@ -165,31 +117,117 @@ public final class ConditionalDataBuilder {
             inner.save(capture, id);
 
             if (capture.capturedRecipe == null) {
-                throw new IllegalStateException(
-                        "Inner RecipeBuilder did not produce a recipe for id: " + id);
+                throw new IllegalStateException("Inner RecipeBuilder did not produce a recipe for id: " + id);
             }
 
-            final PackOutput.PathProvider recipePaths =
-                    packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "recipe");
-            final PackOutput.PathProvider advancementPaths =
-                    packOutput.createPathProvider(PackOutput.Target.DATA_PACK, "advancement");
+            final PackOutput.PathProvider recipePaths = packOutput.createPathProvider(PackOutput.Target.DATA_PACK,
+                    "recipe");
+            final PackOutput.PathProvider advancementPaths = packOutput.createPathProvider(PackOutput.Target.DATA_PACK,
+                    "advancement");
 
             final List<CompletableFuture<?>> futures = new ArrayList<>();
-            futures.add(writeRecipeJson(cachedOutput, id, capture.capturedRecipe,
-                    neoForgeConditions, fabricConditions, recipePaths, registryAccess));
+            futures.add(writeRecipeJson(cachedOutput, id, capture.capturedRecipe, neoForgeConditions, fabricConditions,
+                    recipePaths, registryAccess));
 
             if (capture.capturedAdvancement != null) {
-                futures.add(writeAdvancementJson(cachedOutput, capture.capturedAdvancement,
-                        neoForgeConditions, fabricConditions, advancementPaths, registryAccess));
+                futures.add(writeAdvancementJson(cachedOutput, capture.capturedAdvancement, neoForgeConditions,
+                        fabricConditions, advancementPaths, registryAccess));
             }
 
             return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
         });
     }
 
-    // -------------------------------------------------------------------------
-    // Condition accumulation
-    // -------------------------------------------------------------------------
+    private static JsonArray buildNeoForgeArray(final List<ResourceLocation> conditions) {
+        final JsonArray arr = new JsonArray();
+        for (final ResourceLocation rl : conditions) {
+            final JsonObject obj = new JsonObject();
+            obj.addProperty("type", rl.toString());
+            arr.add(obj);
+        }
+        return arr;
+    }
+
+    private static JsonArray buildFabricArray(final List<ResourceLocation> conditions) {
+        final JsonArray arr = new JsonArray();
+        for (final ResourceLocation rl : conditions) {
+            final JsonObject obj = new JsonObject();
+            obj.addProperty("condition", rl.toString());
+            arr.add(obj);
+        }
+        return arr;
+    }
+
+    /**
+     * Encodes the recipe using its own serializer codec, injects condition arrays, and
+     * saves to {@code data/{namespace}/recipe/{path}.json}.
+     *
+     * <p>The {@code "type"} field is derived from the recipe's registered serializer in
+     * {@link BuiltInRegistries#RECIPE_SERIALIZER} rather than being passed explicitly,
+     * so this helper works for any registered recipe type.
+     */
+    @SuppressWarnings("unchecked") // RecipeSerializer always handles its own concrete Recipe type.
+    private static CompletableFuture<?> writeRecipeJson(final CachedOutput cachedOutput,
+                                                        final ResourceLocation id,
+                                                        final Recipe<?> recipe,
+                                                        final JsonArray neoForgeConditions,
+                                                        final JsonArray fabricConditions,
+                                                        final PackOutput.PathProvider recipePaths,
+                                                        final HolderLookup.Provider registryAccess) {
+        final RecipeSerializer<Recipe<?>> serializer = (RecipeSerializer<Recipe<?>>) recipe.getSerializer();
+        final ResourceLocation typeId = Objects.requireNonNull(BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer),
+                () -> "Recipe serializer not registered in BuiltInRegistries: " + serializer);
+
+        final JsonObject json = serializer.codec()
+                .codec()
+                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), recipe)
+                .getOrThrow()
+                .getAsJsonObject();
+
+        json.addProperty("type", typeId.toString());
+
+        if (!neoForgeConditions.isEmpty()) {
+            json.add("neoforge:conditions", neoForgeConditions);
+        }
+        if (!fabricConditions.isEmpty()) {
+            json.add("fabric:load_conditions", fabricConditions);
+        }
+
+        final Path path = recipePaths.json(id);
+        return DataProvider.saveStable(cachedOutput, json, path);
+    }
+
+    /**
+     * Encodes the advancement using {@link Advancement#CODEC}, injects condition arrays, and
+     * saves to the path encoded in {@link AdvancementHolder#id()}.
+     *
+     * <p>The inner recipe builder sets the advancement id to
+     * {@code {namespace}:recipes/{category}/{name}} before passing it to
+     * {@link RecipeOutput#accept}, so {@link AdvancementHolder#id()} already contains the
+     * correct full path - no category lookup is required here.
+     */
+    private static CompletableFuture<?> writeAdvancementJson(final CachedOutput cachedOutput,
+                                                             final AdvancementHolder holder,
+                                                             final JsonArray neoForgeConditions,
+                                                             final JsonArray fabricConditions,
+                                                             final PackOutput.PathProvider advancementPaths,
+                                                             final HolderLookup.Provider registryAccess) {
+        final JsonObject json = Advancement.CODEC.encodeStart(
+                        registryAccess.createSerializationContext(JsonOps.INSTANCE), holder.value())
+                .getOrThrow()
+                .getAsJsonObject();
+
+        if (!neoForgeConditions.isEmpty()) {
+            json.add("neoforge:conditions", neoForgeConditions);
+        }
+        if (!fabricConditions.isEmpty()) {
+            json.add("fabric:load_conditions", fabricConditions);
+        }
+
+        // holder.id() is already "namespace:recipes/{category}/{name}"
+        final Path path = advancementPaths.json(holder.id());
+        return DataProvider.saveStable(cachedOutput, json, path);
+    }
 
     /**
      * Adds a condition to the {@code neoforge:conditions} array.
@@ -252,10 +290,6 @@ public final class ConditionalDataBuilder {
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Save
-    // -------------------------------------------------------------------------
-
     /**
      * Builds the condition arrays from the accumulated condition lists and delegates to
      * the wrapped {@link JsonProducer}.
@@ -274,110 +308,45 @@ public final class ConditionalDataBuilder {
                                      final ResourceLocation id,
                                      final HolderLookup.Provider registryAccess,
                                      final PackOutput packOutput) {
-        return producer.produce(cachedOutput, id, registryAccess, packOutput,
-                buildNeoForgeArray(neoForgeConditions),
+        return producer.produce(cachedOutput, id, registryAccess, packOutput, buildNeoForgeArray(neoForgeConditions),
                 buildFabricArray(fabricConditions));
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
-
-    private static JsonArray buildNeoForgeArray(final List<ResourceLocation> conditions) {
-        final JsonArray arr = new JsonArray();
-        for (final ResourceLocation rl : conditions) {
-            final JsonObject obj = new JsonObject();
-            obj.addProperty("type", rl.toString());
-            arr.add(obj);
-        }
-        return arr;
-    }
-
-    private static JsonArray buildFabricArray(final List<ResourceLocation> conditions) {
-        final JsonArray arr = new JsonArray();
-        for (final ResourceLocation rl : conditions) {
-            final JsonObject obj = new JsonObject();
-            obj.addProperty("condition", rl.toString());
-            arr.add(obj);
-        }
-        return arr;
-    }
-
     /**
-     * Encodes the recipe using its own serializer codec, injects condition arrays, and
-     * saves to {@code data/{namespace}/recipe/{path}.json}.
+     * Produces one or more data-pack JSON files given the standard data-gen context and
+     * pre-built condition arrays.
      *
-     * <p>The {@code "type"} field is derived from the recipe's registered serializer in
-     * {@link BuiltInRegistries#RECIPE_SERIALIZER} rather than being passed explicitly,
-     * so this helper works for any registered recipe type.
-     */
-    @SuppressWarnings("unchecked") // RecipeSerializer always handles its own concrete Recipe type.
-    private static CompletableFuture<?> writeRecipeJson(final CachedOutput cachedOutput,
-                                                        final ResourceLocation id,
-                                                        final Recipe<?> recipe,
-                                                        final JsonArray neoForgeConditions,
-                                                        final JsonArray fabricConditions,
-                                                        final PackOutput.PathProvider recipePaths,
-                                                        final HolderLookup.Provider registryAccess) {
-        final RecipeSerializer<Recipe<?>> serializer =
-                (RecipeSerializer<Recipe<?>>) recipe.getSerializer();
-        final ResourceLocation typeId = Objects.requireNonNull(
-                BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer),
-                () -> "Recipe serializer not registered in BuiltInRegistries: " + serializer);
-
-        final JsonObject json = serializer.codec().codec()
-                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), recipe)
-                .getOrThrow()
-                .getAsJsonObject();
-
-        json.addProperty("type", typeId.toString());
-
-        if (!neoForgeConditions.isEmpty()) {
-            json.add("neoforge:conditions", neoForgeConditions);
-        }
-        if (!fabricConditions.isEmpty()) {
-            json.add("fabric:load_conditions", fabricConditions);
-        }
-
-        final Path path = recipePaths.json(id);
-        return DataProvider.saveStable(cachedOutput, json, path);
-    }
-
-    /**
-     * Encodes the advancement using {@link Advancement#CODEC}, injects condition arrays, and
-     * saves to the path encoded in {@link AdvancementHolder#id()}.
+     * <p>The producer is responsible for deciding which JSON files to write and where to
+     * inject the condition arrays. Both arrays may be empty when no conditions have been
+     * added to the owning {@link ConditionalDataBuilder}.
      *
-     * <p>The inner recipe builder sets the advancement id to
-     * {@code {namespace}:recipes/{category}/{name}} before passing it to
-     * {@link RecipeOutput#accept}, so {@link AdvancementHolder#id()} already contains the
-     * correct full path - no category lookup is required here.
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    private static CompletableFuture<?> writeAdvancementJson(final CachedOutput cachedOutput,
-                                                              final AdvancementHolder holder,
-                                                              final JsonArray neoForgeConditions,
-                                                              final JsonArray fabricConditions,
-                                                              final PackOutput.PathProvider advancementPaths,
-                                                              final HolderLookup.Provider registryAccess) {
-        final JsonObject json = Advancement.CODEC
-                .encodeStart(registryAccess.createSerializationContext(JsonOps.INSTANCE), holder.value())
-                .getOrThrow()
-                .getAsJsonObject();
-
-        if (!neoForgeConditions.isEmpty()) {
-            json.add("neoforge:conditions", neoForgeConditions);
-        }
-        if (!fabricConditions.isEmpty()) {
-            json.add("fabric:load_conditions", fabricConditions);
-        }
-
-        // holder.id() is already "namespace:recipes/{category}/{name}"
-        final Path path = advancementPaths.json(holder.id());
-        return DataProvider.saveStable(cachedOutput, json, path);
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @FunctionalInterface
+    public interface JsonProducer {
+        /**
+         * Writes data-pack JSON, injecting the given condition arrays where appropriate.
+         *
+         * @param cachedOutput       the data-gen output cache
+         * @param id                 the primary resource location for this data entry
+         * @param registryAccess     the current registry lookup context
+         * @param packOutput         the data-pack output root
+         * @param neoForgeConditions pre-built {@code neoforge:conditions} array (may be empty)
+         * @param fabricConditions   pre-built {@code fabric:load_conditions} array (may be empty)
+         *
+         * @return a future that completes when all files have been written
+         *
+         * @since 1.0.0-SNAPSHOT.1+1.21.1
+         */
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+        CompletableFuture<?> produce(CachedOutput cachedOutput,
+                                     ResourceLocation id,
+                                     HolderLookup.Provider registryAccess,
+                                     PackOutput packOutput,
+                                     JsonArray neoForgeConditions,
+                                     JsonArray fabricConditions);
     }
-
-    // -------------------------------------------------------------------------
-    // CapturingRecipeOutput
-    // -------------------------------------------------------------------------
 
     /**
      * A minimal {@link RecipeOutput} that captures the recipe and advancement holder from
@@ -388,8 +357,10 @@ public final class ConditionalDataBuilder {
      * receive a valid object to build against.
      */
     private static final class CapturingRecipeOutput implements RecipeOutput {
-        @Nullable Recipe<?> capturedRecipe;
-        @Nullable AdvancementHolder capturedAdvancement;
+        @Nullable
+        Recipe<?> capturedRecipe;
+        @Nullable
+        AdvancementHolder capturedAdvancement;
 
         /**
          * NeoForge patches {@link RecipeOutput} via {@code IRecipeOutputExtension} so that this

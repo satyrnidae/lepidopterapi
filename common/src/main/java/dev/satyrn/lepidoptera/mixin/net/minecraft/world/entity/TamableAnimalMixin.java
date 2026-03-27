@@ -20,14 +20,14 @@ public abstract class TamableAnimalMixin {
         NotInitializable.mixinClass(this);
     }
 
-    @Unique
-    private SynchedEntityData lapi$entityData() {
-        return ((Entity) (Object) this).getEntityData();
-    }
-
     @Accessor("DATA_FLAGS_ID")
     public static @Nullable EntityDataAccessor<Byte> lapi$getDataFlagsId() {
         return null;
+    }
+
+    @Unique
+    private SynchedEntityData lapi$entityData() {
+        return ((Entity) (Object) this).getEntityData();
     }
 
     @Intrinsic

@@ -27,16 +27,17 @@ public abstract class AnimalMixin extends AgeableMob {
     /**
      * Ticks remaining to emit {@code HAPPY_VILLAGER} particles after a successful feed (server-side).
      */
-    @Unique private int lapi$feedTimer = 0;
-
-    public abstract @Shadow boolean isFood(ItemStack stack);
-
-    protected abstract @Shadow void usePlayerItem(Player player, InteractionHand hand, ItemStack stack);
+    @Unique
+    private int lapi$feedTimer = 0;
 
     private AnimalMixin(final EntityType<? extends AgeableMob> type, final Level level) {
         super(type, level);
         NotInitializable.mixinClass(this);
     }
+
+    public abstract @Shadow boolean isFood(ItemStack stack);
+
+    protected abstract @Shadow void usePlayerItem(Player player, InteractionHand hand, ItemStack stack);
 
     /**
      * Intercepts {@code Animal.mobInteract} inside the {@code isFood} block, before breeding/aging
@@ -47,7 +48,11 @@ public abstract class AnimalMixin extends AgeableMob {
      * started, and the interaction is cancelled with {@code SUCCESS}. Vanilla breeding/aging proceed
      * normally for unregistered entities or when the entity is already full.</p>
      */
-    @Inject(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Animal;getAge()I", shift = At.Shift.AFTER), cancellable = true)
+    @Inject(method = "mobInteract",
+            at = @At(value = "INVOKE",
+                     target = "Lnet/minecraft/world/entity/animal/Animal;getAge()I",
+                     shift = At.Shift.AFTER),
+            cancellable = true)
     private void lapi$onMobInteract(final Player player,
                                     final InteractionHand interactionHand,
                                     final CallbackInfoReturnable<InteractionResult> cir) {
@@ -77,7 +82,10 @@ public abstract class AnimalMixin extends AgeableMob {
      * <p>Runs on the server entity via {@code ServerLevel.sendParticles()}, which forwards a
      * particle packet to nearby clients - no custom packet or entity data sync required.</p>
      */
-    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AgeableMob;aiStep()V", shift = At.Shift.AFTER))
+    @Inject(method = "aiStep",
+            at = @At(value = "INVOKE",
+                     target = "Lnet/minecraft/world/entity/AgeableMob;aiStep()V",
+                     shift = At.Shift.AFTER))
     private void lapi$onAiStep(final CallbackInfo ci) {
         if (!this.level().isClientSide && this.lapi$feedTimer > 0) {
             if (this.lapi$feedTimer % 4 == 0 && this.level() instanceof ServerLevel serverLevel) {
