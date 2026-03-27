@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.item;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.compatibility.Provider;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -28,7 +28,7 @@ import java.util.*;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class EquipmentRegistry {
     private static final HashMap<Item, PrioritizedEntry> ITEM_REGISTRY = new HashMap<>();
     private static final Map<TagKey<Item>, PrioritizedEntry> TAG_KEY_REGISTRY = new HashMap<>();
@@ -53,7 +53,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag) {
         registerEquipment(slot, tag, false, Provider.Priority.NORMAL);
     }
@@ -68,7 +68,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, boolean canShiftClick) {
         registerEquipment(slot, tag, canShiftClick, Provider.Priority.NORMAL);
     }
@@ -85,7 +85,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, short priority) {
         registerEquipment(slot, tag, false, priority);
     }
@@ -103,7 +103,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, TagKey<Item> tag, boolean canShiftClick,
                                          short priority) {
         final PrioritizedEntry existing = TAG_KEY_REGISTRY.get(tag);
@@ -121,7 +121,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, ItemLike item) {
         registerEquipment(slot, item, false, Provider.Priority.NORMAL);
     }
@@ -136,7 +136,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
         registerEquipment(slot, item, canShiftClick, Provider.Priority.NORMAL);
     }
@@ -154,7 +154,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, ItemLike item, short priority) {
         registerEquipment(slot, item, false, priority);
     }
@@ -172,7 +172,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void registerEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick,
                                          short priority) {
         final var key = item.asItem();
@@ -199,7 +199,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void updateEquipment(EquipmentSlot slot, ItemLike item, boolean canShiftClick) {
         ITEM_REGISTRY.put(item.asItem(), new PrioritizedEntry(slot, canShiftClick, Short.MAX_VALUE));
     }
@@ -213,7 +213,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void unregister(final ItemLike item) {
         ITEM_REGISTRY.remove(item.asItem());
     }
@@ -229,7 +229,7 @@ public final class EquipmentRegistry {
      * @throws UnsupportedOperationException if the tag is protected (registered by Lepidoptera itself)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void unregister(final TagKey<Item> tag) {
         if (PROTECTED_TAGS.contains(tag)) {
             throw new UnsupportedOperationException("Cannot unregister a protected tag: " + tag.location());
@@ -261,7 +261,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable EquipmentSlot getSlot(final ItemStack itemStack) {
         @Nullable final Entry entry = getEntry(itemStack);
         return entry != null ? entry.slot : null;
@@ -276,7 +276,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static boolean canShiftClickEquipment(final ItemStack itemStack) {
         @Nullable final Entry entry = getEntry(itemStack);
         return entry != null && entry.canShiftClick;
@@ -295,7 +295,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable Entry getEntry(final ItemStack itemStack) {
         @Nullable PrioritizedEntry pEntry = ITEM_REGISTRY.get(itemStack.getItem());
         if (pEntry == null) {
@@ -336,7 +336,7 @@ public final class EquipmentRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public record Entry(EquipmentSlot slot, boolean canShiftClick) {
     }
 

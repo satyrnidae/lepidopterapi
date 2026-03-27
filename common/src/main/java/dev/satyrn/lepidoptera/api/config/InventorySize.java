@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 public record InventorySize(int width, int height) {
 
     /**
@@ -26,7 +26,7 @@ public record InventorySize(int width, int height) {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     public static final int MIN_VALUE = 1;
 
     /**
@@ -38,7 +38,7 @@ public record InventorySize(int width, int height) {
      * @throws IllegalArgumentException if either dimension is below {@link #MIN_VALUE}
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     public InventorySize {
         if (width < MIN_VALUE) {
             throw new IllegalArgumentException("Inventory width must be >= " + MIN_VALUE + ", got " + width);
@@ -53,7 +53,7 @@ public record InventorySize(int width, int height) {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public @Override int width() {
         return this.width;
@@ -64,7 +64,7 @@ public record InventorySize(int width, int height) {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public @Override int height() {
         return this.height;
@@ -82,8 +82,8 @@ public record InventorySize(int width, int height) {
      *                                  values below {@link #MIN_VALUE}
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    @Contract("_ -> new")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @Contract(value = "_ -> new", pure = true)
     public static InventorySize parse(final @Nullable String s) {
         if (s == null || s.isEmpty()) {
             throw new IllegalArgumentException("Cannot parse null or empty string as inventory size");
@@ -107,7 +107,7 @@ public record InventorySize(int width, int height) {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public @Override String toString() {
         return this.width + "x" + this.height;
@@ -118,7 +118,7 @@ public record InventorySize(int width, int height) {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(value = "null -> false", pure = true)
     public @Override boolean equals(final @Nullable Object o) {
         if (this == o) {

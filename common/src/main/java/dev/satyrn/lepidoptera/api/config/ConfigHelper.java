@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.config;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import me.shedaniel.autoconfig.annotation.Config;
 import org.apache.logging.log4j.util.StackLocatorUtil;
 import org.jetbrains.annotations.Contract;
@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public class ConfigHelper {
 
     @Contract("-> fail")
@@ -29,7 +29,7 @@ public class ConfigHelper {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static String name(final Class<?> configClass) {
         return Objects.requireNonNull(findName(configClass));
@@ -42,7 +42,7 @@ public class ConfigHelper {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static String name() {
         return name(StackLocatorUtil.getCallerClass(2));
@@ -58,7 +58,7 @@ public class ConfigHelper {
      * @throws NullPointerException if the class has no {@link Config} annotation
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static Config config(final Class<?> configClass) {
         return Objects.requireNonNull(findConfig(configClass));
@@ -72,7 +72,7 @@ public class ConfigHelper {
      * @throws NullPointerException if the calling class has no {@link Config} annotation
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static Config config() {
         return config(StackLocatorUtil.getCallerClass(2));

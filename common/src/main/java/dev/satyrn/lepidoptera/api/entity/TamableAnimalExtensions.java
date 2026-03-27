@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.entity;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.world.entity.TamableAnimal;
 import org.jetbrains.annotations.Contract;
 
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface TamableAnimalExtensions {
     /**
      * Returns the value of the entity data flag at the given bit index.
@@ -26,7 +26,7 @@ public interface TamableAnimalExtensions {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default boolean getFlag(int flagId) {
         throw new UnsupportedOperationException("Not Implemented");
     }
@@ -39,7 +39,7 @@ public interface TamableAnimalExtensions {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default void setFlag(int flagId, boolean value) {
         throw new UnsupportedOperationException("Not Implemented");
     }
@@ -55,7 +55,7 @@ public interface TamableAnimalExtensions {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(value = "_ -> param1", pure = true)
     static TamableAnimalExtensions cast(TamableAnimal tamableAnimal) {
         return (TamableAnimalExtensions) tamableAnimal;

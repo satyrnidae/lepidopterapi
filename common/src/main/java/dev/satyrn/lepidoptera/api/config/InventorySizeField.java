@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.annotation.*;
 
@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -33,7 +33,7 @@ public @interface InventorySizeField {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     int maxWidth() default 27;
 
     /**
@@ -41,6 +41,6 @@ public @interface InventorySizeField {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     int maxHeight() default 27;
 }

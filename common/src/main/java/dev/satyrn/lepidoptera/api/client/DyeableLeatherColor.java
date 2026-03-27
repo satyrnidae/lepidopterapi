@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.client;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.color.item.ItemColor;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 @Environment(EnvType.CLIENT)
 public class DyeableLeatherColor implements ItemColor {
 
@@ -30,7 +30,7 @@ public class DyeableLeatherColor implements ItemColor {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     public static final int LEATHER_COLOR = 0xA06540;
 
     /**
@@ -46,9 +46,10 @@ public class DyeableLeatherColor implements ItemColor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
-    public final @Override int getColor(final ItemStack itemStack, final int tintIndex) {
+    @Override
+    public final int getColor(final ItemStack itemStack, final int tintIndex) {
         return DyedItemColor.getOrDefault(itemStack, tintIndex > 0 ? 0xFFFFFFFF : LEATHER_COLOR);
     }
 }

@@ -3,7 +3,7 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.block;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +13,11 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public abstract class ModBlockTagsProvider extends BlockTagsProvider implements WithLocation {
     protected final ModMeta metadata;
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected ModBlockTagsProvider(Class<?> modClass,
                                    PackOutput output,
                                    CompletableFuture<HolderLookup.Provider> lookupProvider,
@@ -30,15 +30,15 @@ public abstract class ModBlockTagsProvider extends BlockTagsProvider implements 
         addModTags(provider);
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected abstract void addModTags(HolderLookup.Provider provider);
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public @Override String getName() {
         return location().toString();
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public @Override ResourceLocation location() {
         return ModHelper.resource(this.metadata, "providers/tag/block");
     }

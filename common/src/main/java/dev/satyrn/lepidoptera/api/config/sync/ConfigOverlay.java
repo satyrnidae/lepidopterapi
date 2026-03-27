@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config.sync;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 public final class ConfigOverlay<T> {
 
     private volatile @Nullable T value;
@@ -44,7 +44,7 @@ public final class ConfigOverlay<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public Optional<T> get() {
         return Optional.ofNullable(value);
@@ -57,7 +57,7 @@ public final class ConfigOverlay<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(mutates = "this")
     public void set(final T value) {
         this.value = value;
@@ -68,7 +68,7 @@ public final class ConfigOverlay<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(mutates = "this")
     public void clear() {
         this.value = null;

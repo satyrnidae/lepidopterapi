@@ -2,7 +2,7 @@ package dev.satyrn.lepidoptera.api.network;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.network.PacketChannelsImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -33,11 +33,11 @@ import java.util.Map;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class PacketChannels {
 
     // -------------------------------------------------------------------------
-    // Internal static state - NOT @Api, but public so platform impls can read.
+    // Internal static state - NOT @ApiStatus.AvailableSince("0.4.0+1.19.2"), but public so platform impls can read.
     // All writes happen during single-threaded mod init; reads are concurrent but
     // structurally unchanged by the time any packet is received.
     // -------------------------------------------------------------------------
@@ -86,7 +86,7 @@ public final class PacketChannels {
     /**
      * Injects the platform-specific implementation and replays all buffered registrations.
      *
-     * <p><b>Internal - not @Api.</b> Called by platform entrypoints during mod initialization.
+     * <p><b>Internal - not @ApiStatus.AvailableSince("0.4.0+1.19.2").</b> Called by platform entrypoints during mod initialization.
      * Must be called exactly once per process lifetime before any packets are sent.</p>
      *
      * @param newImpl the platform implementation
@@ -113,7 +113,7 @@ public final class PacketChannels {
     }
 
     // -------------------------------------------------------------------------
-    // Public @Api methods
+    // Public @ApiStatus.AvailableSince("0.4.0+1.19.2") methods
     // -------------------------------------------------------------------------
 
     /**
@@ -124,7 +124,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerChannel(ResourceLocation id) {
         SERVER_CHANNELS.add(id);
         dispatch(() -> impl.onServerChannelRegistered(id));
@@ -138,7 +138,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientChannel(ResourceLocation id) {
         CLIENT_CHANNELS.add(id);
         dispatch(() -> impl.onClientChannelRegistered(id));
@@ -155,7 +155,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerReceiver(ResourceLocation id,
                                                            PacketReceiver<ServerPlayContext> receiver) {
         SERVER_RECEIVERS.computeIfAbsent(id, k -> new ArrayList<>()).add(receiver);
@@ -172,7 +172,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientReceiver(ResourceLocation id,
                                                            PacketReceiver<ClientPlayContext> receiver) {
         CLIENT_RECEIVERS.computeIfAbsent(id, k -> new ArrayList<>()).add(receiver);
@@ -189,7 +189,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerReadyCallback(PacketReadyCallback<ServerPlayContext> callback) {
         SERVER_READY_CALLBACKS.add(callback);
     }
@@ -205,7 +205,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientReadyCallback(PacketReadyCallback<ClientPlayContext> callback) {
         CLIENT_READY_CALLBACKS.add(callback);
     }
@@ -218,7 +218,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientDisconnectCallback(Runnable callback) {
         CLIENT_DISCONNECT_CALLBACKS.add(callback);
     }
@@ -235,7 +235,7 @@ public final class PacketChannels {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
         if (impl == null) {
             LepidopteraAPI.error("Failed to send packet {} to player: unregistered implementation!", id);

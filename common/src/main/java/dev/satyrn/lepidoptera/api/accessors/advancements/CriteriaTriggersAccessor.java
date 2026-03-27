@@ -1,6 +1,5 @@
 package dev.satyrn.lepidoptera.api.accessors.advancements;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,7 +15,6 @@ import javax.annotation.Nullable;
  * @author Isabel Maskrey
  * @since 0.4.0+1.19.2
  */
-@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 @ApiStatus.Experimental
 @Mixin(CriteriaTriggers.class)
@@ -32,9 +30,11 @@ public interface CriteriaTriggersAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
     @Contract("_, !null -> !null; _, null -> null")
-    static @Invoker <T extends CriterionTrigger<?>> T callRegister(final String string, final @Nullable T object) {
+    @Invoker
+    static <T extends CriterionTrigger<?>> T callRegister(final String string, final @Nullable T object) {
         // noinspection Contract - Static invoker mixin; this code is never called.
         throw new AssertionError();
     }

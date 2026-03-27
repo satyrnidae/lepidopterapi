@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * @param preRelease the pre-release label (empty string if absent)
  * @param metadata   the build metadata label (empty string if absent)
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public record SemVer(int major, int minor, int patch, String preRelease,
                      String metadata) implements Comparable<SemVer> {
     /**

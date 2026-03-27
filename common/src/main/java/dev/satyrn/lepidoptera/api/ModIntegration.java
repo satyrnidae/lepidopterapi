@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api;
 
 import dev.architectury.platform.Platform;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ModIntegration {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -42,7 +42,7 @@ public final class ModIntegration {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static boolean isModLoaded(final String modId) {
         return Platform.isModLoaded(modId);
     }
@@ -59,7 +59,7 @@ public final class ModIntegration {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void ifModLoaded(final String modId, final Runnable action) {
         if (Platform.isModLoaded(modId)) {
             action.run();
@@ -81,7 +81,7 @@ public final class ModIntegration {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static @Nullable <T> T fromModOrDefault(final String modId, final Supplier<T> supplier,
                                                     final @Nullable T fallback) {
         return Platform.isModLoaded(modId) ? supplier.get() : fallback;
@@ -104,7 +104,7 @@ public final class ModIntegration {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static <T> Optional<Class<? extends T>> loadClass(final String className, final Class<T> superType) {
         final Class<?> rawClass;
         try {
@@ -134,7 +134,7 @@ public final class ModIntegration {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static <T> Optional<T> instantiate(final String className, final Class<T> superType) {
         final Optional<Class<? extends T>> loaded = loadClass(className, superType);
         if (loaded.isEmpty()) {

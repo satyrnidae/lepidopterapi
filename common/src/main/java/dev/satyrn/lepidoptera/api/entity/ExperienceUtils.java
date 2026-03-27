@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.entity;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ import java.math.RoundingMode;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ExperienceUtils {
 
     /**
@@ -70,7 +70,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public record LevelProgress(BigInteger level, BigDecimal progress) {
     }
 
@@ -90,7 +90,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPForLevel(final BigInteger level) {
         final BigDecimal x = new BigDecimal(level);
@@ -133,7 +133,7 @@ public final class ExperienceUtils {
      * @see #getXPForLevel(BigInteger)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPForLevel(final int level) {
         return getXPForLevel(BigInteger.valueOf(level));
@@ -156,7 +156,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPSpanForLevel(final BigInteger level) {
         final BigDecimal x = new BigDecimal(level);
@@ -185,7 +185,7 @@ public final class ExperienceUtils {
      * @see #getXPSpanForLevel(BigInteger)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPSpanForLevel(final int level) {
         return getXPSpanForLevel(BigInteger.valueOf(level));
@@ -204,7 +204,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPWithinLevel(final BigInteger level, final BigDecimal progress) {
         return new BigDecimal(getXPSpanForLevel(level))
@@ -227,7 +227,7 @@ public final class ExperienceUtils {
      * @see #getXPWithinLevel(BigInteger, BigDecimal)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getXPWithinLevel(final int level, final float progress) {
         return getXPWithinLevel(BigInteger.valueOf(level), BigDecimal.valueOf(progress));
@@ -246,7 +246,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getTotalXP(final BigInteger level, final BigDecimal progress) {
         return getXPForLevel(level).add(getXPWithinLevel(level, progress));
@@ -267,7 +267,7 @@ public final class ExperienceUtils {
      * @see #getTotalXP(BigInteger, BigDecimal)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static BigInteger getTotalXP(final int level, final float progress) {
         return getTotalXP(BigInteger.valueOf(level), BigDecimal.valueOf(progress));
@@ -291,7 +291,7 @@ public final class ExperienceUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static LevelProgress fromTotalXP(final BigInteger totalXP) {
         final BigDecimal x = new BigDecimal(totalXP);

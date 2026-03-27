@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public interface ItemExtensions extends ItemLike {
 
     /**
@@ -32,7 +32,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     default ItemExtensions setCraftingRemainingItem(@Nullable Item item) {
         throw new NotImplementedException("Mixin apply failed!");
@@ -46,7 +46,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "-> this", mutates = "this")
     default ItemExtensions setRemainsInCraftingTable() {
         return setCraftingRemainingItem((Item) this);
@@ -62,7 +62,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     default ItemExtensions setCraftingDepletionRemainingItem(@Nullable Item item) {
         throw new NotImplementedException("Mixin apply failed!");
@@ -78,7 +78,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     default ItemExtensions setFuelDepletionRemainingItem(@Nullable Item item) {
         throw new NotImplementedException("Mixin apply failed!");
@@ -93,7 +93,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     default ItemExtensions setDamageOnFuelUse(int damage) {
         throw new NotImplementedException("Mixin apply failed!");
@@ -106,7 +106,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default @Nullable Item getCraftingDepletionRemainingItem() {
         throw new NotImplementedException("Mixin apply failed!");
     }
@@ -118,7 +118,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default @Nullable Item getFuelDepletionRemainingItem() {
         throw new NotImplementedException("Mixin apply failed!");
     }
@@ -130,7 +130,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default int getDamageOnFuelUse() {
         throw new NotImplementedException("Mixin apply failed!");
     }
@@ -143,7 +143,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default @Override Item asItem() {
         return (Item) this;
     }
@@ -159,7 +159,7 @@ public interface ItemExtensions extends ItemLike {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     static ItemExtensions cast(Item item) {
         return (ItemExtensions) item;
     }

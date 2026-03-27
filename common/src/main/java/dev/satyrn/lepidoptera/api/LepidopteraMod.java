@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.MinecraftServer;
 
@@ -13,7 +13,7 @@ import net.minecraft.server.MinecraftServer;
  *
  * @since 0.4.1-alpha.1+1.19.2
  */
-@Api("0.4.1-alpha.1+1.19.2")
+@ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
 public interface LepidopteraMod {
     /**
      * Called during the pre-initialization phase, before the main init phase.
@@ -23,7 +23,7 @@ public interface LepidopteraMod {
      *
      * @since 0.4.1-alpha.1+1.19.2
      */
-    @Api("0.4.1-alpha.1+1.19.2")
+    @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void preInit() {
 
     }
@@ -36,7 +36,7 @@ public interface LepidopteraMod {
      *
      * @since 0.4.1-alpha.1+1.19.2
      */
-    @Api("0.4.1-alpha.1+1.19.2")
+    @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void init() {
 
     }
@@ -49,7 +49,7 @@ public interface LepidopteraMod {
      *
      * @since 0.4.1-alpha.1+1.19.2
      */
-    @Api("0.4.1-alpha.1+1.19.2")
+    @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void postInit() {
 
     }
@@ -64,7 +64,7 @@ public interface LepidopteraMod {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStarted(MinecraftServer server) {
 
     }
@@ -76,7 +76,7 @@ public interface LepidopteraMod {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStopped() {
 
     }
@@ -91,7 +91,7 @@ public interface LepidopteraMod {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void onTagsLoaded(final RegistryAccess registryAccess) {
 
     }

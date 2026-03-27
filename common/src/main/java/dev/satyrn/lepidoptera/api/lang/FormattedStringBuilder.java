@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.lang;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.ChatFormatting;
 
 /**
@@ -26,20 +26,20 @@ import net.minecraft.ChatFormatting;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class FormattedStringBuilder {
     private final StringBuilder sb = new StringBuilder();
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder() {
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder(String text) {
         this.append(text);
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder(String text, ChatFormatting... formats) {
         this.append(text, formats);
     }
@@ -53,7 +53,7 @@ public final class FormattedStringBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder append(final String text) {
         sb.append(text);
         return this;
@@ -70,7 +70,7 @@ public final class FormattedStringBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder append(final String text, final ChatFormatting... formats) {
         for (final ChatFormatting format : formats) {
             sb.append(format);
@@ -91,7 +91,7 @@ public final class FormattedStringBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder reset() {
         sb.append(ChatFormatting.RESET);
         return this;
@@ -104,7 +104,7 @@ public final class FormattedStringBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public String build() {
         return sb.toString();
     }

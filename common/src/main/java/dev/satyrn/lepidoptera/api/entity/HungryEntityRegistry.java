@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.entity;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.compatibility.Provider;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -39,7 +39,7 @@ import java.util.*;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class HungryEntityRegistry {
 
     private static final Map<EntityType<?>, Short> TYPE_REGISTRY = new HashMap<>();
@@ -63,7 +63,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void register(final EntityType<?> type) {
         register(type, Provider.Priority.NORMAL);
     }
@@ -80,7 +80,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void register(final EntityType<?> type, final short priority) {
         final Short existing = TYPE_REGISTRY.get(type);
         if (existing == null || priority > existing) {
@@ -106,7 +106,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void register(final TagKey<EntityType<?>> tag) {
         register(tag, Provider.Priority.NORMAL);
     }
@@ -124,7 +124,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void register(final TagKey<EntityType<?>> tag, final short priority) {
         final Short existing = TAG_REGISTRY.get(tag);
         if (existing == null || priority > existing) {
@@ -143,7 +143,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void unregister(final EntityType<?> type) {
         if (TYPE_REGISTRY.remove(type) != null) {
             final Set<EntityType<?>> updated = new HashSet<>(RESOLVED_TYPES);
@@ -164,7 +164,7 @@ public final class HungryEntityRegistry {
      * @throws UnsupportedOperationException if the tag is protected (registered by Lepidoptera itself)
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void unregister(final TagKey<EntityType<?>> tag) {
         if (PROTECTED_TAGS.contains(tag)) {
             throw new UnsupportedOperationException("Cannot unregister a protected tag: " + tag.location());
@@ -180,7 +180,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static @SafeVarargs void protect(final TagKey<EntityType<?>>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
@@ -197,7 +197,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public static boolean isRegistered(final EntityType<?> type) {
         return RESOLVED_TYPES.contains(type);
@@ -211,7 +211,7 @@ public final class HungryEntityRegistry {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void onTagsLoaded(final RegistryAccess registryAccess) {
         final Set<EntityType<?>> resolved = new HashSet<>(TYPE_REGISTRY.keySet());
         final var entityTypeLookup = registryAccess.lookupOrThrow(Registries.ENTITY_TYPE);

@@ -3,7 +3,7 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
@@ -56,7 +56,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ConditionalDataBuilder {
 
     // -------------------------------------------------------------------------
@@ -73,7 +73,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @FunctionalInterface
     public interface JsonProducer {
         /**
@@ -90,7 +90,7 @@ public final class ConditionalDataBuilder {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         CompletableFuture<?> produce(CachedOutput cachedOutput,
                                      ResourceLocation id,
                                      HolderLookup.Provider registryAccess,
@@ -127,7 +127,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> new")
     public static ConditionalDataBuilder wrap(final JsonProducer producer) {
         return new ConditionalDataBuilder(producer);
@@ -157,7 +157,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> new")
     public static ConditionalDataBuilder wrapRecipeBuilder(final RecipeBuilder inner) {
         return wrap((cachedOutput, id, registryAccess, packOutput, neoForgeConditions, fabricConditions) -> {
@@ -204,7 +204,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public ConditionalDataBuilder addNeoForgeCondition(final ResourceLocation condition) {
         neoForgeConditions.add(condition);
@@ -224,7 +224,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public ConditionalDataBuilder addFabricCondition(final ResourceLocation condition) {
         fabricConditions.add(condition);
@@ -244,7 +244,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public ConditionalDataBuilder addCondition(final ResourceLocation condition) {
         neoForgeConditions.add(condition);
@@ -269,7 +269,7 @@ public final class ConditionalDataBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public CompletableFuture<?> save(final CachedOutput cachedOutput,
                                      final ResourceLocation id,
                                      final HolderLookup.Provider registryAccess,

@@ -1,11 +1,11 @@
 package dev.satyrn.lepidoptera.api.accessors.recipes;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
+import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -23,7 +23,8 @@ import java.util.Map;
  *
  * @since 0.4.0+1.19.2
  */
-@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
+@ApiStatus.Experimental
 @Mixin(ShapedRecipeBuilder.class)
 public interface ShapedRecipeBuilderAccessor {
 
@@ -34,8 +35,10 @@ public interface ShapedRecipeBuilderAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor Map<String, Criterion<?>> getCriteria();
+    @Accessor
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    Map<String, Criterion<?>> getCriteria();
 
     /**
      * Returns the output item count.
@@ -44,8 +47,10 @@ public interface ShapedRecipeBuilderAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor int getCount();
+    @Accessor
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    int getCount();
 
     /**
      * Returns the recipe group, or {@code null} if none was set.
@@ -54,8 +59,11 @@ public interface ShapedRecipeBuilderAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor @Nullable String getGroup();
+    @Accessor
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @Nullable
+    String getGroup();
 
     /**
      * Returns the list of pattern row strings.
@@ -64,8 +72,12 @@ public interface ShapedRecipeBuilderAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor List<String> getRows();
+    @Accessor
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @SuppressWarnings("unused")
+    // API Accessor
+    List<String> getRows();
 
     /**
      * Returns the symbol-to-ingredient mapping for the pattern.
@@ -74,8 +86,10 @@ public interface ShapedRecipeBuilderAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor Map<Character, Ingredient> getKey();
+    @Accessor
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    Map<Character, Ingredient> getKey();
 
     /**
      * Invokes the private {@code ensureValid(ResourceLocation)} method to validate
@@ -88,6 +102,10 @@ public interface ShapedRecipeBuilderAccessor {
      * @throws IllegalStateException if the pattern is invalid
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Invoker ShapedRecipePattern invokeEnsureValid(ResourceLocation resourceLocation);
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @Invoker
+    @SuppressWarnings("unused")
+    // API Invoker
+    ShapedRecipePattern invokeEnsureValid(ResourceLocation resourceLocation);
 }

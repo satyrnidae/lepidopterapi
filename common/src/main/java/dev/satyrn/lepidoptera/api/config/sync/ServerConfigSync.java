@@ -3,7 +3,7 @@ package dev.satyrn.lepidoptera.api.config.sync;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -63,7 +63,7 @@ import java.util.function.Supplier;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 public final class ServerConfigSync {
 
     private final int networkVersion;
@@ -98,7 +98,7 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
     public static Builder builder(final String modId) {
         return new Builder(modId);
@@ -114,7 +114,7 @@ public final class ServerConfigSync {
      * @see #builder(String)
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
     public static Builder builder(final ModMeta metadata) {
         return new Builder(metadata.name());
@@ -130,7 +130,7 @@ public final class ServerConfigSync {
      * @see #builder(String)
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> new")
     public static Builder builder(final Class<?> modClass) {
         return new Builder(ModHelper.name(modClass));
@@ -144,7 +144,8 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     public void broadcastToAll(final MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             sendTo(player);
@@ -159,7 +160,8 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     public void sendTo(final ServerPlayer player) {
         PacketChannels.sendToPlayer(player, configChannel, buildConfigPacket());
     }
@@ -177,7 +179,8 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.Internal
     public void startWatching(final MinecraftServer server) {
         if (watchEntries.isEmpty()) {
             return;
@@ -232,7 +235,8 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.Internal
     public void stopWatching() {
         this.watchingServer = null;
         final @Nullable WatchService ws = this.watchService;
@@ -402,12 +406,17 @@ public final class ServerConfigSync {
     // Entry records
     // -------------------------------------------------------------------------
 
-    private record CommonConfigEntry<T>(ConfigCodec<T> codec, Supplier<T> source, ConfigOverlay<T> overlay,
+    private record CommonConfigEntry<T>(ConfigCodec<T> codec,
+                                        Supplier<T> source,
+                                        ConfigOverlay<T> overlay,
                                         @Nullable SyncedConfig<T> synced) {
     }
 
-    private record ClientOverrideEntry<T>(BooleanSupplier enabled, ConfigCodec<T> codec, Supplier<T> source,
-                                          ConfigOverlay<T> overlay, @Nullable SyncedConfig<T> synced) {
+    private record ClientOverrideEntry<T>(BooleanSupplier enabled,
+                                          ConfigCodec<T> codec,
+                                          Supplier<T> source,
+                                          ConfigOverlay<T> overlay,
+                                          @Nullable SyncedConfig<T> synced) {
     }
 
     private record WatchEntry(ConfigHolder<?> holder, Path configPath) {
@@ -422,7 +431,7 @@ public final class ServerConfigSync {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     public static final class Builder {
 
         private final String modId;
@@ -448,7 +457,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract(value = "_, _ -> this", mutates = "this")
         public Builder networkVersion(final int version, final String mismatchKey) {
             this.networkVersion = version;
@@ -469,7 +478,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract(value = "_, _, _ -> this", mutates = "this")
         public <T> Builder commonConfig(final ConfigCodec<T> codec,
                                         final Supplier<T> source,
@@ -492,7 +501,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract(value = "_, _, _, _ -> this", mutates = "this")
         public <T> Builder clientOverride(final BooleanSupplier enabled,
                                           final ConfigCodec<T> codec,
@@ -516,7 +525,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract(value = "_, _ -> new", mutates = "this")
         public <T> SyncedConfig<T> commonConfig(final ConfigCodec<T> codec, final T localConfig) {
             SyncedConfig<T> synced = new SyncedConfig<>(localConfig, new ConfigOverlay<>());
@@ -539,7 +548,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract("_, _, _ -> new")
         public <T> SyncedConfig<T> clientOverride(final BooleanSupplier enabled,
                                                   final ConfigCodec<T> codec,
@@ -575,7 +584,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract("_, _ -> this")
         public Builder watchConfig(final ConfigHolder<?> holder, final Path configPath) {
             watchEntries.add(new WatchEntry(holder, configPath));
@@ -591,7 +600,7 @@ public final class ServerConfigSync {
          *
          * @since 1.0.0-SNAPSHOT+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
         @Contract("-> new")
         public ServerConfigSync register() {
             ServerConfigSync sync = new ServerConfigSync(this);

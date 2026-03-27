@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public final class NotInitializable {
     @Contract("-> fail")
     private NotInitializable() {
@@ -28,7 +28,7 @@ public final class NotInitializable {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> fail")
     public static <T> void staticClass(final T instance) {
         staticClass(instance.getClass());
@@ -43,7 +43,7 @@ public final class NotInitializable {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> fail")
     public static <T> void mixinClass(final T instance) {
         mixinClass(instance.getClass());
@@ -60,7 +60,8 @@ public final class NotInitializable {
      * @deprecated Prefer the instance overload {@link #staticClass(Object)} to avoid
      * passing the class explicitly.
      */
-    @Api(value = "0.4.0+1.19.2", deprecated = "1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+    @ApiStatus.Obsolete(since = "1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> fail")
     @Deprecated(since = "1.0.0-SNAPSHOT.1+1.21.1", forRemoval = true)
     public static <T> void staticClass(final Class<T> clazz) {
@@ -78,7 +79,8 @@ public final class NotInitializable {
      * @deprecated Prefer the instance overload {@link #mixinClass(Object)} to avoid
      * passing the class explicitly.
      */
-    @Api(value = "0.4.0+1.19.2", deprecated = "1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Obsolete(since = "1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_ -> fail")
     @Deprecated(since = "1.0.0-SNAPSHOT.1+1.21.1", forRemoval = true)
     public static <T> void mixinClass(final Class<T> clazz) {

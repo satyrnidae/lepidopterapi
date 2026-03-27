@@ -1,11 +1,12 @@
 package dev.satyrn.lepidoptera.api.accessors.autoconfig;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.YamlConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.Yaml;
+import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -21,7 +22,8 @@ import java.nio.file.Path;
  *
  * @since 0.4.0+1.19.2
  */
-@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
+@ApiStatus.Experimental
 @Mixin(value = YamlConfigSerializer.class, remap = false)
 public interface YamlConfigSerializerAccessor {
 
@@ -32,8 +34,10 @@ public interface YamlConfigSerializerAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor Config getDefinition();
+    @Accessor
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    Config getDefinition();
 
     /**
      * Returns the class object for the config data type managed by this serializer.
@@ -42,8 +46,11 @@ public interface YamlConfigSerializerAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor Class<ConfigData> getConfigClass();
+    @Accessor
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @SuppressWarnings("unused") // API Accessor
+    Class<ConfigData> getConfigClass();
 
     /**
      * Returns the SnakeYAML {@link Yaml} instance used for serialization and deserialization.
@@ -52,8 +59,10 @@ public interface YamlConfigSerializerAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor Yaml getYaml();
+    @Accessor
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    Yaml getYaml();
 
     /**
      * Invokes the private {@code getConfigPath()} method to resolve the on-disk path for
@@ -63,6 +72,8 @@ public interface YamlConfigSerializerAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Invoker Path callGetConfigPath();
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @Invoker
+    Path callGetConfigPath();
 }

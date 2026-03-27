@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -31,7 +31,7 @@ import net.minecraft.world.item.crafting.*;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public class BreakableShapelessRecipe extends ShapelessRecipe {
 
     /**
@@ -39,7 +39,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1") public static final Serializer SERIALIZER = new Serializer();
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final Serializer SERIALIZER = new Serializer();
 
     // Fields are stored locally for codec access since ShapelessRecipe's fields are package-private.
     private final String group;
@@ -59,7 +59,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public BreakableShapelessRecipe(final String group,
                                     final CraftingBookCategory category,
                                     final ItemStack result,
@@ -80,7 +80,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public @Override NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
 
@@ -102,7 +102,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public @Override RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
@@ -113,7 +113,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static class Serializer implements RecipeSerializer<BreakableShapelessRecipe> {
 
         /**
@@ -121,7 +121,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1") public static final MapCodec<BreakableShapelessRecipe> CODEC = RecordCodecBuilder.mapCodec(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final MapCodec<BreakableShapelessRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(Codec.STRING.optionalFieldOf("group", "").forGetter(r -> r.group),
                                 CraftingBookCategory.CODEC.fieldOf("category")
                                         .orElse(CraftingBookCategory.MISC)
@@ -144,7 +144,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1") public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> STREAM_CODEC = StreamCodec.of(
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> STREAM_CODEC = StreamCodec.of(
                 BreakableShapelessRecipe.Serializer::toNetwork, BreakableShapelessRecipe.Serializer::fromNetwork);
 
 
@@ -153,7 +153,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public @Override MapCodec<BreakableShapelessRecipe> codec() {
             return CODEC;
         }
@@ -163,7 +163,7 @@ public class BreakableShapelessRecipe extends ShapelessRecipe {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public StreamCodec<RegistryFriendlyByteBuf, BreakableShapelessRecipe> streamCodec() {
             return STREAM_CODEC;
         }

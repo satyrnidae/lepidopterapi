@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.food;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.entity.LivingEntityExtensions;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +27,7 @@ import java.util.Objects;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public class EntityFoodData {
     final static int MAX_FOOD_LEVEL = 20;
 
@@ -48,7 +48,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void eat(final int level, final float saturation) {
         this.foodLevel = Math.min(level + this.foodLevel, MAX_FOOD_LEVEL);
@@ -63,7 +63,7 @@ public class EntityFoodData {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "this")
     public boolean eat(final ItemStack stack) {
         final @Nullable var foodProperties = stack.get(DataComponents.FOOD);
@@ -82,7 +82,8 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", deprecated = "1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Obsolete(since = "1.0.0-SNAPSHOT.1+1.21.1")
     @Deprecated(since = "1.0.0-SNAPSHOT.1+1.21.1", forRemoval = true)
     public void eat(final Item item, final ItemStack stack) {
         eat(stack);
@@ -99,7 +100,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2")
+    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
     @Contract(mutates = "this, param")
     public void tick(final LivingEntity entity) {
         final var difficulty = entity.level().getDifficulty();
@@ -160,7 +161,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void readAdditionalSaveData(final CompoundTag compoundTag) {
         if (compoundTag.contains("foodLevel", 99)) {
@@ -178,7 +179,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "param")
     public void addAdditionalSaveData(final CompoundTag compoundTag) {
         compoundTag.putInt("foodLevel", this.foodLevel);
@@ -194,7 +195,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     public int getFoodLevel() {
         return this.foodLevel;
@@ -207,7 +208,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     public int getLastFoodLevel() {
         return this.lastFoodLevel;
@@ -220,7 +221,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     public boolean needsFood() {
         return this.foodLevel < MAX_FOOD_LEVEL;
@@ -234,7 +235,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void addExhaustion(float exhaustion) {
         this.exhaustionLevel = Math.min(this.exhaustionLevel + exhaustion, 40F);
@@ -247,7 +248,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     public float getExhaustionLevel() {
         return this.exhaustionLevel;
@@ -261,7 +262,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     public float getSaturationLevel() {
         return this.saturationLevel;
@@ -274,7 +275,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void setFoodLevel(int foodLevel) {
         this.foodLevel = foodLevel;
@@ -287,7 +288,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void setSaturation(float saturationLevel) {
         this.saturationLevel = saturationLevel;
@@ -300,7 +301,7 @@ public class EntityFoodData {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(mutates = "this")
     public void setExhaustion(float exhaustionLevel) {
         this.exhaustionLevel = exhaustionLevel;

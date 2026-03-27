@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.item;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Marks an item as optionally preventing repair in an anvil.
@@ -11,7 +11,7 @@ import dev.satyrn.lepidoptera.api.annotations.Api;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public interface Repairable {
     /**
      * Returns {@code true} if this item should be prevented from being repaired in an anvil.
@@ -22,7 +22,7 @@ public interface Repairable {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default boolean preventRepair() {
         return false;
     }

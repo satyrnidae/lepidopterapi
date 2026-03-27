@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.item.enchantment;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +19,7 @@ import java.util.List;
  *
  * <p>Use {@link #cast(Enchantment)} to obtain a typed reference to the injected methods.</p>
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface EnchantmentExtensions {
     /**
      * Modifies the durability change value for this enchantment using its
@@ -33,7 +33,7 @@ public interface EnchantmentExtensions {
      * @param itemStack          the item stack being damaged
      * @param value              the mutable damage value to modify in place
      */
-    @Api
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default void modifyDurabilityChange(RandomSource legacyRandomSource,
                                         int level,
                                         ItemStack itemStack,
@@ -51,7 +51,7 @@ public interface EnchantmentExtensions {
      * @param itemStack          the item stack the enchantment is on
      * @param value              the mutable float to modify in place
      */
-    @Api
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     default void modifyItemFilteredCount(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,
                                          RandomSource legacyRandomSource,
                                          int level,
@@ -70,7 +70,7 @@ public interface EnchantmentExtensions {
      *
      * @return the enchantment as {@link EnchantmentExtensions}
      */
-    @Api
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @SuppressWarnings("DataFlowIssue")
     static EnchantmentExtensions cast(Enchantment enchantment) {
         return (EnchantmentExtensions) (Object) enchantment;

@@ -3,15 +3,15 @@ package dev.satyrn.lepidoptera.api.entity;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.Contract;
 
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class ApiEntityTags {
-    @Api("1.0.0-SNAPSHOT.1+1.21.1") public static final TagKey<EntityType<?>> TICKS_FOOD;
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1") public static final TagKey<EntityType<?>> TICKS_FOOD;
 
     static {
         TICKS_FOOD = register("ticks_food");

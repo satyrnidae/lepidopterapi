@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.neoforge.api.provider.server.tags.item;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -10,9 +10,9 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public abstract class ModOnlyItemTagsProvider extends ModItemTagsProvider {
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected ModOnlyItemTagsProvider(final Class<?> modClass,
                                       final PackOutput output,
                                       final CompletableFuture<HolderLookup.Provider> lookupProvider,
@@ -21,7 +21,7 @@ public abstract class ModOnlyItemTagsProvider extends ModItemTagsProvider {
                 existingFileHelper);
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public @Override ResourceLocation location() {
         return super.location().withSuffix("_only");
     }

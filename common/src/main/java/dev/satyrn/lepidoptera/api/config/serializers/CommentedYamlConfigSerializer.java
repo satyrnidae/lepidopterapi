@@ -3,7 +3,7 @@ package dev.satyrn.lepidoptera.api.config.serializers;
 import com.google.common.collect.Maps;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.accessors.autoconfig.YamlConfigSerializerAccessor;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.config.serializers.YamlCommentInjector;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public final class CommentedYamlConfigSerializer<T extends ConfigData> extends YamlConfigSerializer<T> {
 
     /**
@@ -46,7 +46,7 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     public static final int DEFAULT_LINE_LENGTH = YamlCommentInjector.DEFAULT_LINE_LENGTH;
 
     /**
@@ -54,7 +54,10 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Obsolete
+    @Deprecated(since = "1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused") // Public API member
     public static final int MIN_LINE_LENGTH = YamlCommentInjector.MIN_LINE_LENGTH;
 
     private static final String YAML_DIRECTIVE_PREFIX = "!!";
@@ -75,7 +78,7 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     public CommentedYamlConfigSerializer(final Config definition, final Class<T> configClass, final int lineLength) {
         super(definition, configClass, getYaml(configClass));
         this.injector = new YamlCommentInjector(lineLength);
@@ -89,7 +92,7 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     public CommentedYamlConfigSerializer(final Config definition, final Class<T> configClass) {
         this(definition, configClass, DEFAULT_LINE_LENGTH);
     }
@@ -128,8 +131,9 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
-    public @Override void serialize(final T config) {
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @Override
+    public void serialize(final T config) {
         final Path configPath = this.accessor.callGetConfigPath();
 
         try {
@@ -151,8 +155,9 @@ public final class CommentedYamlConfigSerializer<T extends ConfigData> extends Y
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
-    public @Override T deserialize() {
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @Override
+    public T deserialize() {
         Path configPath = this.accessor.callGetConfigPath();
         if (Files.exists(configPath)) {
             try {

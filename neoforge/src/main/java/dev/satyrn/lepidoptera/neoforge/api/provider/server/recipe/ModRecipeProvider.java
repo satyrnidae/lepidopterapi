@@ -7,7 +7,7 @@ import com.mojang.serialization.MapCodec;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
  * Wire the provider into your {@code GatherDataEvent} listener via
  * {@code event.createProvider((output, lookup) -> new YourRecipeProvider(output, lookup))}.
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public abstract class ModRecipeProvider extends RecipeProvider implements WithLocation {
     protected final ModMeta metadata;
     private final PackOutput packOutput;
@@ -63,12 +63,12 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected PackOutput packOutput() {
         return this.packOutput;
     }
 
-    @Api
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     protected CompletableFuture<?> runModded(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
         // Defaults to no-op
         return CompletableFuture.runAsync(() -> {
@@ -89,7 +89,7 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected CompletableFuture<?> saveWithConditions(final CachedOutput cachedOutput,
                                                       final ConditionalDataBuilder builder,
                                                       final ResourceLocation id,
@@ -97,7 +97,7 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         return builder.save(cachedOutput, id, registryAccess, this.packOutput);
     }
 
-    @Api
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     protected <T> CompletableFuture<?> recipeWithConditions(CachedOutput cachedOutput,
                                                             ResourceLocation id,
                                                             T recipe,

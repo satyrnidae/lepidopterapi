@@ -3,7 +3,7 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.server.loot;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public abstract class ModLootTableProvider extends LootTableProvider implements WithLocation {
     protected final ModMeta metadata;
 

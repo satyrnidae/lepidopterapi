@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.item.enchantment;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
@@ -18,7 +18,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class EnchantmentHelper {
     private EnchantmentHelper() {
         NotInitializable.staticClass(this);
@@ -40,7 +40,7 @@ public final class EnchantmentHelper {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static int processDurabilityChange(RandomSource legacyRandomSource, ItemStack itemStack, int i) {
         MutableFloat mutableFloat = new MutableFloat(i);
         //noinspection DataFlowIssue - Mixin soft-applies interface
@@ -59,7 +59,7 @@ public final class EnchantmentHelper {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void runIterationOnItem(ItemStack itemStack, EnchantmentVisitor visitor) {
         ItemEnchantments itemEnchantments = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
@@ -73,7 +73,7 @@ public final class EnchantmentHelper {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @FunctionalInterface
     public interface EnchantmentVisitor {
         /**
@@ -84,7 +84,7 @@ public final class EnchantmentHelper {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         void accept(Holder<Enchantment> holder, int i);
     }
 }

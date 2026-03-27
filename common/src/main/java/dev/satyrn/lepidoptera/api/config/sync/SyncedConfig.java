@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config.sync;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.function.Consumer;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 public final class SyncedConfig<T> {
 
     private final T config;
@@ -51,7 +51,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     public SyncedConfig(final T config, final ConfigOverlay<T> overlay) {
         this.config = config;
         this.overlay = overlay;
@@ -64,7 +64,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public T get() {
         return overlay.get().orElse(config);
@@ -78,7 +78,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public T local() {
         return config;
@@ -92,7 +92,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract(pure = true)
     public ConfigOverlay<T> overlay() {
         return overlay;
@@ -113,7 +113,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> this")
     public SyncedConfig<T> onApply(final Consumer<T> callback) {
         applyCallbacks.add(callback);
@@ -131,7 +131,7 @@ public final class SyncedConfig<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     @Contract("_ -> this")
     public SyncedConfig<T> onClear(final Runnable callback) {
         clearCallbacks.add(callback);
@@ -144,6 +144,7 @@ public final class SyncedConfig<T> {
      *
      * @param value the server-pushed config value
      */
+    @ApiStatus.Internal
     void applyOverlay(final T value) {
         this.overlay.set(value);
         T resolved = get();
@@ -156,6 +157,7 @@ public final class SyncedConfig<T> {
      * Clears the overlay and fires all registered {@link #onClear} callbacks.
      * Package-private - called by {@link ServerConfigSync}.
      */
+    @ApiStatus.Internal
     void clearOverlay() {
         this.overlay.clear();
         for (Runnable cb : clearCallbacks) {

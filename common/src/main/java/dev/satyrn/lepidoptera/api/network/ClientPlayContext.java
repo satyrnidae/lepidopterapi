@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -12,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
  *
  * <p>Extends {@link PacketSender} so implementations can send C2S replies inline.</p>
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 @Environment(EnvType.CLIENT)
 public interface ClientPlayContext extends PacketSender {
 

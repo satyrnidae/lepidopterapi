@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
  *
  * <p>Extends {@link PacketSender} so implementations can send S2C replies inline.</p>
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface ServerPlayContext extends PacketSender {
 
     /**

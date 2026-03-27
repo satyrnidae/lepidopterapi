@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.compatibility;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Comparator;
@@ -20,7 +20,7 @@ import java.util.Comparator;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public interface Provider {
 
     /**
@@ -31,7 +31,7 @@ public interface Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default short getPriority() {
         return Priority.LOWEST;
     }
@@ -46,7 +46,7 @@ public interface Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     final class Priority {
 
         @Contract("-> fail")
@@ -60,7 +60,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short HIGHEST = Short.MAX_VALUE;
 
         /**
@@ -68,7 +68,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short HIGH = 100;
 
         /**
@@ -78,7 +78,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short NORMAL = 0;
 
         /**
@@ -86,7 +86,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short LOW = -100;
 
         /**
@@ -95,7 +95,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public static final short LOWEST = Short.MIN_VALUE;
     }
 
@@ -105,7 +105,7 @@ public interface Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     final class ProviderComparator implements Comparator<Provider> {
 
         /**
@@ -121,7 +121,7 @@ public interface Provider {
          *
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
-        @Api("1.0.0-SNAPSHOT.1+1.21.1")
+        @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
         public @Override int compare(final Provider o1, final Provider o2) {
             if (o1 == null || o2 == null) {
                 throw new NullPointerException("One or both of the providers to compare were null.");

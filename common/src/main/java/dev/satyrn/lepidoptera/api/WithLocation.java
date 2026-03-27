@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public interface WithLocation {
     /**
      * Returns the {@link ResourceLocation} that identifies this component.
@@ -18,6 +18,6 @@ public interface WithLocation {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     ResourceLocation location();
 }

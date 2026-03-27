@@ -2,7 +2,7 @@ package dev.satyrn.lepidoptera.neoforge.api.provider.client.model;
 
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -15,17 +15,17 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public abstract class ModItemModelProvider extends ItemModelProvider {
     protected final ModMeta metadata;
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public ModItemModelProvider(Class<?> modClass, PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, ModHelper.modId(modClass), existingFileHelper);
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @SuppressWarnings("unused")
     protected ItemModelBuilder handheldItem(Supplier<? extends Item> item) {
         final @Nonnull ResourceLocation id = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.get()));
@@ -33,7 +33,7 @@ public abstract class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath()));
     }
 
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @SuppressWarnings("unused")
     protected @Nonnull ItemModelBuilder basicItem(Supplier<? extends Item> item) {
         return this.basicItem(item.get());

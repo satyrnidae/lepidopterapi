@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.entity;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.food.EntityFoodData;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Contract;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface LivingEntityExtensions {
 
     /**
@@ -29,7 +29,7 @@ public interface LivingEntityExtensions {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Contract(pure = true)
     default boolean isHurt() {
         throw new UnsupportedOperationException("Not Implemented");
@@ -47,7 +47,7 @@ public interface LivingEntityExtensions {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @Contract(pure = true)
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default EntityFoodData getFoodData() {
         throw new UnsupportedOperationException("Not Implemented");
     }
@@ -70,7 +70,7 @@ public interface LivingEntityExtensions {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "this")
     default boolean eat(final ItemStack itemStack) {
         final EntityFoodData foodData = this.getFoodData();
@@ -88,7 +88,7 @@ public interface LivingEntityExtensions {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void addExhaustion(final float exhaustion) {
         throw new UnsupportedOperationException("Not Implemented");
     }
@@ -104,7 +104,7 @@ public interface LivingEntityExtensions {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> param1", pure = true)
     static LivingEntityExtensions cast(final LivingEntity livingEntity) {
         return (LivingEntityExtensions) livingEntity;

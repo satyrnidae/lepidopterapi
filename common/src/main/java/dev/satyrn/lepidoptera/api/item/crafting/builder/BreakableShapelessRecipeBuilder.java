@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.item.crafting.builder;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.item.crafting.BreakableShapelessRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
 
     private final RecipeCategory category;
@@ -62,7 +62,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_, _ -> new")
     public static BreakableShapelessRecipeBuilder shapeless(final RecipeCategory category, final ItemLike result) {
         return shapeless(category, result, 1, 1);
@@ -79,7 +79,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_, _, _ -> new")
     public static BreakableShapelessRecipeBuilder shapeless(final RecipeCategory category,
                                                             final ItemLike result,
@@ -99,7 +99,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract("_, _, _, _ -> new")
     public static BreakableShapelessRecipeBuilder shapeless(final RecipeCategory category,
                                                             final ItemLike result,
@@ -117,7 +117,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public BreakableShapelessRecipeBuilder requires(final ItemLike item) {
         return requires(Ingredient.of(item));
@@ -132,7 +132,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public BreakableShapelessRecipeBuilder requires(final Ingredient ingredient) {
         ingredients.add(ingredient);
@@ -149,7 +149,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_, _ -> this", mutates = "this")
     public @Override RecipeBuilder unlockedBy(final String string, final Criterion<?> criterion) {
         this.criteria.put(string, criterion);
@@ -165,7 +165,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
     public @Override BreakableShapelessRecipeBuilder group(final @Nullable String group) {
         this.group = group;
@@ -179,7 +179,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public @Override Item getResult() {
         return this.result.asItem();
@@ -195,7 +195,7 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      * @throws IllegalStateException if no unlock criteria have been added
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "param1")
     public @Override void save(final RecipeOutput output, final ResourceLocation id) {
         this.ensureValid(id);

@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import org.jetbrains.annotations.Contract;
 
@@ -15,7 +15,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to wooden tools (Effectiveness = 0)")
     WOOD(0),
     /**
@@ -23,7 +23,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to stone tools (Effectiveness = 1)")
     STONE(1),
     /**
@@ -31,7 +31,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to iron tools (Effectiveness = 2)")
     IRON(2),
     /**
@@ -39,7 +39,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to golden tools (Effectiveness = 0)")
     GOLD(0),
     /**
@@ -47,7 +47,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to diamond tools (Effectiveness = 3)")
     DIAMOND(3),
     /**
@@ -55,7 +55,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @YamlComment("Equivalent to netherite tools (Effectiveness = 4)")
     NETHERITE(4);
 
@@ -71,7 +71,7 @@ public enum ToolEffectivenessTier {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
     public int getEffectiveness() {
         return this.effectiveness;

@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config.sync;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
@@ -17,7 +17,7 @@ import net.minecraft.network.FriendlyByteBuf;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 public interface ConfigCodec<T> {
 
     /**
@@ -28,7 +28,7 @@ public interface ConfigCodec<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     void encode(final T value, final FriendlyByteBuf buf);
 
     /**
@@ -40,6 +40,6 @@ public interface ConfigCodec<T> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     T decode(final FriendlyByteBuf buf);
 }

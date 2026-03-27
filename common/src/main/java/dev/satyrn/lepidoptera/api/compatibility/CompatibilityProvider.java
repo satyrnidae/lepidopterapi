@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.compatibility;
 
 import dev.architectury.platform.Platform;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Abstract base class for optional third-party mod compatibility providers.
@@ -42,7 +42,7 @@ import dev.satyrn.lepidoptera.api.annotations.Api;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public abstract class CompatibilityProvider implements Provider {
 
     /**
@@ -54,7 +54,7 @@ public abstract class CompatibilityProvider implements Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public abstract String getModId();
 
     /**
@@ -64,7 +64,7 @@ public abstract class CompatibilityProvider implements Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public boolean isModLoaded() {
         return Platform.isModLoaded(getModId());
     }
@@ -76,7 +76,7 @@ public abstract class CompatibilityProvider implements Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public void onPreInit() {}
 
     /**
@@ -85,7 +85,7 @@ public abstract class CompatibilityProvider implements Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public void onInit() {}
 
     /**
@@ -95,6 +95,6 @@ public abstract class CompatibilityProvider implements Provider {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public void onPostInit() {}
 }

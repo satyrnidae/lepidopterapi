@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
  * <p><b>Threading:</b> {@code send} serialises to the Netty write queue and is safe to call from any
  * thread. Callers do not need to dispatch to the game thread before sending.</p>
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface PacketSender {
 
     /**

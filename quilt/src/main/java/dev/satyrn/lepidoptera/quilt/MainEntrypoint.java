@@ -16,7 +16,7 @@ import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 
 import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class MainEntrypoint implements ModInitializer {
 
     public @Override void onInitialize() {

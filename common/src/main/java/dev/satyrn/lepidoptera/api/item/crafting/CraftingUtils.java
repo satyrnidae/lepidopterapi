@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.item.crafting;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import dev.satyrn.lepidoptera.api.item.ItemExtensions;
 import dev.satyrn.lepidoptera.api.item.ItemStackExtensions;
 import net.minecraft.util.RandomSource;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class CraftingUtils {
 
     private static final RandomSource RANDOM = RandomSource.create();
@@ -47,7 +47,7 @@ public final class CraftingUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static ItemStack damageAndDepleteCrafting(final ItemStack source, final int damage) {
         if (!source.getItem().hasCraftingRemainingItem()) {
             return ItemStack.EMPTY;
@@ -95,7 +95,7 @@ public final class CraftingUtils {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "param1")
     public static ItemStack damageAndDepleteFuel(final ItemStack source, final ItemStack remainder) {
         if (!remainder.isEmpty() && remainder.isDamageableItem()) {

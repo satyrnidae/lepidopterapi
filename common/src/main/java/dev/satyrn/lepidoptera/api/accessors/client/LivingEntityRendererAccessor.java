@@ -1,10 +1,10 @@
 package dev.satyrn.lepidoptera.api.accessors.client;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -18,7 +18,8 @@ import java.util.List;
  *
  * @since 0.4.0+1.19.2
  */
-@Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
+@ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
+@ApiStatus.Experimental
 @Environment(EnvType.CLIENT)
 @Mixin(LivingEntityRenderer.class)
 public interface LivingEntityRendererAccessor {
@@ -30,6 +31,10 @@ public interface LivingEntityRendererAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @Api(value = "0.4.0+1.19.2", minecraft = "1.21.1")
-    @Accessor List<RenderLayer<?, ?>> getLayers();
+    @Accessor
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @ApiStatus.Experimental
+    @SuppressWarnings("unused")
+    // API Accessor
+    List<RenderLayer<?, ?>> getLayers();
 }

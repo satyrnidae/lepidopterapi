@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import me.shedaniel.autoconfig.ConfigData;
 
 /**
@@ -14,7 +14,7 @@ import me.shedaniel.autoconfig.ConfigData;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 public interface NestingConfigData<T extends NestingConfigData<T>> extends ConfigData {
     /**
      * Copies all values from {@code other} into this config object.
@@ -26,6 +26,6 @@ public interface NestingConfigData<T extends NestingConfigData<T>> extends Confi
      *
      * @since 0.4.0+1.19.2
      */
-    @Api("0.4.0+1.19.2")
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     void copyFrom(final T other);
 }

@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.api.network;
 
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import net.minecraft.network.FriendlyByteBuf;
 
 /**
@@ -14,7 +14,7 @@ import net.minecraft.network.FriendlyByteBuf;
  * @param <C> the context type - {@link ServerPlayContext} for C2S channels,
  *            {@link ClientPlayContext} for S2C channels
  */
-@Api
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 @FunctionalInterface
 public interface PacketReceiver<C> {
 

@@ -1,7 +1,7 @@
 package dev.satyrn.lepidoptera.api.compatibility;
 
 import dev.satyrn.lepidoptera.api.NotInitializable;
-import dev.satyrn.lepidoptera.api.annotations.Api;
+import org.jetbrains.annotations.ApiStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
-@Api("1.0.0-SNAPSHOT.1+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public final class Compatibility {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -76,7 +76,7 @@ public final class Compatibility {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void register(final String className) {
         final Class<?> rawClass;
         try {
@@ -117,7 +117,7 @@ public final class Compatibility {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static List<CompatibilityProvider> getProviders() {
         return Collections.unmodifiableList(PROVIDERS);
     }
@@ -128,7 +128,7 @@ public final class Compatibility {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void preInit() {
         for (final CompatibilityProvider provider : PROVIDERS) {
             provider.onPreInit();
@@ -141,7 +141,7 @@ public final class Compatibility {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void init() {
         for (final CompatibilityProvider provider : PROVIDERS) {
             provider.onInit();
@@ -154,7 +154,7 @@ public final class Compatibility {
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static void postInit() {
         for (final CompatibilityProvider provider : PROVIDERS) {
             provider.onPostInit();

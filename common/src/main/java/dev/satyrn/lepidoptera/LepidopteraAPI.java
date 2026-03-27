@@ -27,6 +27,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +37,7 @@ import java.util.Arrays;
 import static net.minecraft.world.level.GameRules.BooleanValue;
 import static net.minecraft.world.level.GameRules.Key;
 
+@ApiStatus.Internal
 @ModMeta(value = LepidopteraAPI.MOD_ID, name = "Lepidoptera API", semVer = "1.0.0-SNAPSHOT+1.21.1")
 public class LepidopteraAPI implements LepidopteraMod {
     public static final String MOD_ID = "lepidoptera_api";
@@ -51,7 +54,7 @@ public class LepidopteraAPI implements LepidopteraMod {
     public static @Nullable MinecraftServer currentServer = null;
 
     /**
-     * Safe default - ensures {@link #SYNCED_CONFIG} is never null during data gen or
+     * Safe default - ensures {@code SYNCED_CONFIG} is never null during data gen or
      * early class loading before {@link #init()} runs.
      */
     public static SyncedConfig<LepidopteraConfig> SYNCED_CONFIG = new SyncedConfig<>(new LepidopteraConfig(),
@@ -59,6 +62,7 @@ public class LepidopteraAPI implements LepidopteraMod {
 
     public static @Nullable ServerConfigSync CONFIG_SYNC;
 
+    @Contract(pure = true)
     private LepidopteraAPI() {
     }
 

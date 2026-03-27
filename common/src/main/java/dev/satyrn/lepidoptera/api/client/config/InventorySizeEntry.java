@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.api.client.config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
-import dev.satyrn.lepidoptera.api.annotations.Api;
 import dev.satyrn.lepidoptera.api.config.InventorySize;
 import dev.satyrn.lepidoptera.api.config.InventorySizeField;
 import dev.satyrn.lepidoptera.api.lang.T9n;
@@ -24,6 +23,7 @@ import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -52,76 +52,11 @@ import java.util.Optional;
  *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
-@Api("1.0.0-SNAPSHOT+1.21.1")
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
 @Environment(EnvType.CLIENT)
 public final class InventorySizeEntry extends TooltipListEntry<String> {
 
     // -- Texture --
-
-    private static final ResourceLocation CELL_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath("lepidoptera_api", "textures/gui/inventory_size.png");
-
-    // -- MC slider sprites --
-
-    private static final ResourceLocation SLIDER_BG =
-            ResourceLocation.withDefaultNamespace("widget/slider");
-    private static final ResourceLocation SLIDER_BG_HL =
-            ResourceLocation.withDefaultNamespace("widget/slider_highlighted");
-    private static final ResourceLocation SLIDER_HANDLE =
-            ResourceLocation.withDefaultNamespace("widget/slider_handle");
-    private static final ResourceLocation SLIDER_HANDLE_HL =
-            ResourceLocation.withDefaultNamespace("widget/slider_handle_highlighted");
-
-    // -- Layout constants --
-
-    private static final int PADDING          = 4;
-    private static final int LABEL_HEIGHT     = 10;
-    private static final int H_SLIDER_HEIGHT  = 20;
-    /** Width of the vertical slider track — matches {@link #H_SLIDER_HEIGHT}. */
-    private static final int V_SLIDER_WIDTH   = 20;
-    /** Height of the draggable thumb on the vertical slider (matches MC handle proportions). */
-    private static final int V_THUMB_HEIGHT   = 8;
-    /** Font line height used to size the rotated "Height: N" label column. */
-    private static final int FONT_LINE_HEIGHT = 9;
-    /** Gap between the rotated label and the slider track. */
-    private static final int V_LABEL_GAP      = 2;
-    private static final int CELL_SIZE        = 16;
-    /** No gap between cells — slots are drawn edge-to-edge. */
-    private static final int CELL_STEP        = CELL_SIZE;
-
-    // -- Colors --
-
-    private static final int COLOR_LABEL      = 0xFFFFFFFF;
-    private static final int COLOR_DIM_VALUE  = 0xFFAAAAAA;
-
-    // -- State --
-
-    private final String originalValue;
-    private final String defaultValue;
-    private final int maxWidth;
-    private final int maxHeight;
-    private int currentWidth;
-    private int currentHeight;
-
-    // Widgets — positions are updated every render() call
-    private final WidthSlider widthSlider;
-    private final HeightSliderWidget heightSlider;
-
-    /**
-     * The widget that captured the most recent mouseClicked, or {@code null}.
-     *
-     * <p>{@link AbstractSliderButton#mouseDragged} responds to every left-drag regardless
-     * of which widget was clicked, so drag events must only be forwarded to the widget that
-     * originally captured the click.</p>
-     */
-    private @Nullable AbstractWidget activeWidget = null;
-
-    /** Entry top-Y captured each frame; used to restrict tooltip display to the label row. */
-    private int lastRenderY = 0;
-
-    // -------------------------------------------------------------------------
-    // TYPE_PROVIDER
-    // -------------------------------------------------------------------------
 
     /**
      * A Cloth Config {@link GuiProvider} that matches any {@code String} field annotated
@@ -132,16 +67,17 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static final GuiProvider TYPE_PROVIDER = (i18n, field, config, defaults, guiProvider) -> {
         final InventorySizeField annotation = field.getAnnotation(InventorySizeField.class);
-        final int maxWidth  = annotation != null ? annotation.maxWidth()  : 27;
+        final int maxWidth = annotation != null ? annotation.maxWidth() : 27;
         final int maxHeight = annotation != null ? annotation.maxHeight() : 27;
 
         final String currentValue = readField(field, config,
                 new InventorySize(InventorySize.MIN_VALUE, InventorySize.MIN_VALUE).toString());
-        final String defaultVal   = readField(field, defaults, currentValue);
+        final String defaultVal = readField(field, defaults, currentValue);
 
         // Build tooltip supplier from @ConfigEntry.Gui.Tooltip(count = N) if present.
         // Cloth Config indexed tooltip keys follow the pattern: i18n + ".@Tooltip[N]"
@@ -157,11 +93,78 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             tooltipSupplier = Optional::empty;
         }
 
-        final InventorySizeEntry entry = new InventorySizeEntry(
-                Component.translatable(i18n), tooltipSupplier, currentValue, defaultVal, maxWidth, maxHeight);
+        final InventorySizeEntry entry = new InventorySizeEntry(Component.translatable(i18n), tooltipSupplier,
+                currentValue, defaultVal, maxWidth, maxHeight);
         entry.saveCallback = value -> writeField(field, config, value);
         return (List) Collections.singletonList(entry);
     };
+
+    // -- MC slider sprites --
+    private static final ResourceLocation CELL_TEXTURE = ResourceLocation.fromNamespaceAndPath("lepidoptera_api",
+            "textures/gui/inventory_size.png");
+    private static final ResourceLocation SLIDER_BG = ResourceLocation.withDefaultNamespace("widget/slider");
+    private static final ResourceLocation SLIDER_BG_HL = ResourceLocation.withDefaultNamespace(
+            "widget/slider_highlighted");
+    private static final ResourceLocation SLIDER_HANDLE = ResourceLocation.withDefaultNamespace("widget/slider_handle");
+
+    // -- Layout constants --
+    private static final ResourceLocation SLIDER_HANDLE_HL = ResourceLocation.withDefaultNamespace(
+            "widget/slider_handle_highlighted");
+    private static final int PADDING = 4;
+    private static final int LABEL_HEIGHT = 10;
+    private static final int H_SLIDER_HEIGHT = 20;
+    /**
+     * Width of the vertical slider track — matches {@link #H_SLIDER_HEIGHT}.
+     */
+    private static final int V_SLIDER_WIDTH = 20;
+    /**
+     * Height of the draggable thumb on the vertical slider (matches MC handle proportions).
+     */
+    private static final int V_THUMB_HEIGHT = 8;
+    /**
+     * Font line height used to size the rotated "Height: N" label column.
+     */
+    private static final int FONT_LINE_HEIGHT = 9;
+    /**
+     * Gap between the rotated label and the slider track.
+     */
+    private static final int V_LABEL_GAP = 2;
+    private static final int CELL_SIZE = 16;
+
+    // -- Colors --
+    /**
+     * No gap between cells — slots are drawn edge-to-edge.
+     */
+    private static final int CELL_STEP = CELL_SIZE;
+    private static final int COLOR_LABEL = 0xFFFFFFFF;
+
+    // -- State --
+    private static final int COLOR_DIM_VALUE = 0xFFAAAAAA;
+    private final String originalValue;
+    private final String defaultValue;
+    private final int maxWidth;
+    private final int maxHeight;
+    // Widgets — positions are updated every render() call
+    private final WidthSlider widthSlider;
+    private final HeightSliderWidget heightSlider;
+    private int currentWidth;
+    private int currentHeight;
+    /**
+     * The widget that captured the most recent mouseClicked, or {@code null}.
+     *
+     * <p>{@link AbstractSliderButton#mouseDragged} responds to every left-drag regardless
+     * of which widget was clicked, so drag events must only be forwarded to the widget that
+     * originally captured the click.</p>
+     */
+    private @Nullable AbstractWidget activeWidget = null;
+
+    // -------------------------------------------------------------------------
+    // TYPE_PROVIDER
+    // -------------------------------------------------------------------------
+    /**
+     * Entry top-Y captured each frame; used to restrict tooltip display to the label row.
+     */
+    private int lastRenderY = 0;
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -178,31 +181,30 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @SuppressWarnings({"deprecation", "UnstableApiUsage"})
-    public InventorySizeEntry(
-            final Component label,
-            final java.util.function.Supplier<Optional<Component[]>> tooltipSupplier,
-            final String currentValue,
-            final String defaultValue,
-            final int maxWidth,
-            final int maxHeight) {
+    public InventorySizeEntry(final Component label,
+                              final java.util.function.Supplier<Optional<Component[]>> tooltipSupplier,
+                              final String currentValue,
+                              final String defaultValue,
+                              final int maxWidth,
+                              final int maxHeight) {
         super(label, tooltipSupplier, false);
         this.defaultValue = defaultValue;
-        this.maxWidth  = Math.max(InventorySize.MIN_VALUE, maxWidth);
+        this.maxWidth = Math.max(InventorySize.MIN_VALUE, maxWidth);
         this.maxHeight = Math.max(InventorySize.MIN_VALUE, maxHeight);
 
         final InventorySize parsed = safeParse(currentValue, defaultValue);
-        this.currentWidth  = Mth.clamp(parsed.width(),  InventorySize.MIN_VALUE, this.maxWidth);
+        this.currentWidth = Mth.clamp(parsed.width(), InventorySize.MIN_VALUE, this.maxWidth);
         this.currentHeight = Mth.clamp(parsed.height(), InventorySize.MIN_VALUE, this.maxHeight);
         this.originalValue = currentValue;
 
         // Widgets are positioned in render(); placeholder bounds here.
         // The initial slider value is computed here (outer this is available) and passed in,
         // because inner constructors cannot reference the enclosing instance before super().
-        final double initWidthNorm = this.maxWidth == 1 ? 0.0
-                : (this.currentWidth - 1.0) / (this.maxWidth - 1.0);
-        this.widthSlider  = new WidthSlider(0, 0, this.maxWidth * CELL_SIZE, initWidthNorm);
+        final double initWidthNorm = this.maxWidth == 1 ? 0.0 : (this.currentWidth - 1.0) / (this.maxWidth - 1.0);
+        this.widthSlider = new WidthSlider(0, 0, this.maxWidth * CELL_SIZE, initWidthNorm);
         this.heightSlider = new HeightSliderWidget(0, 0, this.maxHeight * CELL_STEP);
     }
 
@@ -210,14 +212,33 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     // AbstractConfigListEntry / AbstractConfigEntry
     // -------------------------------------------------------------------------
 
+    @Contract(pure = true)
+    private static String readField(final Field field, final Object obj, final String fallback) {
+        try {
+            return (String) field.get(obj);
+        } catch (final IllegalAccessException | ClassCastException ignored) {
+            return fallback;
+        }
+    }
+
+    @Contract(mutates = "param1")
+    private static void writeField(final Field field, final Object obj, final String value) {
+        try {
+            field.set(obj, value);
+        } catch (final IllegalAccessException ignored) {
+        }
+    }
+
     /**
      * {@inheritDoc}
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @Contract(pure = true)
-    public @Override String getValue() {
+    @Override
+    public String getValue() {
         return new InventorySize(this.currentWidth, this.currentHeight).toString();
     }
 
@@ -226,9 +247,11 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @Contract(pure = true)
-    public @Override Optional<String> getDefaultValue() {
+    @Override
+    public Optional<String> getDefaultValue() {
         return Optional.of(this.defaultValue);
     }
 
@@ -237,9 +260,11 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @Contract(pure = true)
-    public @Override boolean isEdited() {
+    @Override
+    public boolean isEdited() {
         return !getValue().equals(this.originalValue);
     }
 
@@ -252,8 +277,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    public @Override Optional<Component[]> getTooltip(final int mouseX, final int mouseY) {
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Override
+    public Optional<Component[]> getTooltip(final int mouseX, final int mouseY) {
         final int labelRowBottom = this.lastRenderY + PADDING + LABEL_HEIGHT + PADDING;
         if (mouseY >= this.lastRenderY && mouseY < labelRowBottom) {
             return super.getTooltip(mouseX, mouseY);
@@ -269,35 +296,12 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
     @Contract(pure = true)
-    public @Override int getItemHeight() {
-        return PADDING + LABEL_HEIGHT
-                + PADDING + H_SLIDER_HEIGHT
-                + PADDING + this.maxHeight * CELL_STEP
-                + PADDING;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0-SNAPSHOT+1.21.1
-     */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    @Contract(value = "-> new", pure = true)
-    public @Override List<? extends GuiEventListener> children() {
-        return List.of(this.widthSlider, this.heightSlider);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0-SNAPSHOT+1.21.1
-     */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    @Contract(value = "-> new", pure = true)
-    public @Override @Unmodifiable List<? extends NarratableEntry> narratables() {
-        return List.of(this.widthSlider, this.heightSlider);
+    @Override
+    public int getItemHeight() {
+        return PADDING + LABEL_HEIGHT + PADDING + H_SLIDER_HEIGHT + PADDING + this.maxHeight * CELL_STEP + PADDING;
     }
 
     // -------------------------------------------------------------------------
@@ -309,18 +313,45 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    public @Override void render(
-            final GuiGraphics graphics,
-            final int index,
-            final int y,
-            final int x,
-            final int entryWidth,
-            final int entryHeight,
-            final int mouseX,
-            final int mouseY,
-            final boolean isHovered,
-            final float delta) {
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Contract(value = "-> new", pure = true)
+    @Override
+    public @Unmodifiable List<? extends GuiEventListener> children() {
+        return List.of(this.widthSlider, this.heightSlider);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Contract(value = "-> new", pure = true)
+    @Override
+    public @Unmodifiable List<? extends NarratableEntry> narratables() {
+        return List.of(this.widthSlider, this.heightSlider);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Override
+    public void render(final GuiGraphics graphics,
+                       final int index,
+                       final int y,
+                       final int x,
+                       final int entryWidth,
+                       final int entryHeight,
+                       final int mouseX,
+                       final int mouseY,
+                       final boolean isHovered,
+                       final float delta) {
 
         this.lastRenderY = y;
         final var font = Minecraft.getInstance().font;
@@ -328,20 +359,18 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         // Row 1 — label + current value summary
         final int labelY = y + PADDING;
         graphics.drawString(font, getFieldName(), x + PADDING, labelY, COLOR_LABEL);
-        final Component summary = Component.translatable(
-                T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"),
+        final Component summary = Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"),
                 this.currentWidth, this.currentHeight);
-        graphics.drawString(font, summary,
-                x + entryWidth - PADDING - font.width(summary), labelY, COLOR_DIM_VALUE);
+        graphics.drawString(font, summary, x + entryWidth - PADDING - font.width(summary), labelY, COLOR_DIM_VALUE);
 
         // Right-align the entire control block to match other Cloth Config entry positions.
         // Layout (right→left from entry right edge):
         //   PADDING | grid (maxWidth * CELL_SIZE) | PADDING | vertical slider (V_SLIDER_WIDTH)
         //           | V_LABEL_GAP | "Height: N" label rotated (FONT_LINE_HEIGHT wide)
-        final int trackH     = this.maxHeight * CELL_STEP;
-        final int gridLeft   = x + entryWidth - PADDING - this.maxWidth * CELL_SIZE;
+        final int trackH = this.maxHeight * CELL_STEP;
+        final int gridLeft = x + entryWidth - PADDING - this.maxWidth * CELL_SIZE;
         final int sliderLeft = gridLeft - PADDING - V_SLIDER_WIDTH;
-        final int labelLeft  = sliderLeft - V_LABEL_GAP - FONT_LINE_HEIGHT;
+        final int labelLeft = sliderLeft - V_LABEL_GAP - FONT_LINE_HEIGHT;
 
         // Row 2 — horizontal width slider, fixed width = maxWidth * CELL_SIZE, aligned with grid
         final int row2Y = labelY + LABEL_HEIGHT + PADDING;
@@ -369,29 +398,34 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
     }
 
+    // -------------------------------------------------------------------------
+    // Input forwarding
+    // -------------------------------------------------------------------------
+
     /**
      * Renders the "Height: N" label rotated 90° CCW so it reads upward alongside the vertical slider.
      *
-     * @param graphics            the graphics context
-     * @param font                the font renderer
-     * @param labelX              the left edge of the label column (i.e. {@code x + PADDING})
-     * @param trackY              the top of the track / grid row
-     * @param trackH              the pixel height of the track
-     * @param currentHeightValue  the current height value to embed in the label
+     * @param graphics           the graphics context
+     * @param font               the font renderer
+     * @param labelX             the left edge of the label column (i.e. {@code x + PADDING})
+     * @param trackY             the top of the track / grid row
+     * @param trackH             the pixel height of the track
+     * @param currentHeightValue the current height value to embed in the label
      */
-    private void drawVerticalLabel(
-            final GuiGraphics graphics,
-            final net.minecraft.client.gui.Font font,
-            final int labelX,
-            final int trackY,
-            final int trackH,
-            final int currentHeightValue) {
-        final Component full = Component.translatable(
-                T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), currentHeightValue);
+    private void drawVerticalLabel(final GuiGraphics graphics,
+                                   final net.minecraft.client.gui.Font font,
+                                   final int labelX,
+                                   final int trackY,
+                                   final int trackH,
+                                   final int currentHeightValue) {
+        final Component full = Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"),
+                currentHeightValue);
         // Fall back to the short form if the full label is longer than the track is tall
-        final Component heightLabel = font.width(full.getString()) <= trackH ? full
-                : Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), currentHeightValue);
-        final String text   = heightLabel.getString();
+        final Component heightLabel = font.width(full.getString()) <= trackH
+                ? full
+                : Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"),
+                        currentHeightValue);
+        final String text = heightLabel.getString();
         final int textWidth = font.width(text);
 
         // Center the text vertically along the track.
@@ -418,24 +452,21 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             for (int col = 0; col < this.currentWidth; col++) {
                 final int cellX = startX + col * CELL_STEP;
                 final int cellY = startY + row * CELL_STEP;
-                graphics.blit(CELL_TEXTURE, cellX, cellY, 0, 0.0f, 0.0f,
-                        CELL_SIZE, CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                graphics.blit(CELL_TEXTURE, cellX, cellY, 0, 0.0f, 0.0f, CELL_SIZE, CELL_SIZE, CELL_SIZE, CELL_SIZE);
             }
         }
         RenderSystem.disableBlend();
     }
-
-    // -------------------------------------------------------------------------
-    // Input forwarding
-    // -------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    public @Override boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Override
+    public boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
         if (this.widthSlider.mouseClicked(mouseX, mouseY, button)) {
             this.activeWidget = this.widthSlider;
             return true;
@@ -448,6 +479,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+
     /**
      * {@inheritDoc}
      *
@@ -457,10 +492,14 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    public @Override boolean mouseDragged(
-            final double mouseX, final double mouseY,
-            final int button, final double deltaX, final double deltaY) {
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Override
+    public boolean mouseDragged(final double mouseX,
+                                final double mouseY,
+                                final int button,
+                                final double deltaX,
+                                final double deltaY) {
         if (this.activeWidget != null) {
             return this.activeWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         }
@@ -472,8 +511,11 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
-    @Api("1.0.0-SNAPSHOT+1.21.1")
-    public @Override boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    @ApiStatus.Internal
+    @Contract(mutates = "this")
+    @Override
+    public boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
         if (this.activeWidget != null) {
             this.activeWidget.mouseReleased(mouseX, mouseY, button);
             this.activeWidget = null;
@@ -481,10 +523,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
-
+    @Contract(pure = true)
     private InventorySize safeParse(final String value, final String fallback) {
         try {
             return InventorySize.parse(value);
@@ -494,22 +533,6 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             } catch (final IllegalArgumentException ignored2) {
                 return new InventorySize(InventorySize.MIN_VALUE, InventorySize.MIN_VALUE);
             }
-        }
-    }
-
-    @Contract(pure = true)
-    private static String readField(final Field field, final Object obj, final String fallback) {
-        try {
-            return (String) field.get(obj);
-        } catch (final IllegalAccessException | ClassCastException ignored) {
-            return fallback;
-        }
-    }
-
-    private static void writeField(final Field field, final Object obj, final String value) {
-        try {
-            field.set(obj, value);
-        } catch (final IllegalAccessException ignored) {
         }
     }
 
@@ -524,19 +547,24 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             updateMessage();
         }
 
-        protected @Override void applyValue() {
-            currentWidth = Mth.clamp(
-                    (int) Math.round(this.value * (maxWidth - 1)) + 1,
-                    InventorySize.MIN_VALUE, maxWidth);
+        @ApiStatus.Internal
+        @Override
+        protected void applyValue() {
+            currentWidth = Mth.clamp((int) Math.round(this.value * (maxWidth - 1)) + 1, InventorySize.MIN_VALUE,
+                    maxWidth);
         }
 
-        protected @Override void updateMessage() {
+        @ApiStatus.Internal
+        @Override
+        protected void updateMessage() {
             final var font = Minecraft.getInstance().font;
-            final Component full = Component.translatable(
-                    T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), currentWidth);
+            final Component full = Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"),
+                    currentWidth);
             // AbstractSliderButton.renderScrollingString uses margin=2 each side → usable width = this.width - 4
-            final Component label = font.width(full) <= this.width - 4 ? full
-                    : Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"), currentWidth);
+            final Component label = font.width(full) <= this.width - 4
+                    ? full
+                    : Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"),
+                            currentWidth);
             setMessage(label);
         }
     }
@@ -544,7 +572,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     // =========================================================================
     // Inner widget: vertical height slider
     // =========================================================================
-
+    // TODO: Vertical slider widget could be useful elsewhere
     private final class HeightSliderWidget extends AbstractWidget {
 
         private boolean dragging = false;
@@ -555,16 +583,21 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             this.trackHeight = trackHeight;
         }
 
-        /** Updates the rendered track height (called each frame before render). */
+        /**
+         * Updates the rendered track height (called each frame before render).
+         */
+        @ApiStatus.Internal
         @Contract(mutates = "this")
-        public @Override void setHeight(final int h) {
+        @Override
+        public void setHeight(final int h) {
             this.trackHeight = Math.max(V_THUMB_HEIGHT, h);
         }
 
-        protected @Override void renderWidget(
-                final GuiGraphics graphics,
-                final int mouseX, final int mouseY,
-                final float delta) {
+        @Override
+        protected void renderWidget(final GuiGraphics graphics,
+                                    final int mouseX,
+                                    final int mouseY,
+                                    final float delta) {
             // -- Track (background) --
             // Rotate 90° CCW so the horizontal slider sprite is drawn vertically.
             // After Axis.ZP.rotationDegrees(90):
@@ -590,12 +623,16 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             graphics.pose().popPose();
         }
 
+        @ApiStatus.Internal
         @Contract(pure = true)
-        public @Override @Nullable ComponentPath nextFocusPath(final FocusNavigationEvent event) {
+        @Override
+        public @Nullable ComponentPath nextFocusPath(final FocusNavigationEvent event) {
             return null; // not keyboard-navigable
         }
 
-        public @Override boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
+        @ApiStatus.Internal
+        @Override
+        public boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
             if (button == 0 && isMouseOver(mouseX, mouseY)) {
                 this.dragging = true;
                 applyMouse(mouseY);
@@ -604,9 +641,13 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             return false;
         }
 
-        public @Override boolean mouseDragged(
-                final double mouseX, final double mouseY,
-                final int button, final double deltaX, final double deltaY) {
+        @ApiStatus.Internal
+        @Override
+        public boolean mouseDragged(final double mouseX,
+                                    final double mouseY,
+                                    final int button,
+                                    final double deltaX,
+                                    final double deltaY) {
             if (this.dragging) {
                 applyMouse(mouseY);
                 return true;
@@ -614,49 +655,61 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             return false;
         }
 
-        public @Override boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
+        @ApiStatus.Internal
+        @Contract(mutates = "this")
+        @Override
+        public boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
             this.dragging = false;
             return super.mouseReleased(mouseX, mouseY, button);
         }
 
-        public @Override boolean isMouseOver(final double mouseX, final double mouseY) {
-            return mouseX >= getX() && mouseX < getX() + V_SLIDER_WIDTH
-                    && mouseY >= getY() && mouseY < getY() + this.trackHeight;
+        @ApiStatus.Internal
+        @Contract(pure = true)
+        @Override
+        public boolean isMouseOver(final double mouseX, final double mouseY) {
+            return mouseX >= getX() &&
+                    mouseX < getX() + V_SLIDER_WIDTH &&
+                    mouseY >= getY() &&
+                    mouseY < getY() + this.trackHeight;
         }
 
-        protected @Override void updateWidgetNarration(final NarrationElementOutput output) {
+        @ApiStatus.Internal
+        @Override
+        protected void updateWidgetNarration(final NarrationElementOutput output) {
             defaultButtonNarrationText(output);
         }
 
         // -- Helpers --
 
+        @Contract(pure = true)
         private int thumbY() {
-            if (maxHeight <= 1) return getY();
-            final double norm  = (currentHeight - 1.0) / (maxHeight - 1.0);
-            final int    range = this.trackHeight - V_THUMB_HEIGHT;
+            if (maxHeight <= 1) {
+                return getY();
+            }
+            final double norm = (currentHeight - 1.0) / (maxHeight - 1.0);
+            final int range = this.trackHeight - V_THUMB_HEIGHT;
             // norm=0 (min height) → thumb at top; norm=1 (max) → thumb at bottom
             return getY() + (int) (norm * range);
         }
 
+        @Contract(pure = true)
         private boolean isMouseOverThumb(final double mouseX, final double mouseY) {
             final int ty = thumbY();
-            return mouseX >= getX() && mouseX < getX() + V_SLIDER_WIDTH
-                    && mouseY >= ty && mouseY < ty + V_THUMB_HEIGHT;
+            return mouseX >= getX() && mouseX < getX() + V_SLIDER_WIDTH && mouseY >= ty && mouseY < ty + V_THUMB_HEIGHT;
         }
 
+        @Contract(mutates = "this")
         private void applyMouse(final double mouseY) {
             if (maxHeight <= 1) {
                 currentHeight = 1;
                 return;
             }
-            final int    range = this.trackHeight - V_THUMB_HEIGHT;
+            final int range = this.trackHeight - V_THUMB_HEIGHT;
             // Map mouse Y position to a normalized value in [0..1],
             // where 0 (top of track) = minimum height and 1 (bottom) = maximum height.
-            final double relY  = mouseY - getY() - V_THUMB_HEIGHT / 2.0;
-            final double norm  = Mth.clamp(relY / range, 0.0, 1.0);
-            currentHeight = Mth.clamp(
-                    (int) Math.round(norm * (maxHeight - 1)) + 1,
-                    InventorySize.MIN_VALUE, maxHeight);
+            final double relY = mouseY - getY() - V_THUMB_HEIGHT / 2.0;
+            final double norm = Mth.clamp(relY / range, 0.0, 1.0);
+            currentHeight = Mth.clamp((int) Math.round(norm * (maxHeight - 1)) + 1, InventorySize.MIN_VALUE, maxHeight);
         }
     }
 }

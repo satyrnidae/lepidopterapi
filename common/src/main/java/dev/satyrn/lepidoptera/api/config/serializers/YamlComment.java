@@ -1,5 +1,7 @@
 package dev.satyrn.lepidoptera.api.config.serializers;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,6 +16,7 @@ import java.lang.annotation.Target;
  *
  * @since 0.4.0+1.19.2
  */
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 public @interface YamlComment {
@@ -23,6 +26,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String value() default "";
 
     /**
@@ -31,6 +35,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     boolean sectionHeader() default false;
 
     /**
@@ -38,6 +43,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String note() default "";
 
     /**
@@ -46,6 +52,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String noteLeader() default NOTE_LEADER;
 
     /**
@@ -54,6 +61,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String defaultValueLeader() default DEFAULT_VALUE_LEADER;
 
     /**
@@ -62,6 +70,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     boolean emitType() default true;
 
     /**
@@ -70,6 +79,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String defaultValue() default "";
 
     /**
@@ -78,6 +88,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     boolean emitChildren() default true;
 
     /**
@@ -85,6 +96,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String VALID_VALUES_LEADER = "Valid values: ";
 
     /**
@@ -92,6 +104,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String NOTE_LEADER = "Note: ";
 
     /**
@@ -99,6 +112,7 @@ public @interface YamlComment {
      *
      * @since 0.4.0+1.19.2
      */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     String DEFAULT_VALUE_LEADER = "Default value: ";
 
     /**
@@ -107,5 +121,7 @@ public @interface YamlComment {
      * @since 0.4.0+1.19.2
      */
     // TODO: Implement See also: emitting
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @SuppressWarnings("unused") // Public API member
     String SEE_ALSO_LEADER = "See also: ";
 }

@@ -3,7 +3,7 @@
 @FieldsAreNonnullByDefault
 @ParametersAreNonnullByDefault
 @VariablesAreNonnullByDefault
-package dev.satyrn.lepidoptera.client;
+package dev.satyrn.lepidoptera.fabric.mixin;
 
 import dev.satyrn.lepidoptera.api.VariablesAreNonnullByDefault;
 import net.minecraft.FieldsAreNonnullByDefault;

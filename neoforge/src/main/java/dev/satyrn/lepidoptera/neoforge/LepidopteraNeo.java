@@ -28,11 +28,13 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.jetbrains.annotations.ApiStatus;
 
 import static dev.satyrn.lepidoptera.LepidopteraAPI.MOD_ID;
 import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
 @Mod(MOD_ID)
+@ApiStatus.Internal
 public class LepidopteraNeo {
 
     private static final DeferredRegister<MapCodec<? extends ICondition>> CONDITION_CODECS = DeferredRegister.create(

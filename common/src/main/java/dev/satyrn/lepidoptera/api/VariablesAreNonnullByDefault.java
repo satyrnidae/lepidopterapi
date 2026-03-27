@@ -1,4 +1,6 @@
-package dev.satyrn.lepidoptera.api.annotations;
+package dev.satyrn.lepidoptera.api;
+
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;
@@ -16,7 +18,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @since 0.4.0+1.19.2
  */
-@Api("0.4.0+1.19.2")
+@ApiStatus.AvailableSince("0.4.0+1.19.2")
 @Nonnull
 @TypeQualifierDefault(ElementType.LOCAL_VARIABLE)
 @Retention(RetentionPolicy.RUNTIME)
