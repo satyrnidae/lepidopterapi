@@ -9,9 +9,13 @@ import dev.satyrn.lepidoptera.neoforge.api.provider.client.lang.ModLanguageProvi
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.PackOutput;
 
-public class LepidopteraFrenchLanguageProvider extends ModLanguageProvider {
-    public LepidopteraFrenchLanguageProvider(PackOutput output) {
-        super(LepidopteraAPI.class, output, "fr_fr");
+public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
+    public LepidopteraFrFRLanguageProvider(PackOutput output) {
+        this(output, "fr_fr");
+    }
+
+    public LepidopteraFrFRLanguageProvider(PackOutput output, String locale) {
+        super(LepidopteraAPI.class, output, locale);
     }
 
     protected @Override void addTranslations() {
@@ -40,8 +44,6 @@ public class LepidopteraFrenchLanguageProvider extends ModLanguageProvider {
                 "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 1),
                 "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de la configuration.");
-        this.add(T9n.configOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick"),
-                "Shift-clic droit pour équiper l'alambic dans le casque");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 0),
                 "Les changements prennent effet lors du rechargement de la configuration.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", 1),
@@ -64,5 +66,13 @@ public class LepidopteraFrenchLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Hauteur : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        // region-specific overrides
+        this.addAlchemicalAlembicCanShiftClick();
+    }
+
+    protected void addAlchemicalAlembicCanShiftClick() {
+        this.add(T9n.configOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick"),
+                "Shift-clic droit pour équiper l'alambic dans le casque");
     }
 }

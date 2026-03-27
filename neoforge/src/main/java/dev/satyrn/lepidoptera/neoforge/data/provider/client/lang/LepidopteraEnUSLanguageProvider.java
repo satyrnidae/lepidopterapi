@@ -9,9 +9,13 @@ import dev.satyrn.lepidoptera.neoforge.api.provider.client.lang.ModLanguageProvi
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.PackOutput;
 
-public class LepidopteraLanguageProvider extends ModLanguageProvider {
-    public LepidopteraLanguageProvider(PackOutput output) {
-        super(LepidopteraAPI.class, output, "en_us");
+public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
+    public LepidopteraEnUSLanguageProvider(PackOutput output) {
+        this(output, "en_us");
+    }
+
+    public LepidopteraEnUSLanguageProvider(PackOutput output, String locale) {
+        super(LepidopteraAPI.class, output, locale);
     }
 
     protected @Override void addTranslations() {
