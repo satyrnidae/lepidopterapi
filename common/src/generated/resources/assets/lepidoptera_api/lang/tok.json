@@ -17,7 +17,7 @@
   "text.autoconfig.lepidoptera/config.option.debug.@Tooltip[1]": "§eo open e ni taso la sina sona e pali sina.§r",
   "text.autoconfig.lepidoptera/config.option.demoInventorySize": "suli poki (lukin)",
   "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[0]": "[lukin] sitelen pi suli poki tawa lukin pi ilo InventorySizeEntry.",
-  "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[1]": "nasin: pxs (sama: 9x3). poka suli: 18, sewi suli: 9.",
+  "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[1]": "nasin: pxs (sama: 9x3). poka suli: 9, sewi suli: 4.",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes": "o open e nasin pali pi ilo telo nasa",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes.@Tooltip[0]": "ni li ante la o sin e ma tomo, anu o pali e /reload.",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes.@Tooltip[1]": "ma tomo li tawa e ni tawa ilo jan lon tenpo kama en tenpo sin nasin.",

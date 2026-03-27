@@ -18,13 +18,10 @@ import java.util.Map;
  * Mixin accessor interface exposing private fields and methods of
  * {@link ShapedRecipeBuilder} to {@code BreakableShapedRecipeBuilder}.
  *
- * <p>Allows the breakable recipe builder to reuse vanilla's pattern validation
- * logic ({@link #invokeEnsureValid}) without duplicating it.</p>
- *
  * @since 0.4.0+1.19.2
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
-@ApiStatus.Experimental
+@ApiStatus.Internal
 @Mixin(ShapedRecipeBuilder.class)
 public interface ShapedRecipeBuilderAccessor {
 
@@ -37,7 +34,7 @@ public interface ShapedRecipeBuilderAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     Map<String, Criterion<?>> getCriteria();
 
     /**
@@ -49,7 +46,7 @@ public interface ShapedRecipeBuilderAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     int getCount();
 
     /**
@@ -61,23 +58,9 @@ public interface ShapedRecipeBuilderAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     @Nullable
     String getGroup();
-
-    /**
-     * Returns the list of pattern row strings.
-     *
-     * @return the pattern rows
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @Accessor
-    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
-    @SuppressWarnings("unused")
-    // API Accessor
-    List<String> getRows();
 
     /**
      * Returns the symbol-to-ingredient mapping for the pattern.
@@ -88,24 +71,6 @@ public interface ShapedRecipeBuilderAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     Map<Character, Ingredient> getKey();
-
-    /**
-     * Invokes the private {@code ensureValid(ResourceLocation)} method to validate
-     * the pattern and produce a {@link ShapedRecipePattern}.
-     *
-     * @param resourceLocation the recipe ID (used in error messages)
-     *
-     * @return the compiled pattern
-     *
-     * @throws IllegalStateException if the pattern is invalid
-     * @since 0.4.0+1.19.2
-     */
-    @ApiStatus.AvailableSince(value = "0.4.0+1.19.2")
-    @ApiStatus.Experimental
-    @Invoker
-    @SuppressWarnings("unused")
-    // API Invoker
-    ShapedRecipePattern invokeEnsureValid(ResourceLocation resourceLocation);
 }

@@ -90,6 +90,7 @@ public final class PacketChannels {
      *
      * @param newImpl the platform implementation
      */
+    @ApiStatus.Internal
     public static synchronized void setImpl(PacketChannelsImpl newImpl) {
         impl = newImpl;
         for (Runnable pending : pendingCalls) {

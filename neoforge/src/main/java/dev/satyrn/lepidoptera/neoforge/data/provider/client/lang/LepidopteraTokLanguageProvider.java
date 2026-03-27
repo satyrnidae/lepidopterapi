@@ -74,7 +74,7 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
                 "[lukin] sitelen pi suli poki tawa lukin pi ilo InventorySizeEntry.");
         // nasin = format; poka = side (width); sewi = up/sky (height); suli = max
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
-                "nasin: pxs (sama: 9x3). poka suli: 18, sewi suli: 9.");
+                "nasin: pxs (sama: 9x3). poka suli: 9, sewi suli: 4.");
         // poka = side (width)
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "poka: %s");
         // p = poka (side/width)

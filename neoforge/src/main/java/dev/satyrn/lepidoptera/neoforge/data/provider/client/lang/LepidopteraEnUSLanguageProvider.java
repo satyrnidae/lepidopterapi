@@ -60,7 +60,7 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
                 "[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
-                "Format: WxH (e.g. 9x3). Max width: 18, max height: 9.");
+                "Format: WxH (e.g. 9x3). Max width: 9, max height: 4.");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "Width: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"), "W: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Height: %s");

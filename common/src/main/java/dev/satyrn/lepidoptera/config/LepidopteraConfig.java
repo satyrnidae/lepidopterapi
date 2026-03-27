@@ -39,10 +39,11 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
             "Changing this value requires a full restart to take effect.")
     public boolean showAlembicInCreativeTabs = false;
 
-    @InventorySizeField(maxWidth = 5, maxHeight = 3)
+    @InventorySizeField(maxWidth = 9, maxHeight = 4)
     @ConfigEntry.Gui.Tooltip(count = 2)
     @YamlComment("[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.")
-    public String demoInventorySize = new InventorySize(9, 3).toString();
+    @SuppressWarnings("unused") // Demo
+    public String demoInventorySize = new InventorySize(9, 4).toString();
 
     @Override
     public void copyFrom(LepidopteraConfig other) {

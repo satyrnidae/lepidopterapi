@@ -17,7 +17,7 @@
   "text.autoconfig.lepidoptera/config.option.debug.@Tooltip[1]": "§eÀ n'activer que si vous comprenez les conséquences.§r",
   "text.autoconfig.lepidoptera/config.option.demoInventorySize": "Taille de l'inventaire (démo)",
   "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[0]": "[Démo] Entrée de la taille de l'inventaire pour tests visuels du widget InventorySizeEntry.",
-  "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[1]": "Format : LxH (ex. : 9x3). Largeur maximale : 18, Hauteur maximale : 9.",
+  "text.autoconfig.lepidoptera/config.option.demoInventorySize.@Tooltip[1]": "Format : LxH (ex. : 9x3). Largeur maximale : 9, Hauteur maximale : 4.",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes": "Activer les recettes de l'alambic alchimiste",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes.@Tooltip[0]": "Modifier ce paramètre nécessite un redémarrage du serveur, ou la commande /reload.",
   "text.autoconfig.lepidoptera/config.option.enableAlchemicalAlembicRecipes.@Tooltip[1]": "C'est synchronisé vers les clients lorsqu'ils se connectent, ou lors d'un rechargement de la configuration.",
