@@ -1,3 +1,6 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 plugins {
     id 'com.github.johnrengelman.shadow'
 }
@@ -9,6 +12,13 @@ repositories {
 architectury {
     platformSetupLoomIde()
     loader('quilt')
+}
+
+loom {
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = rootProject.name + "." + project.name + ".refmap.json"
+    }
 }
 
 configurations {
@@ -31,8 +41,8 @@ configurations {
 dependencies {
     modImplementation "org.quiltmc:quilt-loader:$rootProject.quilt_loader_version"
 
-    // Quilt Standard Libraries and QFAPI.
-    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:$rootProject.quilted_fabric_api_version"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation("dev.architectury:architectury-fabric:$rootProject.architectury_api_version") {
@@ -58,9 +68,10 @@ processResources {
     inputs.property 'group', project.group
     inputs.property 'version', project.version
 
-    // Quilt Loader resolves mixin configs from the mod container directory, not the general classpath.
-    // Copy the common mixin config here so it's found in dev mode.
-    from(project(':common').sourceSets.main.resources) {
+    // Copy mixin configs from common's processResources output (not raw source) to ensure they are
+    // present for dev mode. After copying, inject the "refmap" field pointing to the common refmap
+    // so Quilt Loader can resolve intermediary method names at runtime.
+    from(project(':common').tasks.processResources) {
         include 'lepidoptera.api.mixins.json'
         include 'lepidoptera.common.mixins.json'
         include 'icon.png'
@@ -69,11 +80,26 @@ processResources {
     filesMatching('quilt.mod.json') {
         expand group: project.group, version: project.version
     }
+
+    doLast {
+        def refmapName = "${rootProject.name}.${project(':common').name}.refmap.json"
+        ['lepidoptera.api.mixins.json', 'lepidoptera.common.mixins.json'].each { filename ->
+            def f = new File(destinationDir, filename)
+            if (f.exists()) {
+                def json = new JsonSlurper().parseText(f.text)
+                if (!json.containsKey('refmap')) {
+                    def patched = ['refmap': refmapName] + json
+                    f.text = JsonOutput.prettyPrint(JsonOutput.toJson(patched))
+                }
+            }
+        }
+    }
 }
 
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 remapJar {

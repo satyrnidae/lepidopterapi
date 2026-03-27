@@ -64,6 +64,7 @@ subprojects {
         // if it is present.
         // If you remove this line, sources will not be generated.
         withSourcesJar()
+        withJavadocJar()
 
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -73,15 +74,13 @@ subprojects {
         it.options.release = 21
     }
 
-    remotes {
-        mavenSftp {
-            host = providers.provider { rootProject.findProperty('sftpHost') }
-            user = providers.provider { rootProject.findProperty('sftpUser') }
-            password = providers.provider { rootProject.findProperty('sftpPassword') }
-        }
+    tasks.withType(Javadoc).configureEach {
+        options.addStringOption('Xdoclint:-missing', '-quiet')
     }
 
     // Configure Maven publishing.
+    // Secrets are injected as SFTP_HOST / SFTP_USER / SFTP_PASSWORD by `op run`:
+    //   op run --env-file=.op.env -- ./gradlew publish
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -90,140 +89,22 @@ subprojects {
             }
         }
 
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
         repositories {
-            // Add repositories to publish to here.
-            // Notice: This block does NOT have the same function as the block in the top level.
-            // The repositories here will be used for publishing your artifact, not for
-            // retrieving dependencies.
             maven {
                 name = "maven.satyrn.dev"
-                url = providers.provider {
-                    "sftp://${rootProject.findProperty('sftpHost')}:22"
+                // SFTP_HOST may be a bare hostname or a full sftp:// URL — normalise to bare hostname
+                def rawHost = System.getenv('SFTP_HOST') ?: ''
+                def sftpHost = rawHost.replaceFirst(/^sftp:\/\//, '').split(':')[0]
+                url = "sftp://${sftpHost}:22"
+                credentials {
+                    username = System.getenv('SFTP_USER')
+                    password = System.getenv('SFTP_PASSWORD')
                 }
             }
         }
     }
 
-    // Ensure creds are fetched before publishing
-    tasks.withType(PublishToMavenRepository).configureEach {
-        dependsOn fetch1PasswordSecrets, testSftpConnection
-
-        doFirst {
-            repository.credentials {
-                username = rootProject.findProperty('sftpUser')
-                password = rootProject.findProperty('sftpPassword')
-            }
-
-            println "Publishing with credentials:"
-            println "URL: ${repository.url}"
-            println "Username: ${repository.credentials.username}"
-            println "Password: ${repository.credentials.password ? '*****' : 'NULL'}"
-        }
-    }
-
-    // Configure JSch system properties
+    // Configure JSch system properties for SFTP transport
     System.setProperty('org.gradle.sftp.preferredAuthentications', 'password')
     System.setProperty('org.gradle.sftp.strictHostKeyChecking', 'no')
-}
-
-tasks.register('fetch1PasswordSecrets') {
-    doFirst {
-        // Skip sign-in if already authenticated or in CI
-        if (System.getenv("CI") == "true" || "op get account".execute().waitFor() == 0) {
-            logger.lifecycle("1Password: Using existing session")
-            return
-        }
-
-        "op signin --raw".execute().with {
-            waitForOrKill(30_000)
-            if (exitValue() != 0) throw new GradleException("Sign-in failed: ${err.text}")
-        }
-    }
-    doLast {
-        def text = "op item get \"${rootProject.sftp_login}\" --vault \"${rootProject.secrets_vault}\" --format json".execute().with {
-            waitForOrKill(10_000)
-            if (exitValue() != 0) throw new GradleException("Secret fetch failed: ${err.text}")
-            text
-        }
-        def json = new groovy.json.JsonSlurper().parseText(text)
-        rootProject.ext.sftpHost = [
-                json.urls?.find { it.primary }?.href,      // Primary URL href
-                json.fields?.find { it.label == "hostname" }?.value,
-                json.fields?.find { it.label == "host" }?.value,
-                json.fields?.find { it.label == "server" }?.value
-        ].find { it }?.toString()?.replaceAll(/^[a-z]+:\/\//, '')
-        rootProject.ext.sftpUser = json.fields.find { it.label == "username" }?.value
-        rootProject.ext.sftpPassword = json.fields.find { it.label == "password" }?.value
-
-        println "SFTP Host: ${rootProject.ext.sftpHost}"
-        println "SFTP User: ${rootProject.ext.sftpUser}"
-    }
-}
-
-tasks.register('testSftpConnection') {
-    dependsOn fetch1PasswordSecrets
-
-    doLast {
-        try {
-            def jsch = new com.jcraft.jsch.JSch()
-            def session = jsch.getSession(
-                    rootProject.ext.sftpUser,
-                    rootProject.ext.sftpHost,
-                    22
-            )
-            session.setPassword(rootProject.ext.sftpPassword)
-            session.setConfig("StrictHostKeyChecking", "no")
-            session.setConfig("PreferredAuthentications", "password")
-
-            session.connect(5000)
-            logger.lifecycle("✅ Verified SFTP credentials work with JSch")
-
-            // Test actual file operations
-            def channel = session.openChannel("sftp") as com.jcraft.jsch.ChannelSftp
-            channel.connect()
-            try {// Test target directory
-                channel.put(new ByteArrayInputStream("test".bytes), "connection-test.txt")
-                channel.rm("connection-test.txt")
-                logger.lifecycle("✅ Verified write access to target directory")
-            } finally {
-                channel.disconnect()
-                session.disconnect()
-            }
-        } catch (Exception e) {
-            throw new GradleException("""
-                SFTP verification failed: ${e.message}
-                
-                Credentials used:
-                - Host: ${rootProject.ext.sftpHost}
-                - User: ${rootProject.ext.sftpUser}
-                - Password: ${rootProject.ext.sftpPassword ? '*****' : 'NULL'}
-                
-                Server requirements:
-                1. Password authentication must be enabled
-                2. User must have write permissions to target directory
-                """.stripIndent())
-        }
-    }
-}
-
-// Add to your build.gradle
-tasks.register('verifyHostResolution') {
-    doLast {
-        try {
-            InetAddress.getByName(rootProject.ext.sftpHost).with {
-                logger.lifecycle("✅ Host resolution successful: ${hostAddress}")
-            }
-        } catch (UnknownHostException e) {
-            throw new GradleException("""
-                Host resolution failed for: ${rootProject.ext.sftpHost}
-                
-                Possible fixes:
-                1. Verify the hostname is correct
-                2. Check your DNS settings
-                3. Try using an IP address instead
-                4. Ensure network connectivity
-                """.stripIndent())
-        }
-    }
 }

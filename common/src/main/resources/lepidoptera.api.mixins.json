@@ -7,7 +7,6 @@
     "client.LivingEntityRendererAccessor"
   ],
   "mixins": [
-    "advancements.CriteriaTriggersAccessor",
     "autoconfig.YamlConfigSerializerAccessor",
     "item.InstrumentItemAccessor",
     "recipes.ShapedRecipeBuilderAccessor"

@@ -16,6 +16,9 @@ import javax.annotation.Nullable;
  * Config beans should store this as a {@code String} field so that any Cloth Config serializer
  * handles it natively — use {@link #parse} and {@link #toString} at the use site.</p>
  *
+ * @param width The width of the inventory
+ * @param height The height of the inventory
+ *
  * @since 1.0.0-SNAPSHOT+1.21.1
  */
 @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
@@ -83,6 +86,8 @@ public record InventorySize(int width, int height) {
     /**
      * Returns the number of columns.
      *
+     * @return The width of the inventory
+     *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
@@ -94,6 +99,8 @@ public record InventorySize(int width, int height) {
 
     /**
      * Returns the number of rows.
+     *
+     * @return The height of the inventory
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */

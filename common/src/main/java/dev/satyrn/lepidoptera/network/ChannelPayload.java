@@ -17,6 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * {@link net.minecraft.network.FriendlyByteBuf}.</p>
  *
  * <p><b>Internal - not for external use.</b></p>
+ *
+ * @param channelId The channel ID as a resource location
+ * @param data The data to send in this payload
  */
 public record ChannelPayload(ResourceLocation channelId, byte[] data) implements CustomPacketPayload {
 

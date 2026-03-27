@@ -50,3 +50,6 @@ bin/
 
 # VS Code
 *.code-workspace
+
+# 1Password secret references — never commit
+.op.env

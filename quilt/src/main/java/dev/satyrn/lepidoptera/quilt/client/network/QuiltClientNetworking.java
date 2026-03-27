@@ -19,8 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 /**
- * Client-only Quilt networking setup, mirroring
- * {@link dev.satyrn.lepidoptera.fabric.client.network.play.FabricClientNetworking}.
+ * Client-only Quilt networking setup.
  *
  * <p>Uses Fabric API networking ({@code net.fabricmc.fabric.api.client.networking.v1}) -
  * QSL/QFAPI is discontinued.</p>
