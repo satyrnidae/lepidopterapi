@@ -4,7 +4,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.InstrumentItem;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -17,8 +16,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
  *
  * @since 0.4.0+1.19.2
  */
-@ApiStatus.AvailableSince("0.4.0+1.19.2")
-@ApiStatus.Experimental
 @Mixin(InstrumentItem.class)
 public interface InstrumentItemAccessor {
 
@@ -32,8 +29,6 @@ public interface InstrumentItemAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Experimental
     @Contract("_, _, _ -> _")
     @Invoker
     @SuppressWarnings("unused") // API Invoker

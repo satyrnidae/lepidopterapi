@@ -3,7 +3,6 @@ package dev.satyrn.lepidoptera.api.accessors.autoconfig;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.YamlConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.Yaml;
-import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -20,8 +19,6 @@ import java.nio.file.Path;
  *
  * @since 0.4.0+1.19.2
  */
-@ApiStatus.AvailableSince("0.4.0+1.19.2")
-@ApiStatus.Internal
 @Mixin(value = YamlConfigSerializer.class, remap = false)
 public interface YamlConfigSerializerAccessor {
 
@@ -33,8 +30,6 @@ public interface YamlConfigSerializerAccessor {
      * @since 0.4.0+1.19.2
      */
     @Accessor
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Internal
     Config getDefinition();
 
     /**
@@ -45,8 +40,6 @@ public interface YamlConfigSerializerAccessor {
      * @since 0.4.0+1.19.2
      */
     @Accessor
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Internal
     Yaml getYaml();
 
     /**
@@ -57,8 +50,6 @@ public interface YamlConfigSerializerAccessor {
      *
      * @since 0.4.0+1.19.2
      */
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Internal
     @Invoker
     Path callGetConfigPath();
 }
