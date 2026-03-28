@@ -1115,6 +1115,72 @@ public final class T9n {
         return String.format("tag.%s.%s.%s", type, modId, String.join(".", key));
     }
 
+    //#region BlockTags
+
+    /**
+     * Returns a block tag translation key: {@code tag.block.<modId>.<key...>}.
+     *
+     * @param modId the mod ID to scope the key to
+     * @param key   one or more path segments appended after the mod ID
+     *
+     * @return the assembled block tag translation key
+     *
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    public static String blockTag(final String modId, final String... key) {
+        return tag(modId, "block", key);
+    }
+
+    /**
+     * Returns a block tag translation key scoped to the given mod metadata.
+     *
+     * @see #blockTag(String, String...)
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String blockTag(final ModMeta metadata, final String... key) {
+        return blockTag(metadata.name(), key);
+    }
+
+    /**
+     * Returns a block tag translation key scoped to the given mod class.
+     * The class must be annotated with {@link dev.satyrn.lepidoptera.api.ModMeta}.
+     *
+     * @see #blockTag(String, String...)
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String blockTag(final Class<?> modClass, final String... key) {
+        return blockTag(ModHelper.modId(modClass), key);
+    }
+
+    /**
+     * Returns a block tag translation key derived from the tag's {@link ResourceLocation}.
+     *
+     * <p>The tag's path segments (separated by {@code /}) are converted to {@code .}-separated
+     * key segments; e.g. {@code mymod:ground/dirt} → {@code "tag.block.mymod.ground.dirt"}.</p>
+     *
+     * @param blockTagKey the block tag key
+     *
+     * @return the assembled block tag translation key
+     *
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String blockTag(final TagKey<Item> blockTagKey) {
+        return blockTag(blockTagKey.location().getNamespace(), blockTagKey.location().getPath().replace('/', '.'));
+    }
+
+    //#endregion BlockTags
+
     //#region ItemTags
 
     /**
