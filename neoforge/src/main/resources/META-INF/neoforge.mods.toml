@@ -11,9 +11,16 @@ authors = "satyrnidae"
 description = '''
 Provides common functionality for satyrnidae's mods.
 '''
+logoFile = "icon.png"
+
+[[mixins]]
+config = "lepidoptera.api.mixins.json"
 
 [[mixins]]
 config = "lepidoptera.common.mixins.json"
+
+[[mixins]]
+config = "lepidoptera.neoforge.mixins.json"
 
 [[dependencies.lepidoptera_api]]
 modId = "neoforge"

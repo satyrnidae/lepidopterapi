@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "type": "lepidoptera_api:crafting_shapeless_breakable",
+  "category": "misc",
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "group": "gold_ingot",
+  "ingredients": [
+    {
+      "item": "lepidoptera_api:alchemical_alembic"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:gold_ingot"
+  }
+}

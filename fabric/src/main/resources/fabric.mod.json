@@ -20,10 +20,15 @@
     ],
     "client": [
       "dev.satyrn.lepidoptera.fabric.client.ClientEntrypoint"
+    ],
+    "modmenu": [
+      "dev.satyrn.lepidoptera.fabric.client.ModMenuApiImpl"
     ]
   },
   "mixins": [
-    "lepidoptera.common.mixins.json"
+    "lepidoptera.api.mixins.json",
+    "lepidoptera.common.mixins.json",
+    "lepidoptera.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.10",

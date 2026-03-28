@@ -1,0 +1,31 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "type": "lepidoptera_api:crafting_shaped_breakable",
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "group": "gunpowder",
+  "key": {
+    "A": {
+      "item": "lepidoptera_api:alchemical_alembic"
+    },
+    "S": {
+      "item": "minecraft:soul_sand"
+    }
+  },
+  "pattern": [
+    " S ",
+    "SAS",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:gunpowder"
+  }
+}

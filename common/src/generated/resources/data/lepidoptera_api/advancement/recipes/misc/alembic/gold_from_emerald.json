@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "criteria": {
+    "has_the_alembic": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lepidoptera_api:alchemical_alembic"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "lepidoptera_api:alembic/gold_from_emerald"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_the_alembic"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "lepidoptera_api:alembic/gold_from_emerald"
+    ]
+  }
+}

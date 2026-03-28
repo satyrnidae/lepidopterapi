@@ -1,0 +1,23 @@
+package dev.satyrn.lepidoptera.api;
+
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus;
+
+/**
+ * Provides a {@link ResourceLocation} identity for data-gen providers and other
+ * components that need a stable locator string for logging or registration.
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
+ */
+@ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+public interface WithLocation {
+    /**
+     * Returns the {@link ResourceLocation} that identifies this component.
+     *
+     * @return the component's resource location
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    ResourceLocation location();
+}

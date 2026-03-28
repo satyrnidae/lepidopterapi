@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "fabric:load_conditions": [
+    {
+      "condition": "lepidoptera_api:alchemical_alembic_recipes"
+    }
+  ],
+  "group": "alchemical_alembic",
+  "ingredients": [
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "lepidoptera_api:depleted_alembic"
+    },
+    {
+      "tag": "minecraft:candles"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "lepidoptera_api:alchemical_alembic"
+  }
+}

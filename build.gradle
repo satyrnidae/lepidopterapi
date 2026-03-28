@@ -51,10 +51,6 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
-        mixin {
-            useLegacyMixinAp = true
-            defaultRefmapName = "${project.rootProject.name}.common.refmap.json"
-        }
     }
 
     dependencies {

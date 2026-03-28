@@ -3,12 +3,7 @@ plugins {
 }
 
 loom {
-    neoForge { }
-
-    mixin {
-        useLegacyMixinAp = true
-        defaultRefmapName = "${project.rootProject.name}.${project.name}.refmap.json"
-    }
+    neoForge {}
 
     runs {
         data {
@@ -59,6 +54,10 @@ processResources {
     inputs.property 'version', project.version
     filesMatching('META-INF/neoforge.mods.toml') {
         expand version: project.version
+    }
+
+    from(project(':common').sourceSets.main.resources) {
+        include 'icon.png'
     }
 }
 

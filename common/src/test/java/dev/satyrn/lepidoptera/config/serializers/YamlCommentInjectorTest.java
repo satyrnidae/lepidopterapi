@@ -1,6 +1,6 @@
 package dev.satyrn.lepidoptera.config.serializers;
 
-import dev.satyrn.lepidoptera.annotations.YamlComment;
+import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,6 @@ class YamlCommentInjectorTest {
     void setUp() {
         injector = new YamlCommentInjector(80);
     }
-
-    // -------------------------------------------------------------------------
-    // getCurrentPath
-    // -------------------------------------------------------------------------
 
     @Nested
     class GetCurrentPath {
@@ -52,10 +48,6 @@ class YamlCommentInjectorTest {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // wordWrap
-    // -------------------------------------------------------------------------
-
     @Nested
     class WordWrap {
         @Test
@@ -77,7 +69,9 @@ class YamlCommentInjectorTest {
             StringBuilder input = new StringBuilder();
             // Build a sentence > 78 chars
             for (int i = 0; i < 25; i++) {
-                if (!input.isEmpty()) input.append(" ");
+                if (!input.isEmpty()) {
+                    input.append(" ");
+                }
                 input.append(word);
             }
             String result = injector.wordWrap(input.toString());
@@ -116,7 +110,9 @@ class YamlCommentInjectorTest {
             String word = "word";
             StringBuilder input = new StringBuilder();
             for (int i = 0; i < 20; i++) {
-                if (!input.isEmpty()) input.append(" ");
+                if (!input.isEmpty()) {
+                    input.append(" ");
+                }
                 input.append(word);
             }
             String result = narrow.wordWrap(input.toString(), 20, 20);
@@ -129,21 +125,8 @@ class YamlCommentInjectorTest {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // getEnumComments
-    // -------------------------------------------------------------------------
-
     @Nested
     class GetEnumComments {
-        enum SimpleEnum { ALPHA, BETA, GAMMA }
-
-        enum AnnotatedEnum {
-            @YamlComment("First option")
-            ONE,
-            @YamlComment("Second option")
-            TWO
-        }
-
         @Test
         void nonEnumClass_returnsEmpty() {
             assertEquals("", injector.getEnumComments(String.class, 0));
@@ -170,48 +153,23 @@ class YamlCommentInjectorTest {
             assertTrue(result.contains("First option"));
             assertTrue(result.contains("Second option"));
         }
-    }
 
-    // -------------------------------------------------------------------------
-    // buildNestedCommentMap
-    // -------------------------------------------------------------------------
+        enum SimpleEnum {
+            ALPHA,
+            BETA,
+            GAMMA
+        }
+
+        enum AnnotatedEnum {
+            @YamlComment("First option")
+            ONE,
+            @YamlComment("Second option")
+            TWO
+        }
+    }
 
     @Nested
     class BuildNestedCommentMap {
-
-        // A minimal bean: public no-arg constructor + getters
-        public static class SimpleConfig {
-            private String name = "";
-            private int count = 0;
-
-            public SimpleConfig() {}
-
-            @YamlComment("The name value")
-            public String getName() { return name; }
-            public void setName(String name) { this.name = name; }
-
-            @YamlComment("The count value")
-            public int getCount() { return count; }
-            public void setCount(int count) { this.count = count; }
-        }
-
-        public static class SectionConfig {
-            private Inner inner = new Inner();
-
-            public SectionConfig() {}
-
-            @YamlComment(value = "Inner section", sectionHeader = true)
-            public Inner getInner() { return inner; }
-            public void setInner(Inner inner) { this.inner = inner; }
-
-            public static class Inner {
-                private boolean flag = false;
-                public Inner() {}
-                @YamlComment("A boolean flag")
-                public boolean isFlag() { return flag; }
-                public void setFlag(boolean flag) { this.flag = flag; }
-            }
-        }
 
         @Test
         void simpleBean_mapContainsExpectedKeys() throws Exception {
@@ -247,11 +205,66 @@ class YamlCommentInjectorTest {
             Map<String, String> map = injector.buildNestedCommentMap(String.class);
             assertTrue(map.isEmpty());
         }
-    }
 
-    // -------------------------------------------------------------------------
-    // injectComments
-    // -------------------------------------------------------------------------
+        // A minimal bean: public no-arg constructor + getters
+        public static class SimpleConfig {
+            private String name = "";
+            private int count = 0;
+
+            public SimpleConfig() {
+            }
+
+            @YamlComment("The name value")
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            @YamlComment("The count value")
+            public int getCount() {
+                return count;
+            }
+
+            public void setCount(int count) {
+                this.count = count;
+            }
+        }
+
+        public static class SectionConfig {
+            private Inner inner = new Inner();
+
+            public SectionConfig() {
+            }
+
+            @YamlComment(value = "Inner section", sectionHeader = true)
+            public Inner getInner() {
+                return inner;
+            }
+
+            public void setInner(Inner inner) {
+                this.inner = inner;
+            }
+
+            public static class Inner {
+                private boolean flag = false;
+
+                public Inner() {
+                }
+
+                @YamlComment("A boolean flag")
+                public boolean isFlag() {
+                    return flag;
+                }
+
+                public void setFlag(boolean flag) {
+                    this.flag = flag;
+                }
+            }
+        }
+    }
 
     @Nested
     class InjectComments {
@@ -266,7 +279,7 @@ class YamlCommentInjectorTest {
         void yamlWithoutMatchingKeys_unchanged() {
             String yaml = "foo: bar\nbaz: 42\n";
             String result = injector.injectComments(yaml, Map.of(), null);
-            // Comments map is empty — output should contain same keys/values
+            // Comments map is empty - output should contain same keys/values
             assertTrue(result.contains("foo: bar"));
             assertTrue(result.contains("baz: 42"));
         }
@@ -285,9 +298,8 @@ class YamlCommentInjectorTest {
         @Test
         void sectionCommentInjectedBeforeSectionKey() {
             String yaml = "inner:\n    flag: true\n";
-            Map<String, String> comments = Map.of(
-                    "inner." + YamlCommentInjector.SECTION_IDENTIFIER, "Inner section header"
-            );
+            Map<String, String> comments = Map.of("inner." + YamlCommentInjector.SECTION_IDENTIFIER,
+                    "Inner section header");
             String result = injector.injectComments(yaml, comments, null);
             int commentIdx = result.indexOf("# Inner section header");
             int sectionIdx = result.indexOf("inner:");
@@ -306,7 +318,8 @@ class YamlCommentInjectorTest {
         @Test
         void classLevelComment_prependedAsHeader() {
             @YamlComment("Top-level file comment")
-            class AnnotatedConfig {}
+            class AnnotatedConfig {
+            }
 
             String yaml = "foo: bar\n";
             String result = injector.injectComments(yaml, Map.of(), AnnotatedConfig.class);

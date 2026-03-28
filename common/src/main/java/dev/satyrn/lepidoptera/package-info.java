@@ -1,7 +1,7 @@
 @MethodsReturnNonnullByDefault @FieldsAreNonnullByDefault @ParametersAreNonnullByDefault @VariablesAreNonnullByDefault
 package dev.satyrn.lepidoptera;
 
-import dev.satyrn.lepidoptera.annotations.VariablesAreNonnullByDefault;
+import dev.satyrn.lepidoptera.api.VariablesAreNonnullByDefault;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 
