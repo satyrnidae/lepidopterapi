@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.config.ToolEffectivenessTier;
 import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
 import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
@@ -51,8 +52,10 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1),
                 new FormattedStringBuilder("Modifier ce paramètre nécessite un redémarrage complet du serveur !",
                         ChatFormatting.YELLOW));
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoToolEffectiveness"), "[Démo] Exemple d'efficacité des outils");
 
-        this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "Taille de l'inventaire (démo)");
+
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "[Démo] Taille de l'inventaire");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
                 "[Démo] Entrée de la taille de l'inventaire pour tests visuels du widget InventorySizeEntry.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
@@ -74,6 +77,14 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Jambières à équipement rapide");
 
         this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Animaux affamés");
+
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$wooden), "En bois");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$stone), "En pierre");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$copper), "En cuivre");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$iron), "En fer");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$golden), "En or");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$diamond), "En diamant");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$netherite), "En Netherite");
 
         // region-specific overrides
         this.addAlchemicalAlembicCanShiftClick();

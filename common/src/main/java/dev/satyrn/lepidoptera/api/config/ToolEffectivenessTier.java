@@ -13,51 +13,65 @@ public enum ToolEffectivenessTier {
     /**
      * Tool effectiveness equivalent to wooden tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to wooden tools (Effectiveness = 0)")
-    WOOD(0),
+    lepidoptera_api$tool_effectiveness$wooden(0),
+
     /**
      * Tool effectiveness equivalent to stone tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to stone tools (Effectiveness = 1)")
-    STONE(1),
+    lepidoptera_api$tool_effectiveness$stone(1),
+
+    /**
+     * Tool effectiveness equivalent to copper tools
+     *
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
+    @YamlComment("Equivalent to copper tools (Effectiveness = 1)")
+    lepidoptera_api$tool_effectiveness$copper(1),
+
     /**
      * Tool effectiveness equivalent to iron tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to iron tools (Effectiveness = 2)")
-    IRON(2),
+    lepidoptera_api$tool_effectiveness$iron(2),
+
     /**
      * Tool effectiveness equivalent to golden tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT.1+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to golden tools (Effectiveness = 0)")
-    GOLD(0),
+    lepidoptera_api$tool_effectiveness$golden(0),
+
     /**
      * Tool effectiveness equivalent to diamond tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to diamond tools (Effectiveness = 3)")
-    DIAMOND(3),
+    lepidoptera_api$tool_effectiveness$diamond(3),
+
     /**
      * Tool effectiveness equivalent to netherite tools
      *
-     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     * @since 1.0.1-SNAPSHOT+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT+1.21.1")
     @YamlComment("Equivalent to netherite tools (Effectiveness = 4)")
-    NETHERITE(4);
+    lepidoptera_api$tool_effectiveness$netherite(4);
 
     private final int effectiveness;
 
@@ -73,6 +87,7 @@ public enum ToolEffectivenessTier {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
+    @SuppressWarnings("unused")
     public int getEffectiveness() {
         return this.effectiveness;
     }

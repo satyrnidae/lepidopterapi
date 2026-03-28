@@ -3,6 +3,7 @@ package dev.satyrn.lepidoptera.config;
 import dev.satyrn.lepidoptera.api.config.InventorySize;
 import dev.satyrn.lepidoptera.api.config.InventorySizeField;
 import dev.satyrn.lepidoptera.api.config.NestingConfigData;
+import dev.satyrn.lepidoptera.api.config.ToolEffectivenessTier;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import dev.satyrn.lepidoptera.api.config.sync.ConfigCodec;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -40,6 +41,11 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     @YamlComment("[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.")
     @SuppressWarnings("unused") // Demo
     public String demoInventorySize = new InventorySize(5, 3).toString();
+
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+    @YamlComment("[Demo] Example tool effectiveness tier entry")
+    @SuppressWarnings("unused")
+    public ToolEffectivenessTier demoToolEffectiveness = ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$copper;
 
     @Override
     public void copyFrom(LepidopteraConfig other) {

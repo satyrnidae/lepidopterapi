@@ -37,6 +37,22 @@ public final class T9n {
         NotInitializable.staticClass(this);
     }
 
+    //#region Enum entries
+
+    /**
+     * Returns the enum member name
+     *
+     * @param enumMember the enum member
+     *
+     * @since 1.0.1-SNAPSHOT+1.21.1
+     */
+    @Contract(pure = true)
+    public static String enumKey(final Enum<?> enumMember) {
+        return enumMember.name();
+    }
+
+    //#endregion Enum entries
+
     //#region Configuration
 
     //#region Title

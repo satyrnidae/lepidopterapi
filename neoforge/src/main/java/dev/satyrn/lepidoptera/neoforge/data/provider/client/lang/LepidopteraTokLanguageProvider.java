@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.config.ToolEffectivenessTier;
 import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
 import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
@@ -60,9 +61,11 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         // ni li ante la o sin ale e ma tomo = if this changes, fully restart the server
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1),
                 new FormattedStringBuilder("ni li ante la o sin ale e ma tomo!", ChatFormatting.YELLOW));
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoToolEffectiveness"), "[lukin] ilo pona");
+
 
         // suli poki (lukin) = inventory-size (demonstration)
-        this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "suli poki (lukin)");
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "[lukin] suli poki");
         // sitelen pi suli poki = text of inventory-size; tawa lukin pi ilo = for visual testing of the widget
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
                 "[lukin] sitelen pi suli poki tawa lukin pi ilo InventorySizeEntry.");
@@ -90,5 +93,13 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "len noke pi teno lili");
 
         this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "soweli wile moku");
+
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$wooden), "kasi");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$stone), "kiwen");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$copper), "ante");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$iron), "walo");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$golden), "jelo");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$diamond), "laso");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$netherite), "pi mani Netherite");
     }
 }

@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.config.ToolEffectivenessTier;
 import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
 import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
@@ -47,6 +48,7 @@ public class LepidopteraEnPTLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", 1),
                 new FormattedStringBuilder("If ye be changin' this, ye need to leave the seas entirely before settin' sail again.",
                         ChatFormatting.YELLOW));
+        this.add(T9n.configOption(LepidopteraConfig.class, "demoToolEffectiveness"), "[Demo] Bite o' yer tools");
 
         this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "[Demo] Size o' yer stores");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
@@ -70,5 +72,13 @@ public class LepidopteraEnPTLanguageProvider extends ModLanguageProvider {
         this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Skivvies ye be puttin' on in a hurry");
 
         this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Animals which need be eatin'");
+
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$wooden), "Timber");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$stone), "Rock");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$copper), "Copper");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$iron), "Steel");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$golden), "Gold");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$diamond), "Diamond");
+        this.add(T9n.enumKey(ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$netherite), "Blackbeard's");
     }
 }
