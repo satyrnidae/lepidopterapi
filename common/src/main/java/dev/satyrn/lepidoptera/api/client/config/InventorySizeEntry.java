@@ -314,10 +314,6 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         return PADDING + LABEL_HEIGHT + PADDING + sliderRow + this.maxHeight * CELL_STEP + PADDING;
     }
 
-    // -------------------------------------------------------------------------
-    // Rendering
-    // -------------------------------------------------------------------------
-
     /**
      * {@inheritDoc}
      *

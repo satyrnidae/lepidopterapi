@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -60,5 +62,23 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Height: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Chestplates");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "Quick-Equip Chestplates");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "Boots");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "Quick-Equip Boots");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "Helmets");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "Quick-Equip Helmets");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "Leggings");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Quick-Equip Leggings");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Hungry Animals");
+
+        // Region-specific translations
+        this.addBodyEquipmentTag();
+    }
+
+    protected void addBodyEquipmentTag() {
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Animal Armor");
     }
 }

@@ -30,15 +30,37 @@ import org.jetbrains.annotations.ApiStatus;
 public final class FormattedStringBuilder {
     private final StringBuilder sb = new StringBuilder();
 
+    /**
+     * Creates an empty builder.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused")
     public FormattedStringBuilder() {
     }
 
+    /**
+     * Creates a builder pre-populated with plain (unformatted) text.
+     *
+     * @param text the initial text to append
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused")
     public FormattedStringBuilder(String text) {
         this.append(text);
     }
 
+    /**
+     * Creates a builder pre-populated with formatted text.
+     *
+     * @param text    the initial text to append
+     * @param formats one or more {@link ChatFormatting} values to apply before the text
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public FormattedStringBuilder(String text, ChatFormatting... formats) {
         this.append(text, formats);
@@ -92,6 +114,7 @@ public final class FormattedStringBuilder {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused")
     public FormattedStringBuilder reset() {
         sb.append(ChatFormatting.RESET);
         return this;

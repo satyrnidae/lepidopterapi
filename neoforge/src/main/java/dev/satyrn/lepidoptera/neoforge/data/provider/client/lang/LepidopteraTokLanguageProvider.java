@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -76,5 +78,17 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         // s = sewi (up/height)
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "s: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "len soweli");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "len sijelo");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "len sijelo pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "len noka anpa");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "len noka anpa pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "len lawa");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "len lawa pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "len noka");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "len noke pi teno lili");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "soweli wile moku");
     }
 }

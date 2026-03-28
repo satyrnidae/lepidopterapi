@@ -7,10 +7,7 @@ import dev.satyrn.lepidoptera.api.network.PacketReadyCallback;
 import dev.satyrn.lepidoptera.api.network.ServerPlayContext;
 import dev.satyrn.lepidoptera.item.LepidopteraItems;
 import dev.satyrn.lepidoptera.neoforge.condition.AlchemicalAlembicRecipesCondition;
-import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraEnUSLanguageProvider;
-import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraFrCALanguageProvider;
-import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraFrFRLanguageProvider;
-import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.LepidopteraTokLanguageProvider;
+import dev.satyrn.lepidoptera.neoforge.data.provider.client.lang.*;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.recipe.LepidopteraRecipeProvider;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.tags.LepidopteraEntityTypeTags;
 import dev.satyrn.lepidoptera.neoforge.data.provider.server.tags.LepidopteraItemTags;
@@ -104,11 +101,12 @@ public class LepidopteraNeo {
 
     private void onGatherData(GatherDataEvent event) {
         event.createProvider(LepidopteraRecipeProvider::new);
+        event.createProvider(LepidopteraEnPTLanguageProvider::new);
         event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg));
         event.createProvider((arg, completableFuture) -> new LepidopteraFrFRLanguageProvider(arg));
         event.createProvider((arg, completableFuture) -> new LepidopteraFrCALanguageProvider(arg));
-        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_ca"));
-        event.createProvider((arg, completableFuture) -> new LepidopteraEnUSLanguageProvider(arg, "en_gb"));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEnGBLanguageProvider(arg, "en_ca"));
+        event.createProvider((arg, completableFuture) -> new LepidopteraEnGBLanguageProvider(arg));
         event.createProvider((arg, completableFuture) -> new LepidopteraTokLanguageProvider(arg));
         event.createProvider((arg, completableFuture) -> new LepidopteraEntityTypeTags(arg, completableFuture,
                 event.getExistingFileHelper()));

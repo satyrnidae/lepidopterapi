@@ -6,6 +6,8 @@ import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.network.PacketChannels;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.ConfigHolder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -319,6 +321,20 @@ public final class ServerConfigSync {
             }
         });
 
+        // Server receives config_req → re-send config to that player
+        PacketChannels.registerServerReceiver(configReqChannel, (ctx, buf) -> ctx.send(configChannel, buildConfigPacket()));
+    }
+
+    /**
+     * Registers client-side packet receivers and disconnect callbacks for this sync instance.
+     *
+     * <p><b>Must be called from a client-only entrypoint</b> (e.g. {@code ClientModInitializer}).
+     * Separated from {@link #registerChannels()} to prevent {@code @Environment(EnvType.CLIENT)}
+     * types from being bootstrapped on the server, which would cause a
+     * {@link BootstrapMethodError}.</p>
+     */
+    @Environment(EnvType.CLIENT)
+    public void registerClientHandlers() {
         // Client receives server's version → echo back own version
         PacketChannels.registerClientReceiver(versionChannel, (ctx, buf) -> {
             buf.readVarInt(); // server version - not needed client-side
@@ -328,14 +344,7 @@ public final class ServerConfigSync {
         });
 
         // Client receives config → decode into overlays
-        PacketChannels.registerClientReceiver(configChannel, (ctx, buf) -> {
-            decodeConfigPacket(buf);
-        });
-
-        // Server receives config_req → re-send config to that player
-        PacketChannels.registerServerReceiver(configReqChannel, (ctx, buf) -> {
-            ctx.send(configChannel, buildConfigPacket());
-        });
+        PacketChannels.registerClientReceiver(configChannel, (ctx, buf) -> decodeConfigPacket(buf));
 
         // Client disconnect → clear all overlays
         PacketChannels.registerClientDisconnectCallback(this::clearAllOverlays);

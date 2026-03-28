@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -60,6 +62,18 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Hauteur : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Armure de l'animaux");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Plastrons");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "Plastrons à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "Bottes");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "Bottes à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "Casques");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "Casques à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "Jambières");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Jambières à équipement rapide");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Animaux affamés");
 
         // region-specific overrides
         this.addAlchemicalAlembicCanShiftClick();

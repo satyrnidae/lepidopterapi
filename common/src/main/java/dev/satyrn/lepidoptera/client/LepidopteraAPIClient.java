@@ -1,5 +1,6 @@
 package dev.satyrn.lepidoptera.client;
 
+import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.LepidopteraMod;
 import dev.satyrn.lepidoptera.api.client.config.InventorySizeEntry;
 import dev.satyrn.lepidoptera.api.config.InventorySizeField;
@@ -18,6 +19,13 @@ public class LepidopteraAPIClient implements LepidopteraMod {
     public static LepidopteraMod INSTANCE = new LepidopteraAPIClient();
 
     private LepidopteraAPIClient() {
+    }
+
+    @Override
+    public void init() {
+        if (LepidopteraAPI.CONFIG_SYNC != null) {
+            LepidopteraAPI.CONFIG_SYNC.registerClientHandlers();
+        }
     }
 
     @Override

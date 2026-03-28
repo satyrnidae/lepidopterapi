@@ -35,9 +35,25 @@ import java.util.concurrent.CompletableFuture;
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
 public abstract class ModRecipeProvider extends RecipeProvider implements WithLocation {
+    /**
+     * The mod metadata resolved from the mod class passed to the constructor.
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     protected final ModMeta metadata;
     private final PackOutput packOutput;
 
+    /**
+     * Creates a new recipe provider for the given mod class.
+     *
+     * @param modClass       the mod's main class, annotated with {@link dev.satyrn.lepidoptera.api.ModMeta}
+     * @param output         the data-gen pack output
+     * @param lookupProvider a future providing the registry lookup context
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     protected ModRecipeProvider(Class<?> modClass,
                                 PackOutput output,
                                 CompletableFuture<HolderLookup.Provider> lookupProvider) {
@@ -46,12 +62,12 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         this.metadata = ModHelper.metadata(modClass);
     }
 
-    private static <T> CompletableFuture<?> buildRecipeAchievement(CachedOutput cachedOutput,
-                                                                   ResourceLocation id,
-                                                                   PackOutput.PathProvider advancementPaths,
-                                                                   RecipeCategory category,
-                                                                   Map<String, Criterion<?>> criteria,
-                                                                   HolderLookup.Provider registryAccess) {
+    private static CompletableFuture<?> buildRecipeAchievement(CachedOutput cachedOutput,
+                                                               ResourceLocation id,
+                                                               PackOutput.PathProvider advancementPaths,
+                                                               RecipeCategory category,
+                                                               Map<String, Criterion<?>> criteria,
+                                                               HolderLookup.Provider registryAccess) {
         Advancement.Builder builder = Advancement.Builder.recipeAdvancement()
                 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
                 .rewards(AdvancementRewards.Builder.recipe(id))
@@ -99,17 +115,48 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         return DataProvider.saveStable(cachedOutput, json, path);
     }
 
+    /**
+     * Runs both the standard recipe output and {@link #runModded}.
+     *
+     * @param cachedOutput   the data-gen output cache
+     * @param registryAccess the current registry lookup context
+     *
+     * @return a future that completes when all outputs have been written
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Override
-    protected final CompletableFuture<?> run(CachedOutput arg, HolderLookup.Provider arg2) {
-        return CompletableFuture.allOf(super.run(arg, arg2), runModded(arg, arg2));
+    protected final CompletableFuture<?> run(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
+        return CompletableFuture.allOf(super.run(cachedOutput, registryAccess), runModded(cachedOutput, registryAccess));
     }
 
+    /**
+     * Delegates to {@link #buildModRecipes} so subclasses override the mod-specific
+     * method rather than the NeoForge framework entry point.
+     *
+     * @param output the recipe output to write recipes into
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Override
     protected final void buildRecipes(RecipeOutput output) {
         buildModRecipes(output);
     }
 
-    protected void buildModRecipes(RecipeOutput output) {
+    /**
+     * Override to register recipes via the standard {@link RecipeOutput} API.
+     * Called in place of {@code buildRecipes} during data generation.
+     *
+     * <p>Defaults to a no-op.</p>
+     *
+     * @param output the recipe output to write recipes into
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    protected void buildModRecipes(@SuppressWarnings("unused") RecipeOutput output) {
     }
 
     /**
@@ -119,10 +166,24 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused")
     protected PackOutput packOutput() {
         return this.packOutput;
     }
 
+    /**
+     * Override to perform additional data-gen work alongside the standard recipe output.
+     * Runs concurrently with the parent {@code run} call.
+     *
+     * <p>Defaults to a no-op.</p>
+     *
+     * @param cachedOutput   the data-gen output cache
+     * @param registryAccess the current registry lookup context
+     *
+     * @return a future that completes when all additional outputs have been written
+     *
+     * @since 0.4.0+1.19.2
+     */
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
     protected CompletableFuture<?> runModded(CachedOutput cachedOutput, HolderLookup.Provider registryAccess) {
         // Defaults to no-op
@@ -152,7 +213,34 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
         return builder.save(cachedOutput, id, registryAccess, this.packOutput);
     }
 
+    /**
+     * Writes a recipe JSON with cross-platform load conditions and its accompanying
+     * unlock advancement.
+     *
+     * <p>Both {@code neoforge:conditions} and {@code fabric:load_conditions} arrays are
+     * injected into the recipe JSON. The advancement is written alongside the recipe
+     * using the standard path convention.
+     *
+     * <p>Prefer {@link #saveWithConditions} with a {@link ConditionalDataBuilder} for new
+     * code — this method is a lower-level alternative retained for backwards compatibility.</p>
+     *
+     * @param cachedOutput   the data-gen output cache
+     * @param id             the resource location for the recipe (and advancement)
+     * @param recipe         the recipe instance to encode
+     * @param codec          the {@link MapCodec} used to encode {@code recipe}
+     * @param typeId         the recipe type identifier written to the {@code "type"} field
+     * @param category       the recipe category, used to derive the advancement path
+     * @param criteria       the criteria to add to the unlock advancement
+     * @param registryAccess the current registry lookup context
+     * @param conditions     zero or more condition IDs to inject into both condition arrays
+     * @param <T>            the recipe type
+     *
+     * @return a future that completes when both the recipe and advancement have been written
+     *
+     * @since 0.4.0+1.19.2
+     */
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
+    @SuppressWarnings("unused")
     protected <T> CompletableFuture<?> recipeWithConditions(CachedOutput cachedOutput,
                                                             ResourceLocation id,
                                                             T recipe,
@@ -172,6 +260,12 @@ public abstract class ModRecipeProvider extends RecipeProvider implements WithLo
                 buildRecipeAchievement(cachedOutput, id, advancementPaths, category, criteria, registryAccess));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since 0.4.0+1.19.2
+     */
+    @ApiStatus.AvailableSince("0.4.0+1.19.2")
     @Override
     public ResourceLocation location() {
         return ModHelper.resource(metadata, "providers/recipe");
