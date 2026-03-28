@@ -7,6 +7,13 @@ architectury {
     fabric()
 }
 
+loom {
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = rootProject.name + "." + project.name + ".refmap.json"
+    }
+}
+
 configurations {
     common {
         canBeResolved = true

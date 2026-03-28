@@ -24,17 +24,20 @@ public abstract class EnchantmentMixin {
         NotInitializable.mixinClass(this);
     }
 
-    private static @Shadow <T> void applyEffects(List<ConditionalEffect<T>> list,
+    @Shadow
+    private static <T> void applyEffects(List<ConditionalEffect<T>> list,
                                                  LootContext arg,
                                                  Consumer<T> consumer) {
     }
 
     @SuppressWarnings("ALL")
-    private static @Shadow @Nonnull LootContext itemContext(ServerLevel arg, int i, ItemStack arg2) {
+    @Shadow
+    private static @Nonnull LootContext itemContext(ServerLevel arg, int i, ItemStack arg2) {
         return null;
     }
 
-    public abstract @Shadow <T> List<T> getEffects(DataComponentType<List<T>> arg);
+    @Shadow
+    public abstract <T> List<T> getEffects(DataComponentType<List<T>> arg);
 
     @Intrinsic
     public void lapix$modifyItemFilteredCount(DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> dataComponentType,

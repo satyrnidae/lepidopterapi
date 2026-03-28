@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -14,7 +16,8 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, "tok");
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         // ilo telo nasa = tool-liquid-strange
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "ilo telo nasa");
         // ilo telo nasa weka = tool-liquid-strange-gone
@@ -30,14 +33,6 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
 
         // nasin pi Lepidoptera API = rules/settings of Lepidoptera API
         this.add(T9n.configTitle(LepidopteraConfig.class), "nasin pi Lepidoptera API");
-        // sitelen pi pakala = writing of errors (debug logging)
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "sitelen pi pakala");
-        // o sona e ni! = know this! (WARNING!); ni li sitelen e pali ale = this writes all interactions
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("o sona e ni! ", ChatFormatting.RED).append("ni li sitelen e pali ale!"));
-        // o open e ni taso la sina sona e pali sina = open this only if you know your work
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("o open e ni taso la sina sona e pali sina.", ChatFormatting.YELLOW));
         // o open e nasin pali pi ilo telo nasa = enable the crafting-ways of the alembic
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "o open e nasin pali pi ilo telo nasa");
@@ -73,7 +68,7 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
                 "[lukin] sitelen pi suli poki tawa lukin pi ilo InventorySizeEntry.");
         // nasin = format; poka = side (width); sewi = up/sky (height); suli = max
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
-                "nasin: pxs (sama: 9x3). poka suli: 18, sewi suli: 9.");
+                "nasin: pxs (sama: 9x3). poka suli: 9, sewi suli: 4.");
         // poka = side (width)
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "poka: %s");
         // p = poka (side/width)
@@ -83,5 +78,17 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         // s = sewi (up/height)
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "s: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "len soweli");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "len sijelo");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "len sijelo pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "len noka anpa");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "len noka anpa pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "len lawa");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "len lawa pi tenpo lili");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "len noka");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "len noke pi teno lili");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "soweli wile moku");
     }
 }

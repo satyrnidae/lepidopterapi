@@ -12,7 +12,8 @@ import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 @SuppressWarnings("unused")
 public class ClientEntrypoint implements ClientModInitializer {
 
-    public @Override void onInitializeClient() {
+    @Override
+    public void onInitializeClient() {
         info("Initializing client-sided code for Lepidoptera API for Quilt MC.");
 
         LepidopteraAPIClient.INSTANCE.preInit();

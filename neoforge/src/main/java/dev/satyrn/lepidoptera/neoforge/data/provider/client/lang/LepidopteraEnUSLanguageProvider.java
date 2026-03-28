@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -18,7 +20,8 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, locale);
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alchemical Alembic");
         this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Depleted Alembic");
 
@@ -29,12 +32,6 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
                 "Incompatible Lepidoptera API version. Server: %s, Client: %s");
 
         this.add(T9n.configTitle(LepidopteraConfig.class), "Lepidoptera API Configuration");
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "Debug logging");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("WARNING! ", ChatFormatting.RED).append(
-                        "This will log every API interaction! "));
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("Only enable this if you know what you are doing.", ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "Enable alembic crafting recipes");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0),
@@ -59,11 +56,29 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
                 "[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
-                "Format: WxH (e.g. 9x3). Max width: 18, max height: 9.");
+                "Format: WxH (e.g. 9x3). Max width: 9, max height: 4.");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "Width: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"), "W: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Height: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Chestplates");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "Quick-Equip Chestplates");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "Boots");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "Quick-Equip Boots");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "Helmets");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "Quick-Equip Helmets");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "Leggings");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Quick-Equip Leggings");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Hungry Animals");
+
+        // Region-specific translations
+        this.addBodyEquipmentTag();
+    }
+
+    protected void addBodyEquipmentTag() {
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Animal Armor");
     }
 }

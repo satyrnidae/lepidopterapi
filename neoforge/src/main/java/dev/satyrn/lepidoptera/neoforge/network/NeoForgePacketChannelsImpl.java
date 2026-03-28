@@ -59,15 +59,18 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
         modEventBus.addListener(this::onRegisterPayloads);
     }
 
-    public @Override void onServerChannelRegistered(ResourceLocation id) {
+    @Override
+    public void onServerChannelRegistered(ResourceLocation id) {
         pendingC2S.add(id);
     }
 
-    public @Override void onClientChannelRegistered(ResourceLocation id) {
+    @Override
+    public void onClientChannelRegistered(ResourceLocation id) {
         pendingS2C.add(id);
     }
 
-    public @Override void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
+    @Override
+    public void sendToPlayer(ServerPlayer player, ResourceLocation id, FriendlyByteBuf buf) {
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
         player.connection.send(new ClientboundCustomPayloadPacket(new ChannelPayload(id, bytes)));
@@ -165,25 +168,30 @@ public final class NeoForgePacketChannelsImpl implements PacketChannelsImpl {
             this.player = player;
         }
 
-        public @Override MinecraftServer server() {
+        @Override
+        public MinecraftServer server() {
             return player.server;
         }
 
-        public @Override ServerPlayer player() {
+        @Override
+        public ServerPlayer player() {
             return player;
         }
 
-        public @Override ServerGamePacketListenerImpl handler() {
+        @Override
+        public ServerGamePacketListenerImpl handler() {
             return player.connection;
         }
 
-        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
+        @Override
+        public void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             player.connection.send(new ClientboundCustomPayloadPacket(new ChannelPayload(id, bytes)));
         }
 
-        public @Override boolean canSend(ResourceLocation id) {
+        @Override
+        public boolean canSend(ResourceLocation id) {
             // On NeoForge, all clients are mod-aware; channel availability tracks registration.
             // A more precise check (payload setup negotiation) can be added later.
             return player.connection.isAcceptingMessages() && PacketChannels.CLIENT_CHANNELS.contains(id);

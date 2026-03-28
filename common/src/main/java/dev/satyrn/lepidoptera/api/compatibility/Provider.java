@@ -117,7 +117,8 @@ public interface Provider {
          * @since 1.0.0-SNAPSHOT.1+1.21.1
          */
         @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-        public @Override int compare(final Provider o1, final Provider o2) {
+        @Override
+        public int compare(final Provider o1, final Provider o2) {
             if (o1 == null || o2 == null) {
                 throw new NullPointerException("One or both of the providers to compare were null.");
             }

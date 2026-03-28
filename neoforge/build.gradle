@@ -5,6 +5,11 @@ plugins {
 loom {
     neoForge {}
 
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = rootProject.name + "." + project.name + ".refmap.json"
+    }
+
     runs {
         data {
             data()

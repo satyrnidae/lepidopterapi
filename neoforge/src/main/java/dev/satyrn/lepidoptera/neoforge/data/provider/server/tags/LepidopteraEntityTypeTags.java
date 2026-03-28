@@ -17,7 +17,8 @@ public class LepidopteraEntityTypeTags extends ModEntityTypeTagsProvider {
         super(LepidopteraAPI.class, arg, completableFuture, existingFileHelper);
     }
 
-    protected @Override void addModTags(final HolderLookup.Provider provider) {
+    @Override
+    protected void addModTags(final HolderLookup.Provider provider) {
         this.tag(ApiEntityTags.TICKS_FOOD);
     }
 }

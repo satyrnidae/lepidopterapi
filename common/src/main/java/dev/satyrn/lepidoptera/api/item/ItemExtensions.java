@@ -160,7 +160,8 @@ public interface ItemExtensions extends ItemLike {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    default @Override Item asItem() {
+    @Override
+    default Item asItem() {
         return (Item) this;
     }
 }

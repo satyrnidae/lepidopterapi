@@ -118,15 +118,18 @@ public final class ClientEvents {
             this.client = client;
         }
 
-        public @Override Minecraft client() {
+        @Override
+        public Minecraft client() {
             return client;
         }
 
-        public @Override ClientPacketListener handler() {
+        @Override
+        public ClientPacketListener handler() {
             return client.getConnection();
         }
 
-        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
+        @Override
+        public void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ClientPacketListener conn = client.getConnection();
@@ -136,7 +139,8 @@ public final class ClientEvents {
             }
         }
 
-        public @Override boolean canSend(ResourceLocation id) {
+        @Override
+        public boolean canSend(ResourceLocation id) {
             // On NeoForge, if we have a connection and the channel was registered, assume supported.
             return client.getConnection() != null && PacketChannels.SERVER_CHANNELS.contains(id);
         }

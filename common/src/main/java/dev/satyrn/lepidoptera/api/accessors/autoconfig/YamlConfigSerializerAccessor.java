@@ -1,6 +1,5 @@
 package dev.satyrn.lepidoptera.api.accessors.autoconfig;
 
-import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.YamlConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.org.yaml.snakeyaml.Yaml;
@@ -22,7 +21,7 @@ import java.nio.file.Path;
  * @since 0.4.0+1.19.2
  */
 @ApiStatus.AvailableSince("0.4.0+1.19.2")
-@ApiStatus.Experimental
+@ApiStatus.Internal
 @Mixin(value = YamlConfigSerializer.class, remap = false)
 public interface YamlConfigSerializerAccessor {
 
@@ -35,21 +34,8 @@ public interface YamlConfigSerializerAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     Config getDefinition();
-
-    /**
-     * Returns the class object for the config data type managed by this serializer.
-     *
-     * @return the config class
-     *
-     * @since 0.4.0+1.19.2
-     */
-    @Accessor
-    @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Experimental
-    @SuppressWarnings("unused") // API Accessor
-    Class<ConfigData> getConfigClass();
 
     /**
      * Returns the SnakeYAML {@link Yaml} instance used for serialization and deserialization.
@@ -60,7 +46,7 @@ public interface YamlConfigSerializerAccessor {
      */
     @Accessor
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     Yaml getYaml();
 
     /**
@@ -72,7 +58,7 @@ public interface YamlConfigSerializerAccessor {
      * @since 0.4.0+1.19.2
      */
     @ApiStatus.AvailableSince("0.4.0+1.19.2")
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     @Invoker
     Path callGetConfigPath();
 }

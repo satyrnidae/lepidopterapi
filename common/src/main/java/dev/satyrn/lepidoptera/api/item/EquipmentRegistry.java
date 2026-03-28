@@ -243,7 +243,9 @@ public final class EquipmentRegistry {
      *
      * @param tags the tag or tags to protect
      */
-    public static @SafeVarargs void protect(final TagKey<Item>... tags) {
+    @ApiStatus.Internal
+    @SafeVarargs
+    public static void protect(final TagKey<Item>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 
@@ -310,6 +312,7 @@ public final class EquipmentRegistry {
      *
      * @param registryAccess the current registry access
      */
+    @ApiStatus.Internal
     public static void onTagsLoaded(final RegistryAccess registryAccess) {
         final Map<Item, PrioritizedEntry> resolved = new HashMap<>();
         final var itemLookup = registryAccess.lookupOrThrow(Registries.ITEM);

@@ -9,10 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Static entry point for Lepidoptera's cross-platform play-phase packet API.
@@ -90,6 +87,7 @@ public final class PacketChannels {
      *
      * @param newImpl the platform implementation
      */
+    @ApiStatus.Internal
     public static synchronized void setImpl(PacketChannelsImpl newImpl) {
         impl = newImpl;
         for (Runnable pending : pendingCalls) {
@@ -117,7 +115,7 @@ public final class PacketChannels {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerServerChannel(ResourceLocation id) {
         SERVER_CHANNELS.add(id);
-        dispatch(() -> impl.onServerChannelRegistered(id));
+        dispatch(() -> Objects.requireNonNull(impl).onServerChannelRegistered(id));
     }
 
     /**
@@ -131,7 +129,7 @@ public final class PacketChannels {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public static synchronized void registerClientChannel(ResourceLocation id) {
         CLIENT_CHANNELS.add(id);
-        dispatch(() -> impl.onClientChannelRegistered(id));
+        dispatch(() -> Objects.requireNonNull(impl).onClientChannelRegistered(id));
     }
 
     /**
@@ -196,6 +194,7 @@ public final class PacketChannels {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("unused")
     public static synchronized void registerClientReadyCallback(PacketReadyCallback<ClientPlayContext> callback) {
         CLIENT_READY_CALLBACKS.add(callback);
     }

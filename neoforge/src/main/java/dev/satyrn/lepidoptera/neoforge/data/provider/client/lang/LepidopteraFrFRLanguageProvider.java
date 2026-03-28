@@ -1,6 +1,8 @@
 package dev.satyrn.lepidoptera.neoforge.data.provider.client.lang;
 
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
+import dev.satyrn.lepidoptera.api.item.ApiItemTags;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
@@ -18,7 +20,8 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         super(LepidopteraAPI.class, output, locale);
     }
 
-    protected @Override void addTranslations() {
+    @Override
+    protected void addTranslations() {
         // I tried with this lol
         this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alambic alchimiste");
         this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Alambic alchimiste éteint");
@@ -31,13 +34,6 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
                 "Les versions de Lepidoptera API sont dépareillées entre le serveur et le client. Serveur : %s, Client : %s");
 
         this.add(T9n.configTitle(LepidopteraConfig.class), "Lepidoptera API configuration");
-        this.add(T9n.configOption(LepidopteraConfig.class, "debug"), "Journalisation de débogage");
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 0),
-                new FormattedStringBuilder("AVERTISSEMENT ! ", ChatFormatting.RED).append(
-                        "Toutes les interactions d'API seront journalisées."));
-        this.add(T9n.configTooltip(LepidopteraConfig.class, "debug", 1),
-                new FormattedStringBuilder("À n'activer que si vous comprenez les conséquences.",
-                        ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes"),
                 "Activer les recettes de l'alambic alchimiste");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", 0),
@@ -60,12 +56,24 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 0),
                 "[Démo] Entrée de la taille de l'inventaire pour tests visuels du widget InventorySizeEntry.");
         this.add(T9n.configTooltip(LepidopteraConfig.class, "demoInventorySize", 1),
-                "Format : LxH (ex. : 9x3). Largeur maximale : 18, Hauteur maximale : 9.");
+                "Format : LxH (ex. : 9x3). Largeur maximale : 9, Hauteur maximale : 4.");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width"), "Largeur : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "width_short"), "L : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height"), "Hauteur : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Armure de l'animaux");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Plastrons");
+        this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "Plastrons à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "Bottes");
+        this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE), "Bottes à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT), "Casques");
+        this.add(T9n.itemTag(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE), "Casques à équipement rapide");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT), "Jambières");
+        this.add(T9n.itemTag(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE), "Jambières à équipement rapide");
+
+        this.add(T9n.entityTypeTag(ApiEntityTags.TICKS_FOOD), "Animaux affamés");
 
         // region-specific overrides
         this.addAlchemicalAlembicCanShiftClick();

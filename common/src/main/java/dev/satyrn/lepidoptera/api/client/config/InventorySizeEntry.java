@@ -72,8 +72,18 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static final GuiProvider TYPE_PROVIDER = (i18n, field, config, defaults, guiProvider) -> {
         final InventorySizeField annotation = field.getAnnotation(InventorySizeField.class);
+        final int minWidth = annotation != null ? annotation.minWidth() : InventorySize.MIN_VALUE;
         final int maxWidth = annotation != null ? annotation.maxWidth() : 27;
+        final int minHeight = annotation != null ? annotation.minHeight() : InventorySize.MIN_VALUE;
         final int maxHeight = annotation != null ? annotation.maxHeight() : 27;
+        if (minWidth < InventorySize.MIN_VALUE) {
+            throw new AssertionError("@InventorySizeField minWidth must be >= " + InventorySize.MIN_VALUE
+                    + ", got " + minWidth);
+        }
+        if (minHeight < InventorySize.MIN_VALUE) {
+            throw new AssertionError("@InventorySizeField minHeight must be >= " + InventorySize.MIN_VALUE
+                    + ", got " + minHeight);
+        }
 
         final String currentValue = readField(field, config,
                 new InventorySize(InventorySize.MIN_VALUE, InventorySize.MIN_VALUE).toString());
@@ -94,12 +104,11 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         }
 
         final InventorySizeEntry entry = new InventorySizeEntry(Component.translatable(i18n), tooltipSupplier,
-                currentValue, defaultVal, maxWidth, maxHeight);
+                currentValue, defaultVal, minWidth, maxWidth, minHeight, maxHeight);
         entry.saveCallback = value -> writeField(field, config, value);
         return (List) Collections.singletonList(entry);
     };
 
-    // -- MC slider sprites --
     private static final ResourceLocation CELL_TEXTURE = ResourceLocation.fromNamespaceAndPath("lepidoptera_api",
             "textures/gui/inventory_size.png");
     private static final ResourceLocation SLIDER_BG = ResourceLocation.withDefaultNamespace("widget/slider");
@@ -107,7 +116,6 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             "widget/slider_highlighted");
     private static final ResourceLocation SLIDER_HANDLE = ResourceLocation.withDefaultNamespace("widget/slider_handle");
 
-    // -- Layout constants --
     private static final ResourceLocation SLIDER_HANDLE_HL = ResourceLocation.withDefaultNamespace(
             "widget/slider_handle_highlighted");
     private static final int PADDING = 4;
@@ -131,7 +139,6 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     private static final int V_LABEL_GAP = 2;
     private static final int CELL_SIZE = 16;
 
-    // -- Colors --
     /**
      * No gap between cells — slots are drawn edge-to-edge.
      */
@@ -142,8 +149,12 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     private static final int COLOR_DIM_VALUE = 0xFFAAAAAA;
     private final String originalValue;
     private final String defaultValue;
+    private final int minWidth;
     private final int maxWidth;
+    private final int minHeight;
     private final int maxHeight;
+    private final boolean fixedWidth;
+    private final boolean fixedHeight;
     // Widgets — positions are updated every render() call
     private final WidthSlider widthSlider;
     private final HeightSliderWidget heightSlider;
@@ -158,17 +169,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      */
     private @Nullable AbstractWidget activeWidget = null;
 
-    // -------------------------------------------------------------------------
-    // TYPE_PROVIDER
-    // -------------------------------------------------------------------------
     /**
      * Entry top-Y captured each frame; used to restrict tooltip display to the label row.
      */
     private int lastRenderY = 0;
-
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
 
     /**
      * Creates an entry.
@@ -176,8 +180,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      * @param label        the translated field name shown as the entry label
      * @param currentValue the initial {@code "WxH"} string from the config
      * @param defaultValue the default {@code "WxH"} string for the reset button
-     * @param maxWidth     the maximum slider value for width  (must be {@code >= 1})
-     * @param maxHeight    the maximum slider value for height (must be {@code >= 1})
+     * @param minWidth     the minimum slider value for width  (must be {@code >= 1})
+     * @param maxWidth     the maximum slider value for width  (must be {@code >= minWidth})
+     * @param minHeight    the minimum slider value for height (must be {@code >= 1})
+     * @param maxHeight    the maximum slider value for height (must be {@code >= minHeight})
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
@@ -188,29 +194,32 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
                               final java.util.function.Supplier<Optional<Component[]>> tooltipSupplier,
                               final String currentValue,
                               final String defaultValue,
+                              final int minWidth,
                               final int maxWidth,
+                              final int minHeight,
                               final int maxHeight) {
         super(label, tooltipSupplier, false);
         this.defaultValue = defaultValue;
-        this.maxWidth = Math.max(InventorySize.MIN_VALUE, maxWidth);
-        this.maxHeight = Math.max(InventorySize.MIN_VALUE, maxHeight);
+        this.minWidth = Math.max(InventorySize.MIN_VALUE, minWidth);
+        this.maxWidth = Math.max(this.minWidth, maxWidth);
+        this.minHeight = Math.max(InventorySize.MIN_VALUE, minHeight);
+        this.maxHeight = Math.max(this.minHeight, maxHeight);
+        this.fixedWidth = this.minWidth == this.maxWidth;
+        this.fixedHeight = this.minHeight == this.maxHeight;
 
         final InventorySize parsed = safeParse(currentValue, defaultValue);
-        this.currentWidth = Mth.clamp(parsed.width(), InventorySize.MIN_VALUE, this.maxWidth);
-        this.currentHeight = Mth.clamp(parsed.height(), InventorySize.MIN_VALUE, this.maxHeight);
+        this.currentWidth = Mth.clamp(parsed.width(), this.minWidth, this.maxWidth);
+        this.currentHeight = Mth.clamp(parsed.height(), this.minHeight, this.maxHeight);
         this.originalValue = currentValue;
 
         // Widgets are positioned in render(); placeholder bounds here.
         // The initial slider value is computed here (outer this is available) and passed in,
         // because inner constructors cannot reference the enclosing instance before super().
-        final double initWidthNorm = this.maxWidth == 1 ? 0.0 : (this.currentWidth - 1.0) / (this.maxWidth - 1.0);
+        final double initWidthNorm = this.fixedWidth ? 0.0
+                : (this.currentWidth - this.minWidth) / (double) (this.maxWidth - this.minWidth);
         this.widthSlider = new WidthSlider(0, 0, this.maxWidth * CELL_SIZE, initWidthNorm);
         this.heightSlider = new HeightSliderWidget(0, 0, this.maxHeight * CELL_STEP);
     }
-
-    // -------------------------------------------------------------------------
-    // AbstractConfigListEntry / AbstractConfigEntry
-    // -------------------------------------------------------------------------
 
     @Contract(pure = true)
     private static String readField(final Field field, final Object obj, final String fallback) {
@@ -301,12 +310,9 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @Contract(pure = true)
     @Override
     public int getItemHeight() {
-        return PADDING + LABEL_HEIGHT + PADDING + H_SLIDER_HEIGHT + PADDING + this.maxHeight * CELL_STEP + PADDING;
+        final int sliderRow = this.fixedWidth ? 0 : H_SLIDER_HEIGHT + PADDING;
+        return PADDING + LABEL_HEIGHT + PADDING + sliderRow + this.maxHeight * CELL_STEP + PADDING;
     }
-
-    // -------------------------------------------------------------------------
-    // Rendering
-    // -------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
@@ -318,7 +324,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @Contract(value = "-> new", pure = true)
     @Override
     public @Unmodifiable List<? extends GuiEventListener> children() {
-        return List.of(this.widthSlider, this.heightSlider);
+        final var list = new java.util.ArrayList<AbstractWidget>(2);
+        if (!this.fixedWidth) list.add(this.widthSlider);
+        if (!this.fixedHeight) list.add(this.heightSlider);
+        return List.copyOf(list);
     }
 
     /**
@@ -331,7 +340,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @Contract(value = "-> new", pure = true)
     @Override
     public @Unmodifiable List<? extends NarratableEntry> narratables() {
-        return List.of(this.widthSlider, this.heightSlider);
+        final var list = new java.util.ArrayList<AbstractWidget>(2);
+        if (!this.fixedWidth) list.add(this.widthSlider);
+        if (!this.fixedHeight) list.add(this.heightSlider);
+        return List.copyOf(list);
     }
 
     /**
@@ -367,28 +379,33 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         // Layout (right→left from entry right edge):
         //   PADDING | grid (maxWidth * CELL_SIZE) | PADDING | vertical slider (V_SLIDER_WIDTH)
         //           | V_LABEL_GAP | "Height: N" label rotated (FONT_LINE_HEIGHT wide)
+        // The vertical slider column is omitted entirely when fixedHeight == true.
         final int trackH = this.maxHeight * CELL_STEP;
         final int gridLeft = x + entryWidth - PADDING - this.maxWidth * CELL_SIZE;
         final int sliderLeft = gridLeft - PADDING - V_SLIDER_WIDTH;
         final int labelLeft = sliderLeft - V_LABEL_GAP - FONT_LINE_HEIGHT;
 
-        // Row 2 — horizontal width slider, fixed width = maxWidth * CELL_SIZE, aligned with grid
+        // Row 2 — horizontal width slider (omitted when fixedWidth)
         final int row2Y = labelY + LABEL_HEIGHT + PADDING;
-        this.widthSlider.setX(gridLeft);
-        this.widthSlider.setY(row2Y);
-        this.widthSlider.setWidth(this.maxWidth * CELL_SIZE);
-        this.widthSlider.render(graphics, mouseX, mouseY, delta);
+        if (!this.fixedWidth) {
+            this.widthSlider.setX(gridLeft);
+            this.widthSlider.setY(row2Y);
+            this.widthSlider.setWidth(this.maxWidth * CELL_SIZE);
+            this.widthSlider.render(graphics, mouseX, mouseY, delta);
+        }
 
         // Row 3 — vertical height slider + grid preview
-        final int row3Y = row2Y + H_SLIDER_HEIGHT + PADDING;
+        final int row3Y = row2Y + (this.fixedWidth ? 0 : H_SLIDER_HEIGHT + PADDING);
 
-        this.heightSlider.setX(sliderLeft);
-        this.heightSlider.setY(row3Y);
-        this.heightSlider.setHeight(trackH);
-        this.heightSlider.render(graphics, mouseX, mouseY, delta);
+        if (!this.fixedHeight) {
+            this.heightSlider.setX(sliderLeft);
+            this.heightSlider.setY(row3Y);
+            this.heightSlider.setHeight(trackH);
+            this.heightSlider.render(graphics, mouseX, mouseY, delta);
 
-        // Draw the rotated "Height: N" label after the slider so it renders on top
-        drawVerticalLabel(graphics, font, labelLeft, row3Y, trackH, this.currentHeight);
+            // Draw the rotated "Height: N" label after the slider so it renders on top
+            drawVerticalLabel(graphics, font, labelLeft, row3Y, trackH, this.currentHeight);
+        }
 
         drawGrid(graphics, gridLeft, row3Y);
 
@@ -550,8 +567,8 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         @ApiStatus.Internal
         @Override
         protected void applyValue() {
-            currentWidth = Mth.clamp((int) Math.round(this.value * (maxWidth - 1)) + 1, InventorySize.MIN_VALUE,
-                    maxWidth);
+            currentWidth = Mth.clamp((int) Math.round(this.value * (maxWidth - minWidth)) + minWidth,
+                    minWidth, maxWidth);
         }
 
         @ApiStatus.Internal
@@ -680,10 +697,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
 
         @Contract(pure = true)
         private int thumbY() {
-            if (maxHeight <= 1) {
+            if (maxHeight <= minHeight) {
                 return getY();
             }
-            final double norm = (currentHeight - 1.0) / (maxHeight - 1.0);
+            final double norm = (currentHeight - minHeight) / (double) (maxHeight - minHeight);
             final int range = this.trackHeight - V_THUMB_HEIGHT;
             // norm=0 (min height) → thumb at top; norm=1 (max) → thumb at bottom
             return getY() + (int) (norm * range);
@@ -697,8 +714,8 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
 
         @Contract(mutates = "this")
         private void applyMouse(final double mouseY) {
-            if (maxHeight <= 1) {
-                currentHeight = 1;
+            if (maxHeight <= minHeight) {
+                currentHeight = minHeight;
                 return;
             }
             final int range = this.trackHeight - V_THUMB_HEIGHT;
@@ -706,7 +723,8 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             // where 0 (top of track) = minimum height and 1 (bottom) = maximum height.
             final double relY = mouseY - getY() - V_THUMB_HEIGHT / 2.0;
             final double norm = Mth.clamp(relY / range, 0.0, 1.0);
-            currentHeight = Mth.clamp((int) Math.round(norm * (maxHeight - 1)) + 1, InventorySize.MIN_VALUE, maxHeight);
+            currentHeight = Mth.clamp((int) Math.round(norm * (maxHeight - minHeight)) + minHeight,
+                    minHeight, maxHeight);
         }
     }
 }

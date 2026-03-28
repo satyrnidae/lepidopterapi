@@ -6,8 +6,6 @@ import dev.satyrn.lepidoptera.api.network.PacketReadyCallback;
 import dev.satyrn.lepidoptera.api.network.PacketReceiver;
 import dev.satyrn.lepidoptera.network.ChannelPayload;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
@@ -15,17 +13,18 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Client-only Quilt networking setup, mirroring
- * {@link dev.satyrn.lepidoptera.fabric.client.network.play.FabricClientNetworking}.
+ * Client-only Quilt networking setup.
  *
  * <p>Uses Fabric API networking ({@code net.fabricmc.fabric.api.client.networking.v1}) -
  * QSL/QFAPI is discontinued.</p>
  */
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public final class QuiltClientNetworking {
 
     private QuiltClientNetworking() {
@@ -43,7 +42,8 @@ public final class QuiltClientNetworking {
                 if (receivers == null || receivers.isEmpty()) {
                     return;
                 }
-                QuiltClientPlayContext context = new QuiltClientPlayContext(ctx.client(), ctx.client().getConnection());
+                QuiltClientPlayContext context = new QuiltClientPlayContext(ctx.client(),
+                        Objects.requireNonNull(ctx.client().getConnection()));
                 FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(payload.data()));
                 for (PacketReceiver<ClientPlayContext> receiver : receivers) {
                     receiver.receive(context, buf);
@@ -73,7 +73,7 @@ public final class QuiltClientNetworking {
         });
     }
 
-    @Environment(EnvType.CLIENT)
+    @ClientOnly
     public static final class QuiltClientPlayContext implements ClientPlayContext {
 
         private final Minecraft client;
@@ -84,21 +84,25 @@ public final class QuiltClientNetworking {
             this.handler = handler;
         }
 
-        public @Override Minecraft client() {
+        @Override
+        public Minecraft client() {
             return client;
         }
 
-        public @Override ClientPacketListener handler() {
+        @Override
+        public ClientPacketListener handler() {
             return handler;
         }
 
-        public @Override void send(ResourceLocation id, FriendlyByteBuf buf) {
+        @Override
+        public void send(ResourceLocation id, FriendlyByteBuf buf) {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ClientPlayNetworking.send(new ChannelPayload(id, bytes));
         }
 
-        public @Override boolean canSend(ResourceLocation id) {
+        @Override
+        public boolean canSend(ResourceLocation id) {
             CustomPacketPayload.Type<ChannelPayload> type = ChannelPayload.typeFor(id);
             return ClientPlayNetworking.canSend(type);
         }

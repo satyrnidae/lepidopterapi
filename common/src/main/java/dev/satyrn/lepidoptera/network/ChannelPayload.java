@@ -17,6 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * {@link net.minecraft.network.FriendlyByteBuf}.</p>
  *
  * <p><b>Internal - not for external use.</b></p>
+ *
+ * @param channelId The channel ID as a resource location
+ * @param data The data to send in this payload
  */
 public record ChannelPayload(ResourceLocation channelId, byte[] data) implements CustomPacketPayload {
 
@@ -50,19 +53,22 @@ public record ChannelPayload(ResourceLocation channelId, byte[] data) implements
      */
     public static StreamCodec<RegistryFriendlyByteBuf, ChannelPayload> codecFor(final ResourceLocation id) {
         return new StreamCodec<>() {
-            public @Override ChannelPayload decode(RegistryFriendlyByteBuf buf) {
+            @Override
+            public ChannelPayload decode(RegistryFriendlyByteBuf buf) {
                 byte[] bytes = new byte[buf.readableBytes()];
                 buf.readBytes(bytes);
                 return new ChannelPayload(id, bytes);
             }
 
-            public @Override void encode(RegistryFriendlyByteBuf buf, ChannelPayload value) {
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, ChannelPayload value) {
                 buf.writeBytes(value.data());
             }
         };
     }
 
-    public @Override Type<? extends CustomPacketPayload> type() {
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
         return typeFor(channelId);
     }
 }

@@ -29,12 +29,30 @@ import java.lang.annotation.*;
 public @interface InventorySizeField {
 
     /**
+     * The minimum allowed width (number of columns). Must be {@code >= } {@link InventorySize#MIN_VALUE}.
+     * Defaults to {@link InventorySize#MIN_VALUE}.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    int minWidth() default 1;
+
+    /**
      * The maximum allowed width (number of columns). Defaults to 27.
      *
      * @since 1.0.0-SNAPSHOT+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
     int maxWidth() default 27;
+
+    /**
+     * The minimum allowed height (number of rows). Must be {@code >= } {@link InventorySize#MIN_VALUE}.
+     * Defaults to {@link InventorySize#MIN_VALUE}.
+     *
+     * @since 1.0.0-SNAPSHOT+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT+1.21.1")
+    int minHeight() default 1;
 
     /**
      * The maximum allowed height (number of rows). Defaults to 27.

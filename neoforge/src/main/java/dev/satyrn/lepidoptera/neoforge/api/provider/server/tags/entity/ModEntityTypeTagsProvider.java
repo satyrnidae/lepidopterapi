@@ -13,16 +13,42 @@ import org.jetbrains.annotations.ApiStatus;
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Abstract base for mod-specific NeoForge entity type tag data providers.
+ *
+ * <p>Subclass this and implement {@link #addModTags(HolderLookup.Provider)} to register
+ * entity type tags for your mod. Wire the provider into your
+ * {@code GatherDataEvent} listener.</p>
+ *
+ * @since 1.0.0-SNAPSHOT.1+1.21.1
+ */
 @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
 public abstract class ModEntityTypeTagsProvider extends EntityTypeTagsProvider implements WithLocation {
+
+    /**
+     * The mod metadata resolved from the mod class passed to the constructor.
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     protected final ModMeta metadata;
 
+    /**
+     * Creates a new entity type tag provider for the given mod class.
+     *
+     * @param modClass           the mod's main class, annotated with {@link dev.satyrn.lepidoptera.api.ModMeta}
+     * @param output             the data-gen pack output
+     * @param lookupProvider     a future providing the registry lookup context
+     * @param existingFileHelper helper used to validate references to existing tag files,
+     *                           or {@code null} to skip validation
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public ModEntityTypeTagsProvider(Class<?> modClass,
-                                     PackOutput arg,
-                                     CompletableFuture<HolderLookup.Provider> completableFuture,
+                                     PackOutput output,
+                                     CompletableFuture<HolderLookup.Provider> lookupProvider,
                                      @Nullable ExistingFileHelper existingFileHelper) {
-        super(arg, completableFuture, ModHelper.modId(modClass), existingFileHelper);
+        super(output, lookupProvider, ModHelper.modId(modClass), existingFileHelper);
         this.metadata = ModHelper.metadata(modClass);
     }
 
@@ -31,16 +57,36 @@ public abstract class ModEntityTypeTagsProvider extends EntityTypeTagsProvider i
         addModTags(provider);
     }
 
+    /**
+     * Implement to register entity type tags via the inherited {@code tag()} methods.
+     * Called during data generation in place of {@code addTags}.
+     *
+     * @param provider the registry lookup context
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     protected abstract void addModTags(HolderLookup.Provider provider);
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override String getName() {
+    @Override
+    public String getName() {
         return location().toString();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0-SNAPSHOT.1+1.21.1
+     */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public @Override ResourceLocation location() {
+    @Override
+    public ResourceLocation location() {
         return ModHelper.resource(this.metadata, "providers/tag/entity_type");
     }
 }

@@ -181,7 +181,9 @@ public final class HungryEntityRegistry {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    public static @SafeVarargs void protect(final TagKey<EntityType<?>>... tags) {
+    @ApiStatus.Internal
+    @SafeVarargs
+    public static void protect(final TagKey<EntityType<?>>... tags) {
         PROTECTED_TAGS.addAll(Arrays.asList(tags));
     }
 
@@ -212,6 +214,7 @@ public final class HungryEntityRegistry {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @ApiStatus.Internal
     public static void onTagsLoaded(final RegistryAccess registryAccess) {
         final Set<EntityType<?>> resolved = new HashSet<>(TYPE_REGISTRY.keySet());
         final var entityTypeLookup = registryAccess.lookupOrThrow(Registries.ENTITY_TYPE);

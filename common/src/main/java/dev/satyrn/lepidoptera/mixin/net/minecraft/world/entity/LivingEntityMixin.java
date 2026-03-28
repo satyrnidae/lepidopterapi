@@ -49,9 +49,11 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    public abstract @Shadow float getHealth();
+    @Shadow
+    public abstract float getHealth();
 
-    public abstract @Shadow float getMaxHealth();
+    @Shadow
+    public abstract float getMaxHealth();
 
     @Intrinsic
     public boolean lapix$isHurt() {

@@ -151,7 +151,8 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_, _ -> this", mutates = "this")
-    public @Override RecipeBuilder unlockedBy(final String string, final Criterion<?> criterion) {
+    @Override
+    public RecipeBuilder unlockedBy(final String string, final Criterion<?> criterion) {
         this.criteria.put(string, criterion);
         return this;
     }
@@ -167,7 +168,8 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(value = "_ -> this", mutates = "this")
-    public @Override BreakableShapelessRecipeBuilder group(final @Nullable String group) {
+    @Override
+    public BreakableShapelessRecipeBuilder group(final @Nullable String group) {
         this.group = group;
         return this;
     }
@@ -181,7 +183,8 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
-    public @Override Item getResult() {
+    @Override
+    public Item getResult() {
         return this.result.asItem();
     }
 
@@ -197,7 +200,8 @@ public final class BreakableShapelessRecipeBuilder implements RecipeBuilder {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(mutates = "param1")
-    public @Override void save(final RecipeOutput output, final ResourceLocation id) {
+    @Override
+    public void save(final RecipeOutput output, final ResourceLocation id) {
         this.ensureValid(id);
         Advancement.Builder builder = output.advancement()
                 .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))

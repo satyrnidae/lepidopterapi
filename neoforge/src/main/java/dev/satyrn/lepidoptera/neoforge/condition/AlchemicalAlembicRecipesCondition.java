@@ -25,11 +25,13 @@ public final class AlchemicalAlembicRecipesCondition implements ICondition {
     private AlchemicalAlembicRecipesCondition() {
     }
 
-    public @Override boolean test(IContext context) {
+    @Override
+    public boolean test(IContext context) {
         return LepidopteraAPI.alchemicalAlembicRecipesEnabled();
     }
 
-    public @Override MapCodec<? extends ICondition> codec() {
+    @Override
+    public MapCodec<? extends ICondition> codec() {
         return CODEC;
     }
 }

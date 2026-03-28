@@ -12,12 +12,11 @@ import net.minecraft.server.level.ServerPlayer;
  * injected into {@link PacketChannels} during mod
  * initialization via {@code PacketChannels.setImpl(impl)}.</p>
  *
- * <p>Implementations must handle the timing constraints of their platform:
+ * <p>Implementations must handle the timing constraints of their platform:</p>
  * <ul>
  *   <li>Fabric/Quilt: can register payload types immediately during {@code onInitialize}</li>
  *   <li>NeoForge: must defer actual payload registration until {@code RegisterPayloadHandlersEvent}</li>
  * </ul>
- * </p>
  */
 public interface PacketChannelsImpl {
 
