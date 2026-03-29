@@ -13,28 +13,29 @@ import java.util.List;
 /**
  * Static registry and lifecycle delegate for {@link CompatibilityProvider} instances.
  *
- * <p>Call {@link #register(String)} during your mod's
- * {@link dev.satyrn.lepidoptera.api.LepidopteraMod#preInit() preInit} phase to register
- * compatibility providers by class name. Passing a class name string rather than a direct
- * class reference defers class loading until registration time  if the provider class
- * cannot be found (because the target mod is absent), registration fails silently with a
- * log message rather than crashing.</p>
+ * <p>Annotate your mod's main class with {@link CompatibilityProviders @CompatibilityProviders}
+ * and call {@link #registerAll(Class)} during
+ * {@link dev.satyrn.lepidoptera.api.LepidopteraMod#preInit() preInit} to register all
+ * providers in a single declarative step:</p>
  *
- * <p>After registering all providers, delegate your mod's lifecycle phases to this class:</p>
  * <pre>{@code
- * @Override
- * public void preInit() {
- *     Compatibility.register("com.example.mymod.compat.JeiProvider");
- *     Compatibility.register("com.example.mymod.compat.CuriosProvider");
- *     Compatibility.preInit();
+ * @ModMeta(value = "mymod", ...)
+ * @CompatibilityProviders({
+ *     "com.example.mymod.compat.JeiProvider",
+ *     "com.example.mymod.compat.CuriosProvider"
+ * })
+ * public class MyMod implements LepidopteraMod {
+ *     public void preInit() {
+ *         Compatibility.registerAll(MyMod.class);
+ *         Compatibility.preInit();
+ *     }
  * }
- *
- * @Override
- * public void init()     { Compatibility.init(); }
- *
- * @Override
- * public void postInit() { Compatibility.postInit(); }
  * }</pre>
+ *
+ * <p>Alternatively, call {@link #register(String)} once per provider. Passing a class name
+ * string rather than a direct class reference defers class loading  if the class cannot be
+ * found (because the target mod is absent), registration fails silently with a log message
+ * rather than crashing.</p>
  *
  * <p>Providers are invoked in descending priority order (highest first). See
  * {@link Provider.Priority} for named priority levels.</p>
@@ -107,6 +108,32 @@ public final class Compatibility {
         PROVIDERS.add(provider);
         PROVIDERS.sort(COMPARATOR.reversed());
         LOGGER.debug("Registered compatibility provider {} for mod '{}'", className, provider.getModId());
+    }
+
+    /**
+     * Reads {@link CompatibilityProviders} from {@code modClass} and calls
+     * {@link #register(String)} for each listed class name.
+     *
+     * <p>If {@code modClass} is not annotated with {@link CompatibilityProviders} this
+     * method is a no-op. Each class name is resolved and registered exactly as if
+     * {@link #register(String)} had been called directly  failures are logged and
+     * silently skipped.</p>
+     *
+     * @param modClass the mod's main class, typically annotated with
+     *                 {@link CompatibilityProviders} and
+     *                 {@link dev.satyrn.lepidoptera.api.ModMeta @ModMeta}
+     *
+     * @since 1.0.1-SNAPSHOT.1+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.1+1.21.1")
+    public static void registerAll(final Class<?> modClass) {
+        final CompatibilityProviders annotation = modClass.getAnnotation(CompatibilityProviders.class);
+        if (annotation == null) {
+            return;
+        }
+        for (final String className : annotation.value()) {
+            register(className);
+        }
     }
 
     /**

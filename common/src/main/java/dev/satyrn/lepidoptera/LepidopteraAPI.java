@@ -5,6 +5,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.satyrn.lepidoptera.api.LepidopteraMod;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
+import dev.satyrn.lepidoptera.api.compatibility.Compatibility;
 import dev.satyrn.lepidoptera.api.config.serializers.CommentedYamlConfigSerializer;
 import dev.satyrn.lepidoptera.api.config.sync.ConfigOverlay;
 import dev.satyrn.lepidoptera.api.config.sync.ServerConfigSync;
@@ -176,9 +177,14 @@ public class LepidopteraAPI implements LepidopteraMod {
                 ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE);
 
         if (SYNCED_CONFIG.get().showAlembicInCreativeTabs) {
+            //noinspection UnstableApiUsage
             CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES,
                     () -> new ItemStack(LepidopteraItems.DEPLETED_ALEMBIC.get()));
         }
+
+        Compatibility.preInit();
+        Compatibility.init();
+        Compatibility.postInit();
 
         debug("POST-INIT: {} completed the post-initialization phase.", ModHelper.friendlyName());
     }
