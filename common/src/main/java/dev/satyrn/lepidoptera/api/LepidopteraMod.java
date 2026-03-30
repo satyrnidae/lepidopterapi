@@ -25,7 +25,6 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void preInit() {
-
     }
 
     /**
@@ -38,7 +37,6 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void init() {
-
     }
 
     /**
@@ -51,7 +49,6 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("0.4.1-alpha.1+1.19.2")
     default void postInit() {
-
     }
 
     /**
@@ -66,7 +63,6 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStarted(MinecraftServer server) {
-
     }
 
     /**
@@ -78,7 +74,6 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void serverStopped() {
-
     }
 
     /**
@@ -93,6 +88,5 @@ public interface LepidopteraMod {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     default void onTagsLoaded(final RegistryAccess registryAccess) {
-
     }
 }

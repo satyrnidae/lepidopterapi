@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.api.compatibility;
 
 import dev.architectury.platform.Platform;
+import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -36,9 +37,9 @@ import org.jetbrains.annotations.ApiStatus;
  * Compatibility.preInit();
  * }</pre>
  *
- * <p>If your integration has client-only code, guard it with
- * {@code Platform.getEnvironment() == Env.CLIENT} or use Architectury's
- * {@code @Environment} annotation on the relevant methods.</p>
+ * <p>For client-only integrations (e.g. recipe viewer plugins), extend
+ * {@link ClientCompatibilityProvider} instead and register via
+ * {@link Compatibility#registerClient(String)}.</p>
  *
  * @since 1.0.0-SNAPSHOT.1+1.21.1
  */
@@ -99,5 +100,37 @@ public abstract class CompatibilityProvider implements Provider {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     public void onPostInit() {
+    }
+
+    /**
+     * Called when the server has finished starting. Override to perform setup that requires
+     * a running server, such as accessing world data or server-side registries.
+     *
+     * @param server the server that has started
+     *
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    public void onServerStarted(final MinecraftServer server) {
+    }
+
+    /**
+     * Called when the server is stopping. Override to release server-side resources or
+     * persist state before the server shuts down.
+     *
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    public void onServerStopped() {
+    }
+
+    /**
+     * Called after tags and datapacks have been (re)loaded, including after {@code /reload}.
+     * Override to rebuild any tag-dependent data structures for the target mod.
+     *
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    public void onTagsLoaded() {
     }
 }

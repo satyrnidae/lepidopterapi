@@ -3,6 +3,7 @@ package dev.satyrn.lepidoptera.client;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.LepidopteraMod;
 import dev.satyrn.lepidoptera.api.client.config.InventorySizeEntry;
+import dev.satyrn.lepidoptera.api.compatibility.Compatibility;
 import dev.satyrn.lepidoptera.api.config.InventorySizeField;
 import dev.satyrn.lepidoptera.config.LepidopteraConfig;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -35,5 +36,12 @@ public class LepidopteraAPIClient implements LepidopteraMod {
         AutoConfig.getGuiRegistry(LepidopteraConfig.class)
                 .registerPredicateProvider(InventorySizeEntry.TYPE_PROVIDER, field -> field.getType() == String.class &&
                         field.isAnnotationPresent(InventorySizeField.class));
+
+        LepidopteraAPI.debug("POST-INIT: Begin client-sided init for compatibility layer");
+        Compatibility.clientPreInit();
+        Compatibility.clientInit();
+        Compatibility.clientPostInit();
+        LepidopteraAPI.debug("POST-INIT: Client-sided compatibility layer init complete");
+
     }
 }
