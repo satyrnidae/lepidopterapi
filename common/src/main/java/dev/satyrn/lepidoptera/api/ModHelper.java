@@ -259,6 +259,39 @@ public final class ModHelper {
         return Objects.requireNonNull(findVersion(modClass));
     }
 
+    /**
+     * Returns the net version specified by the {@code modClass}'s {@link ModMeta} annotation.
+     *
+     * @param modClass the class annotated with {@link ModMeta}
+     *
+     * @return The network version
+     *
+     * @throws NullPointerException if the annotation is absent.
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    public static int netVersion(final Class<?> modClass) {
+        return Objects.requireNonNull(findNetVersion(modClass));
+    }
+
+    /**
+     * Returns the net version specified by the {@code caller}'s {@link ModMeta} annotation.
+     *
+     * @return The network version
+     *
+     * @throws NullPointerException if the annotation is absent.
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    public static int netVersion() {
+        return netVersion(StackLocatorUtil.getCallerClass(2));
+    }
+
+    private static @Nullable Integer findNetVersion(final Class<?> modClass) {
+        final @Nullable ModMeta modMeta = findMetadata(modClass);
+        return modMeta != null ? modMeta.netVersion() : null;
+    }
+
     private static @Nullable String findModId(final Class<?> modClass) {
         final @Nullable ModMeta modId = findMetadata(modClass);
         return modId != null ? modId.value() : null;

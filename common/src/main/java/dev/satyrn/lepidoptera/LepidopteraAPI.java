@@ -119,7 +119,7 @@ public class LepidopteraAPI implements LepidopteraMod {
         LepidopteraConfig local = holder.getConfig();
 
         ServerConfigSync.Builder builder = ServerConfigSync.builder(MOD_ID)
-                .networkVersion(1, T9n.netMsg(ModHelper.metadata(), "versionMismatch"))
+                .networkVersion(ModHelper.netVersion(), T9n.netMsg(ModHelper.metadata(), "versionMismatch"))
                 .watchConfig(holder, Platform.getConfigFolder().resolve("lepidoptera/config.yaml"));
 
         SYNCED_CONFIG = builder.clientOverride(() -> true, LepidopteraConfig.Codec.INSTANCE, local).onApply(cfg -> {
@@ -182,9 +182,11 @@ public class LepidopteraAPI implements LepidopteraMod {
                     () -> new ItemStack(LepidopteraItems.DEPLETED_ALEMBIC.get()));
         }
 
+        debug("POST-INIT: Executing compatibility handler init.");
         Compatibility.preInit();
         Compatibility.init();
         Compatibility.postInit();
+        debug("POST-INIT: Compatibility handler init completed.");
 
         debug("POST-INIT: {} completed the post-initialization phase.", ModHelper.friendlyName());
     }
@@ -195,10 +197,12 @@ public class LepidopteraAPI implements LepidopteraMod {
         if (CONFIG_SYNC != null) {
             CONFIG_SYNC.startWatching(server);
         }
+        Compatibility.serverStarted(server);
     }
 
     @Override
     public void serverStopped() {
+        Compatibility.serverStopped();
         if (CONFIG_SYNC != null) {
             CONFIG_SYNC.stopWatching();
         }
@@ -209,5 +213,6 @@ public class LepidopteraAPI implements LepidopteraMod {
     public void onTagsLoaded(final RegistryAccess registryAccess) {
         HungryEntityRegistry.onTagsLoaded(registryAccess);
         EquipmentRegistry.onTagsLoaded(registryAccess);
+        Compatibility.tagsLoaded();
     }
 }

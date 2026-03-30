@@ -52,4 +52,14 @@ public @interface ModMeta {
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     String semVer() default "";
+
+    /**
+     * The mod's network version code.
+     *
+     * <p>Defaults to {@code 1}.</p>
+     *
+     * @since 1.0.1-SNAPSHOT.2+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
+    int netVersion() default 1;
 }
