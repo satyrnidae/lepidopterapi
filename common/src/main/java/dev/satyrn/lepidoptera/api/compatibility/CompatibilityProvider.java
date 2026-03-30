@@ -66,6 +66,7 @@ public abstract class CompatibilityProvider implements Provider {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isModLoaded() {
         return Platform.isModLoaded(getModId());
     }
@@ -111,7 +112,7 @@ public abstract class CompatibilityProvider implements Provider {
      * @since 1.0.1-SNAPSHOT.2+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.2+1.21.1")
-    public void onServerStarted(final MinecraftServer server) {
+    public void onServerStarted(@SuppressWarnings("unused") final MinecraftServer server) {
     }
 
     /**
