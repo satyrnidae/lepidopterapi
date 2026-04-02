@@ -9,7 +9,7 @@ import net.fabricmc.api.Environment;
 import static dev.satyrn.lepidoptera.LepidopteraAPI.info;
 
 @Environment(EnvType.CLIENT)
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class ClientEntrypoint implements ClientModInitializer {
 
     @Override

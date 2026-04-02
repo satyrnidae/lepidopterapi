@@ -63,7 +63,6 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
                 new FormattedStringBuilder("ni li ante la o sin ale e ma tomo!", ChatFormatting.YELLOW));
         this.add(T9n.configOption(LepidopteraConfig.class, "demoToolEffectiveness"), "[lukin] ilo pona");
 
-
         // suli poki (lukin) = inventory-size (demonstration)
         this.add(T9n.configOption(LepidopteraConfig.class, "demoInventorySize"), "[lukin] suli poki");
         // sitelen pi suli poki = text of inventory-size; tawa lukin pi ilo = for visual testing of the widget
@@ -81,6 +80,18 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         // s = sewi (up/height)
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "s: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
+
+        this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "pona");
+        this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "suwi");
+
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "luken len lawa ilo telo nasa");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "x"), "o lukin lon sewi anu lon anpa");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "y"), "o lukin lon poka lawa anu poka pilin");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "z"), "o linja lon poka");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "x"), "o tawa lon poka");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "y"), "o tawa sewi o tawa anpa");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "z"), "o tawa o tawa sin");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "scale"), "o suli anu lili");
 
         this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "len soweli");
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "len sijelo");

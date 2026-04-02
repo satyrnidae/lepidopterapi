@@ -47,6 +47,14 @@ subprojects {
             name = "TerraformersMC"
             url "https://maven.terraformersmc.com/releases/"
         }
+        maven {
+            name = "WispForest"
+            url = "https://maven.wispforest.io/releases/"
+        }
+        maven {
+            name = "Sinytra"
+            url = "https://maven.su5ed.dev/releases"
+        }
     }
 
     loom {

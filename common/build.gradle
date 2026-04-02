@@ -37,4 +37,9 @@ dependencies {
         exclude(group: "net.fabricmc")
         exclude(group: "dev.architectury")
     }
+
+    // Accessories API — compile-only, non-remapped (already uses Mojang names)
+    compileOnly("io.wispforest:accessories-common:${rootProject.accessories_version}-mojmap") {
+        transitive = false
+    }
 }

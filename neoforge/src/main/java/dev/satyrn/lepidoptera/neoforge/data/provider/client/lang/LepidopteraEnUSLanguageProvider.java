@@ -65,6 +65,18 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
 
+        this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "Default");
+        this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "Accessories");
+
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "Render alembic in hat slot");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "x"), "X rotation in degrees");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "y"), "Y rotation in degrees");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "z"), "Z rotation in degrees");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "x"), "X offset");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "y"), "Y offset");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "z"), "Z offset");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "scale"), "Scale multiplier");
+
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Chestplates");
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE), "Quick-Equip Chestplates");
         this.add(T9n.itemTag(ApiItemTags.FEET_EQUIPMENT), "Boots");

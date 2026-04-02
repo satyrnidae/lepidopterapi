@@ -2,6 +2,52 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
+configurations {
+    owoJiJSource {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+// Task that extracts the JiJ JARs from owo-lib-neoforge into build/owoJiJ/
+def jiJExtractDir = layout.buildDirectory.dir("owoJiJ")
+def extractOwoJiJ = tasks.register("extractOwoJiJ") {
+    inputs.files(configurations.owoJiJSource)
+    outputs.dir(jiJExtractDir)
+    doLast {
+        def outDir = jiJExtractDir.get().asFile
+        outDir.mkdirs()
+        def owoJar = configurations.owoJiJSource.singleFile
+        copy {
+            from(zipTree(owoJar)) {
+                include "META-INF/jars/*.jar"
+                eachFile { fcd -> fcd.path = fcd.name }
+                includeEmptyDirs false
+            }
+            into outDir
+        }
+    }
+}
+
+// Ensure JiJ JARs are extracted and injected into the NeoForge legacy classpath before each run.
+tasks.matching { it.name.startsWith("run") }.configureEach {
+    dependsOn extractOwoJiJ
+    doFirst {
+        def classpathFile = file(".gradle/loom-cache/forge_minecraft_classpath.txt")
+        def outDir = jiJExtractDir.get().asFile
+        if (classpathFile.exists() && outDir.exists()) {
+            def current = classpathFile.text
+            // Exclude fabric-api-base: it references Minecraft classes and must load
+            // in the game layer (via modRuntimeOnly), not the bootstrap layer.
+            def toAdd = (outDir.listFiles() ?: [])
+                .findAll { !current.contains(it.absolutePath) && !it.name.startsWith("fabric-api-base") }
+                .collect { it.absolutePath }
+                .join('\n')
+            if (toAdd) classpathFile << '\n' + toAdd
+        }
+    }
+}
+
 loom {
     neoForge {}
 
@@ -44,6 +90,8 @@ configurations {
 }
 
 dependencies {
+    owoJiJSource("io.wispforest:owo-lib-neoforge:0.12.15.1-beta.6+1.21") { transitive = false }
+
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
 
@@ -53,6 +101,12 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}") {
         exclude(group: "dev.architectury")
     }
+
+    // Optional Accessories integration — dev runtime only
+    modRuntimeOnly("io.wispforest:accessories-neoforge:${rootProject.accessories_version}") { transitive = false }
+    modRuntimeOnly("io.wispforest:owo-lib-neoforge:0.12.15.1-beta.6+1.21") { transitive = false }
+    // fabric-api-base uses Minecraft classes — must be in game layer, not bootstrap layer
+    modRuntimeOnly("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308dedd1") { exclude group: "fabric-api" }
 }
 
 processResources {

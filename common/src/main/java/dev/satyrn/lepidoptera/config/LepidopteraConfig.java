@@ -6,6 +6,7 @@ import dev.satyrn.lepidoptera.api.config.NestingConfigData;
 import dev.satyrn.lepidoptera.api.config.ToolEffectivenessTier;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import dev.satyrn.lepidoptera.api.config.sync.ConfigCodec;
+import dev.satyrn.lepidoptera.compat.accessories.AccessoriesConfig;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,10 +48,15 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     @SuppressWarnings("unused")
     public ToolEffectivenessTier demoToolEffectiveness = ToolEffectivenessTier.lepidoptera_api$tool_effectiveness$copper;
 
+    @ConfigEntry.Category("accessories")
+    @ConfigEntry.Gui.TransitiveObject
+    public AccessoriesConfig accessories = new AccessoriesConfig();
+
     @Override
     public void copyFrom(LepidopteraConfig other) {
         this.enableAlchemicalAlembicRecipes = other.enableAlchemicalAlembicRecipes;
         this.alchemicalAlembicCanShiftClick = other.alchemicalAlembicCanShiftClick;
+        this.accessories.copyFrom(other.accessories);
     }
 
     /**
@@ -63,6 +69,7 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
         public void encode(LepidopteraConfig value, FriendlyByteBuf buf) {
             buf.writeBoolean(value.enableAlchemicalAlembicRecipes);
             buf.writeBoolean(value.alchemicalAlembicCanShiftClick);
+            AccessoriesConfig.Codec.INSTANCE.encode(value.accessories, buf);
         }
 
         @Override
@@ -70,6 +77,7 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
             LepidopteraConfig config = new LepidopteraConfig();
             config.enableAlchemicalAlembicRecipes = buf.readBoolean();
             config.alchemicalAlembicCanShiftClick = buf.readBoolean();
+            config.accessories = AccessoriesConfig.Codec.INSTANCE.decode(buf);
             return config;
         }
     }

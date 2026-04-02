@@ -6,9 +6,8 @@ import dev.satyrn.lepidoptera.api.LepidopteraMod;
 import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.compatibility.Compatibility;
+import dev.satyrn.lepidoptera.api.compatibility.CompatibilityProviders;
 import dev.satyrn.lepidoptera.api.config.serializers.CommentedYamlConfigSerializer;
-import dev.satyrn.lepidoptera.api.config.sync.ConfigOverlay;
-import dev.satyrn.lepidoptera.api.config.sync.ServerConfigSync;
 import dev.satyrn.lepidoptera.api.config.sync.SyncedConfig;
 import dev.satyrn.lepidoptera.api.entity.ApiEntityTags;
 import dev.satyrn.lepidoptera.api.entity.HungryEntityRegistry;
@@ -39,6 +38,9 @@ import static net.minecraft.world.level.GameRules.Key;
 
 @ApiStatus.Internal
 @ModMeta(value = LepidopteraAPI.MOD_ID, name = "Lepidoptera API", semVer = "1.0.0-SNAPSHOT+1.21.1")
+@CompatibilityProviders(
+        client = { "dev.satyrn.lepidoptera.compat.accessories.AccessoriesClientCompatProvider" }
+)
 public class LepidopteraAPI implements LepidopteraMod {
     public static final String MOD_ID = "lepidoptera_api";
     /**
@@ -52,13 +54,10 @@ public class LepidopteraAPI implements LepidopteraMod {
     public static @Nullable MinecraftServer currentServer = null;
 
     /**
-     * Safe default - ensures {@code SYNCED_CONFIG} is never null during data gen or
-     * early class loading before {@link #init()} runs.
+     * Safe default — initialized in {@link #preInit()} after AutoConfig registers the config
+     * class; replaced with a fully registered instance in {@link #init()}.
      */
-    public static SyncedConfig<LepidopteraConfig> SYNCED_CONFIG = new SyncedConfig<>(new LepidopteraConfig(),
-            new ConfigOverlay<>());
-
-    public static @Nullable ServerConfigSync CONFIG_SYNC;
+    public static @Nullable SyncedConfig<LepidopteraConfig> SYNCED_CONFIG = null;
 
     @Contract(pure = true)
     private LepidopteraAPI() {
@@ -68,7 +67,7 @@ public class LepidopteraAPI implements LepidopteraMod {
      * Returns {@code true} if alchemical alembic breakable recipes should be loaded.
      */
     public static boolean alchemicalAlembicRecipesEnabled() {
-        return SYNCED_CONFIG.get().enableAlchemicalAlembicRecipes;
+        return SYNCED_CONFIG != null && SYNCED_CONFIG.get().enableAlchemicalAlembicRecipes;
     }
 
     public static void info(String message, Object... params) {
@@ -100,10 +99,19 @@ public class LepidopteraAPI implements LepidopteraMod {
     public void preInit() {
         debug("PRE-INIT: {} entered the pre-initialization phase.", ModHelper.friendlyName());
 
+        // Register lepidoptera's own compat providers early so they can participate in
+        // config registration and sync setup via onConfigRegister / onConfigSyncSetup.
+        Compatibility.registerAll(LepidopteraAPI.class);
+
         AutoConfig.register(LepidopteraConfig.class, (def, cls) -> new CommentedYamlConfigSerializer<>(def, cls,
                 CommentedYamlConfigSerializer.DEFAULT_LINE_LENGTH));
         LepidopteraItems.register();
         LepidopteraRecipeSerializers.register();
+
+        // Safe default for any code that reads SYNCED_CONFIG between preInit() and init()
+        // (e.g. data generation). Replaced with a fully registered instance in init().
+        SYNCED_CONFIG = SyncedConfig.unregistered(AutoConfig.getConfigHolder(LepidopteraConfig.class),
+                LepidopteraConfig.Codec.INSTANCE);
 
         debug("PRE-INIT: {} completed the pre-initialization phase.", ModHelper.friendlyName());
     }
@@ -115,27 +123,29 @@ public class LepidopteraAPI implements LepidopteraMod {
         RULE_ENTITY_STARVATION = GameRules.register("doAnimalStarvation", GameRules.Category.MOBS,
                 GameRules.BooleanValue.create(false));
 
-        var holder = AutoConfig.getConfigHolder(LepidopteraConfig.class);
-        LepidopteraConfig local = holder.getConfig();
+        final var holder = AutoConfig.getConfigHolder(LepidopteraConfig.class);
 
-        ServerConfigSync.Builder builder = ServerConfigSync.builder(MOD_ID)
+        SYNCED_CONFIG = SyncedConfig.<LepidopteraConfig>builder(MOD_ID, LepidopteraConfig.Codec.INSTANCE, holder)
                 .networkVersion(ModHelper.netVersion(), T9n.netMsg(ModHelper.metadata(), "versionMismatch"))
-                .watchConfig(holder, Platform.getConfigFolder().resolve("lepidoptera/config.yaml"));
+                .watchFile(Platform.getConfigFolder().resolve("lepidoptera/config.yaml"))
+                .register()
+                .onApply(cfg -> {
+                    EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.ALCHEMICAL_ALEMBIC.get(),
+                            cfg.alchemicalAlembicCanShiftClick);
+                    EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.DEPLETED_ALEMBIC.get(),
+                            cfg.alchemicalAlembicCanShiftClick);
+                })
+                .onClear(() -> {
+                    final LepidopteraConfig localCfg = holder.getConfig();
+                    EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.ALCHEMICAL_ALEMBIC.get(),
+                            localCfg.alchemicalAlembicCanShiftClick);
+                    EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.DEPLETED_ALEMBIC.get(),
+                            localCfg.alchemicalAlembicCanShiftClick);
+                });
 
-        SYNCED_CONFIG = builder.clientOverride(() -> true, LepidopteraConfig.Codec.INSTANCE, local).onApply(cfg -> {
-            EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.ALCHEMICAL_ALEMBIC.get(),
-                    cfg.alchemicalAlembicCanShiftClick);
-            EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.DEPLETED_ALEMBIC.get(),
-                    cfg.alchemicalAlembicCanShiftClick);
-        }).onClear(() -> {
-            LepidopteraConfig localCfg = AutoConfig.getConfigHolder(LepidopteraConfig.class).getConfig();
-            EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.ALCHEMICAL_ALEMBIC.get(),
-                    localCfg.alchemicalAlembicCanShiftClick);
-            EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.DEPLETED_ALEMBIC.get(),
-                    localCfg.alchemicalAlembicCanShiftClick);
-        });
-
-        // Re-apply server-side equipment registration on config reload (file watcher or GUI save).
+        // Server-side equipment update on config reload — uses registerLoadListener (not
+        // registerSaveListener) because it must also fire on external file edits, which only
+        // trigger the load listener (via WatchService → holder.load()).
         holder.registerLoadListener((h, cfg) -> {
             EquipmentRegistry.updateEquipment(EquipmentSlot.HEAD, LepidopteraItems.ALCHEMICAL_ALEMBIC.get(),
                     cfg.alchemicalAlembicCanShiftClick);
@@ -143,8 +153,6 @@ public class LepidopteraAPI implements LepidopteraMod {
                     cfg.alchemicalAlembicCanShiftClick);
             return net.minecraft.world.InteractionResult.SUCCESS;
         });
-
-        CONFIG_SYNC = builder.register();
 
         debug("INIT: {} completed the initialization phase.", ModHelper.friendlyName());
     }
@@ -176,7 +184,7 @@ public class LepidopteraAPI implements LepidopteraMod {
                 ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE, ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE,
                 ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE);
 
-        if (SYNCED_CONFIG.get().showAlembicInCreativeTabs) {
+        if (SYNCED_CONFIG != null && SYNCED_CONFIG.get().showAlembicInCreativeTabs) {
             //noinspection UnstableApiUsage
             CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES,
                     () -> new ItemStack(LepidopteraItems.DEPLETED_ALEMBIC.get()));
@@ -194,8 +202,8 @@ public class LepidopteraAPI implements LepidopteraMod {
     @Override
     public void serverStarted(MinecraftServer server) {
         currentServer = server;
-        if (CONFIG_SYNC != null) {
-            CONFIG_SYNC.startWatching(server);
+        if (SYNCED_CONFIG != null) {
+            SYNCED_CONFIG.serverStarted(server);
         }
         Compatibility.serverStarted(server);
     }
@@ -203,8 +211,8 @@ public class LepidopteraAPI implements LepidopteraMod {
     @Override
     public void serverStopped() {
         Compatibility.serverStopped();
-        if (CONFIG_SYNC != null) {
-            CONFIG_SYNC.stopWatching();
+        if (SYNCED_CONFIG != null) {
+            SYNCED_CONFIG.serverStopped();
         }
         currentServer = null;
     }

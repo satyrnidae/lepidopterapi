@@ -23,13 +23,6 @@ public class LepidopteraAPIClient implements LepidopteraMod {
     }
 
     @Override
-    public void init() {
-        if (LepidopteraAPI.CONFIG_SYNC != null) {
-            LepidopteraAPI.CONFIG_SYNC.registerClientHandlers();
-        }
-    }
-
-    @Override
     public void postInit() {
         // Register the InventorySize GUI entry type provider for the demo field in LepidopteraConfig.
         // Downstream mods should make their own equivalent call for their own config classes.

@@ -7,8 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
  * Encodes and decodes a config value to/from a network buffer.
  *
  * <p>Implement one instance per config category and pass it to
- * {@link ServerConfigSync.Builder#commonConfig} or
- * {@link ServerConfigSync.Builder#clientOverride}.</p>
+ * {@link SyncedConfig#builder(String, ConfigCodec, me.shedaniel.autoconfig.ConfigHolder)}.</p>
  *
  * <p>Implementations must be stateless - the same instance is reused for every
  * encode/decode call.</p>

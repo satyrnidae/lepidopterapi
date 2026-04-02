@@ -366,7 +366,88 @@ public final class T9n {
         return configOption(ConfigHelper.name(configClass), parents, option);
     }
 
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configOption(final String configName, final String... path) {
+        return configOption(configName, String.join(".", path));
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configOption(final Config config, final String... path) {
+        return configOption(config.name(), String.join(".", path));
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configOption(final Class<?> configClass, final String... path) {
+        return configOption(ConfigHelper.name(configClass), String.join(".", path));
+    }
+
     //#endregion Options
+
+    //#region Category
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configCategory(final String configName, final String category) {
+        return String.format("text.autoconfig.%s.category.%s", configName, category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String configCategory(final Config config, final String category) {
+        return configCategory(config.name(), category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configCategory(final Class<?> configClass, final String category) {
+        return configCategory(ConfigHelper.name(configClass), category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configCategory(final String configName, final String parent, final String category) {
+        return String.format("text.autoconfig.%s.category.%s.%s", configName, parent, category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String configCategory(final Config config, final String parent, final String category) {
+        return configCategory(config.name(), parent, category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String configCategory(final Class<?> configClass, final String parent, final String category) {
+        return configCategory(ConfigHelper.name(configClass), parent, category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    public static String configCategory(final String configName, final String[] parents, final String category) {
+        return configCategory(configName, String.join(".", parents), category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String configCategory(final Config config, final String[] parents, final String category) {
+        return configCategory(config.name(), parents, category);
+    }
+
+    @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
+    @Contract(pure = true)
+    @SuppressWarnings("unused")
+    public static String configCategory(final Class<?> configClass, final String[] parents, final String category) {
+        return configCategory(ConfigHelper.name(configClass), parents, category);
+    }
+
+    //#endregion Categories
 
     //#region Tooltips
 
