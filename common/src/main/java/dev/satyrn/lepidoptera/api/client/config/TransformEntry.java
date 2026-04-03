@@ -704,7 +704,17 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         try {
             final float v = Float.parseFloat(text);
             switch (activeMode) {
-                case ROTATE    -> { if (rotation != null) rotation[boxIdx] = v; }
+                case ROTATE    -> {
+                    if (rotation != null) {
+                        final float clamped = ((v % 360f) + 360f) % 360f;
+                        rotation[boxIdx] = clamped;
+                        if (clamped != v) {
+                            suppressEditUpdate = true;
+                            editBoxes[boxIdx].setValue(String.valueOf(clamped));
+                            suppressEditUpdate = false;
+                        }
+                    }
+                }
                 case TRANSLATE -> { if (offset   != null) offset[boxIdx]   = v; }
                 case SCALE     -> { if (boxIdx == 0) scaleHolder[0] = Math.max(0.01f, v); }
             }
