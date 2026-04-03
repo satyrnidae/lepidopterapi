@@ -4,10 +4,19 @@ import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.ModMeta;
 import dev.satyrn.lepidoptera.api.WithLocation;
 import dev.satyrn.lepidoptera.api.lang.FormattedStringBuilder;
+import dev.satyrn.lepidoptera.api.lang.T9n;
+import me.shedaniel.autoconfig.annotation.Config;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.function.Supplier;
 
 /**
  * Abstract base for mod-specific NeoForge language (translation) data providers.
@@ -67,13 +76,13 @@ public abstract class ModLanguageProvider extends LanguageProvider implements Wi
      * of the given {@link StringBuilder}.
      *
      * @param key     the translation key
-     * @param builder the builder whose {@code toString()} value is the translation
+     * @param value the builder whose {@code toString()} value is the translation
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    protected void add(String key, final StringBuilder builder) {
-        this.add(key, builder.toString());
+    protected void add(String key, final StringBuilder value) {
+        this.add(key, value.toString());
     }
 
     /**
@@ -81,27 +90,828 @@ public abstract class ModLanguageProvider extends LanguageProvider implements Wi
      * of the given {@link FormattedStringBuilder}.
      *
      * @param key     the translation key
-     * @param builder the builder whose {@link FormattedStringBuilder#build()} value is the translation
+     * @param value the builder whose {@link FormattedStringBuilder#build()} value is the translation
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    protected void add(String key, final FormattedStringBuilder builder) {
-        this.add(key, builder.toString());
+    protected final void add(String key, final FormattedStringBuilder value) {
+        this.add(key, value.toString());
     }
 
     /**
      * Adds a translation keyed by the enum constant's {@link Enum#name()}.
      *
-     * @param anEnum the enum constant whose name is used as the key
-     * @param name   the translation value
+     * @param key the enum constant whose name is used as the key
+     * @param value   the translation value
      * @param <T>    the enum type
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    protected <T extends Enum<T>> void add(final Enum<T> anEnum, String name) {
-        this.add(anEnum.name(), name);
+    protected final <T extends Enum<T>> void add(final Enum<T> key, String value) {
+        this.add(T9n.enumKey(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final <T extends Enum<T>> void add(final Enum<T> key, final StringBuilder value) {
+        this.add(T9n.enumKey(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final <T extends Enum<T>> void add(final Enum<T> key, final FormattedStringBuilder value) {
+        this.add(T9n.enumKey(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final String configName, final String value) {
+        this.add(T9n.configTitle(configName), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Config config, final String value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Class<?> config, final String value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final String configName, final StringBuilder value) {
+        this.add(T9n.configTitle(configName), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Config config, final StringBuilder value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Class<?> config, final StringBuilder value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final String configName, final FormattedStringBuilder value) {
+        this.add(T9n.configTitle(configName), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Config config, final FormattedStringBuilder value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTitle(final Class<?> config, final FormattedStringBuilder value) {
+        this.add(T9n.configTitle(config), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String key, final String value) {
+        this.add(T9n.configKey(configName, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String key, final String value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String key, final String value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(configName, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(configName, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String parent, final String key, final String value) {
+        this.add(T9n.configKey(configName, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String parent, final String key, final String value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String parent, final String key, final String value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String parent, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(configName, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String parent, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String parent, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String parent, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(configName, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String parent, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String parent, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, parent, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String[] parents, final String key, final String value) {
+        this.add(T9n.configKey(configName, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String[] parents, final String key, final String value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String[] parents, final String key, final String value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String[] parents, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(configName, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String[] parents, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String[] parents, final String key, final StringBuilder value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final String configName, final String[] parents, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(configName, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Config config, final String[] parents, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigKey(final Class<?> config, final String[] parents, final String key, final FormattedStringBuilder value) {
+        this.add(T9n.configKey(config, parents, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String option, final String value) {
+        this.add(T9n.configOption(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String option, final String value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String option, final String value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String parent, final String option, final String value) {
+        this.add(T9n.configOption(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String parent, final String option, final String value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String parent, final String option, final String value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String[] parents, final String option, final String value) {
+        this.add(T9n.configOption(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String[] parents, final String option, final String value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String[] parents, final String option, final String value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final String configName, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Config config, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigOption(final Class<?> config, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configOption(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String category, final String value) {
+        this.add(T9n.configCategory(configName, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String category, final String value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String category, final String value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(configName, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(configName, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String parent, final String category, final String value) {
+        this.add(T9n.configCategory(configName, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String parent, final String category, final String value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String parent, final String category, final String value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String parent, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(configName, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String parent, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String parent, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String parent, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(configName, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String parent, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String parent, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, parent, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String[] parents, final String category, final String value) {
+        this.add(T9n.configCategory(configName, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String[] parents, final String category, final String value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String[] parents, final String category, final String value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String[] parents, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(configName, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String[] parents, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String[] parents, final String category, final StringBuilder value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final String configName, final String[] parents, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(configName, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Config config, final String[] parents, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigCategory(final Class<?> config, final String[] parents, final String category, final FormattedStringBuilder value) {
+        this.add(T9n.configCategory(config, parents, category), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String option, final String value) {
+        this.add(T9n.configTooltip(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String option, final String value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String option, final String value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(configName, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(configName, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String parent, final String option, final String value) {
+        this.add(T9n.configTooltip(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String parent, final String option, final String value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String parent, final String option, final String value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String parent, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(configName, parent, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String parent, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, parent, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String parent, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, parent, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String parent, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(configName, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String parent, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, parent, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String[] parents, final String option, final String value) {
+        this.add(T9n.configTooltip(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String[] parents, final String option, final String value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String[] parents, final String option, final String value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String[] parents, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(configName, parents, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String[] parents, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, parents, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String[] parents, final String option, final String[] value) {
+        for (int i = 0; i < value.length; i++) {
+            this.add(T9n.configTooltip(config, parents, option, i), value[i]);
+        }
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String[] parents, final String option, final StringBuilder value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final String configName, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(configName, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Config config, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addConfigTooltip(final Class<?> config, final String[] parents, final String option, final FormattedStringBuilder value) {
+        this.add(T9n.configTooltip(config, parents, option), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addNetMsg(final String key, final String value) {
+        this.add(T9n.netMsg(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addNetMsg(final String key, final StringBuilder value) {
+        this.add(T9n.netMsg(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addNetMsg(final String key, final FormattedStringBuilder value) {
+        this.add(T9n.netMsg(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addTip(final String key, final String value) {
+        this.add(T9n.tip(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addTip(final String key, final StringBuilder value) {
+        this.add(T9n.tip(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addTip(final String key, final FormattedStringBuilder value) {
+        this.add(T9n.tip(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addItemDesc(final ItemLike item, final String value) {
+        this.add(T9n.itemDesc(item), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addItemDesc(final ItemLike item, final StringBuilder value) {
+        this.add(T9n.itemDesc(item), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addItemDesc(final ItemLike item, final FormattedStringBuilder value) {
+        this.add(T9n.itemDesc(item), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addItemDesc(final Supplier<? extends ItemLike> item, final String value) {
+        this.add(T9n.itemDesc(item), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGamerule(final String key, final String value) {
+        this.add(T9n.gamerule(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGamerule(final String key, final StringBuilder value) {
+        this.add(T9n.gamerule(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGamerule(final String key, final FormattedStringBuilder value) {
+        this.add(T9n.gamerule(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGameruleDesc(final String key, final String value) {
+        this.add(T9n.gameruleDesc(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGameruleDesc(final String key, final StringBuilder value) {
+        this.add(T9n.gameruleDesc(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGameruleDesc(final String key, final FormattedStringBuilder value) {
+        this.add(T9n.gameruleDesc(key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGui(final String key, final String value) {
+        this.add(T9n.gui(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGui(final String key, final StringBuilder value) {
+        this.add(T9n.gui(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addGui(final String key, final FormattedStringBuilder value) {
+        this.add(T9n.gui(this.metadata, key), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModName(final String value) {
+        this.add(T9n.modMenuName(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModName(final StringBuilder value) {
+        this.add(T9n.modMenuName(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModName(final FormattedStringBuilder value) {
+        this.add(T9n.modMenuName(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModDesc(final String value) {
+        this.add(T9n.modMenuDesc(this.metadata), value);
+        this.add(T9n.fmlDesc(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModDesc(final StringBuilder value) {
+        this.add(T9n.modMenuDesc(this.metadata), value);
+        this.add(T9n.fmlDesc(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModDesc(final FormattedStringBuilder value) {
+        this.add(T9n.modMenuDesc(this.metadata), value);
+        this.add(T9n.fmlDesc(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModSummary(final String value) {
+        this.add(T9n.modMenuSummary(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModSummary(final StringBuilder value) {
+        this.add(T9n.modMenuSummary(this.metadata), value);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void addModSummary(final FormattedStringBuilder value) {
+        this.add(T9n.modMenuSummary(this.metadata), value);
     }
 
     /**

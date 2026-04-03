@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.beans.BeanProperty;
 
+@SuppressWarnings("unused")
 @Transformation(rotation = true, offset = true)
 public final class RotationOffset implements NestingConfigData<RotationOffset> {
     @ConfigEntry.Gui.TransitiveObject

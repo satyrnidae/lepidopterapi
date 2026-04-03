@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.beans.BeanProperty;
 
+@SuppressWarnings("unused")
 @Transformation(rotation = true, scale = true)
 public final class RotationScale implements NestingConfigData<RotationScale> {
     @ConfigEntry.Gui.TransitiveObject

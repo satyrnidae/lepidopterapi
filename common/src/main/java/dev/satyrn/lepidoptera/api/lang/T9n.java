@@ -148,7 +148,7 @@ public final class T9n {
      * Returns a nested Cloth Config key: {@code text.autoconfig.<configName>.<parent>.<key>}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parent     the intermediate path segment (e.g. a sub-section name)
+     * @param parent     the intermediate path segment (e.g. a subsection name)
      * @param key        the leaf key
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
@@ -281,11 +281,11 @@ public final class T9n {
      * {@code text.autoconfig.<configName>.option.<parent>.<option>}.
      *
      * <p>Use for options inside a {@link me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject}
-     * sub-section, where {@code parent} is the field name of the sub-section.</p>
+     * subsection, where {@code parent} is the field name of the subsection.</p>
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parent     the sub-section field name
-     * @param option     the config field name within the sub-section
+     * @param parent     the subsection field name
+     * @param option     the config field name within the subsection
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
@@ -328,7 +328,7 @@ public final class T9n {
      * Parent segments are joined with {@code .}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parents    ordered sub-section field names above {@code option}
+     * @param parents    ordered subsection field names above {@code option}
      * @param option     the config field name at the leaf
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
@@ -368,12 +368,14 @@ public final class T9n {
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
+    @SuppressWarnings("unused")
     public static String configOption(final String configName, final String... path) {
         return configOption(configName, String.join(".", path));
     }
 
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
     @Contract(pure = true)
+    @SuppressWarnings("unused")
     public static String configOption(final Config config, final String... path) {
         return configOption(config.name(), String.join(".", path));
     }
@@ -547,8 +549,8 @@ public final class T9n {
      * {@code text.autoconfig.<configName>.option.<parent>.<option>.@Tooltip}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parent     the sub-section field name
-     * @param option     the config field name within the sub-section
+     * @param parent     the subsection field name
+     * @param option     the config field name within the subsection
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
@@ -591,7 +593,7 @@ public final class T9n {
      * Parent segments are joined with {@code .}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parents    ordered sub-section field names above {@code option}
+     * @param parents    ordered subsection field names above {@code option}
      * @param option     the config field name at the leaf
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
@@ -634,8 +636,8 @@ public final class T9n {
      * {@code text.autoconfig.<configName>.option.<parent>.<option>.@Tooltip[N]}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parent     the sub-section field name
-     * @param option     the config field name within the sub-section
+     * @param parent     the subsection field name
+     * @param option     the config field name within the subsection
      * @param line       the 0-based tooltip line index
      *
      * @since 1.0.0-SNAPSHOT.1+1.21.1
@@ -685,7 +687,7 @@ public final class T9n {
      * Parent segments are joined with {@code .}.
      *
      * @param configName the value of {@link Config#name()} on the config class
-     * @param parents    ordered sub-section field names above {@code option}
+     * @param parents    ordered subsection field names above {@code option}
      * @param option     the config field name at the leaf
      * @param line       the 0-based tooltip line index
      *
@@ -1103,7 +1105,6 @@ public final class T9n {
      * @since 1.0.0-SNAPSHOT.1+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.1+1.21.1")
-    @SuppressWarnings("unused")
     public static String itemDesc(final Supplier<? extends ItemLike> supplier) {
         return String.format("%s.desc", supplier.get().asItem().getDescriptionId());
     }
@@ -1112,7 +1113,7 @@ public final class T9n {
 
     //#endregion Items
 
-    //#region Gamerules
+    //#region Game Rules
 
     /**
      * Returns a game rule translation key: {@code gamerule.<key>}.
@@ -1140,7 +1141,7 @@ public final class T9n {
         return String.format("gamerule.%s.description", String.join(".", key));
     }
 
-    //#endregion Gamerules
+    //#endregion Game Rules
 
     //#region Gui
 
@@ -1410,4 +1411,80 @@ public final class T9n {
     //#endregion EntityTags
 
     //#endregion Tags
+
+    //#region Modloader / mod menu specific metadata translations
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuName(final String modId) {
+        return String.format("modmenu.nameTranslation.%s", modId);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuName(final ModMeta metadata) {
+        return modMenuName(metadata.name());
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuName(final Class<?> modClass) {
+        return modMenuName(ModHelper.modId(modClass));
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuDesc(final String modId) {
+        return String.format("modmenu.descriptionTranslation.%s", modId);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuDesc(final ModMeta metadata) {
+        return modMenuDesc(metadata.name());
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuDesc(final Class<?> modClass) {
+        return modMenuDesc(ModHelper.modId(modClass));
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuSummary(final String modId) {
+        return String.format("modmenu.summaryTranslation.%s", modId);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String modMenuSummary(final ModMeta metadata) {
+        return modMenuSummary(metadata.name());
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public String modMenuSummary(final Class<?> modClass) {
+        return modMenuSummary(ModHelper.modId(modClass));
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String fmlDesc(final String modId) {
+        return String.format("fml.menu.mods.info.description.%s", modId);
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String fmlDesc(final ModMeta metadata) {
+        return fmlDesc(metadata.name());
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @Contract(pure = true)
+    public static String fmlDesc(final Class<?> modClass) {
+        return fmlDesc(ModHelper.modId(modClass));
+    }
+
+    //#endregion Modloader / mod menu specific metadata translations
 }

@@ -16,12 +16,7 @@ class SyncedConfigTest {
 
     // --- Minimal stubs ---
 
-    static final class Value implements ConfigData {
-        final String text;
-
-        Value(final String text) {
-            this.text = text;
-        }
+    record Value(String text) implements ConfigData {
     }
 
     static final class StubCodec implements ConfigCodec<Value> {
@@ -43,6 +38,7 @@ class SyncedConfigTest {
      * (registration tests are integration concerns). {@link #setConfig} lets tests mutate the
      * returned value to verify that {@link SyncedConfig#get()} is not a snapshot.
      */
+    @SuppressWarnings("NonExtendableApiUsage")
     static final class StubHolder implements ConfigHolder<Value> {
         private Value config;
 

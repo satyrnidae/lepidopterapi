@@ -125,7 +125,7 @@ public class LepidopteraAPI implements LepidopteraMod {
 
         final var holder = AutoConfig.getConfigHolder(LepidopteraConfig.class);
 
-        SYNCED_CONFIG = SyncedConfig.<LepidopteraConfig>builder(MOD_ID, LepidopteraConfig.Codec.INSTANCE, holder)
+        SYNCED_CONFIG = SyncedConfig.builder(MOD_ID, LepidopteraConfig.Codec.INSTANCE, holder)
                 .networkVersion(ModHelper.netVersion(), T9n.netMsg(ModHelper.metadata(), "versionMismatch"))
                 .watchFile(Platform.getConfigFolder().resolve("lepidoptera/config.yaml"))
                 .register()

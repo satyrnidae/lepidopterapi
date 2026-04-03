@@ -81,17 +81,16 @@ public class LepidopteraTokLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "s: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
 
+        // sewi = rotate/up, tawa = translate/move, suli = scale/size
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "rotate"),    "sewi");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "translate"), "tawa");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "scale"),     "suli");
+
         this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "pona");
         this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "suwi");
 
         this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "luken len lawa ilo telo nasa");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "x"), "o lukin lon sewi anu lon anpa");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "y"), "o lukin lon poka lawa anu poka pilin");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "z"), "o linja lon poka");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "x"), "o tawa lon poka");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "y"), "o tawa sewi o tawa anpa");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "z"), "o tawa o tawa sin");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "scale"), "o suli anu lili");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform"), "suli anu sewi anu tawa len lawa ilo telo nasa");
 
         this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "len soweli");
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "len sijelo");

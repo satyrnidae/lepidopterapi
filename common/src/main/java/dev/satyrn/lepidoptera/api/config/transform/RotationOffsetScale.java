@@ -25,16 +25,19 @@ public final class RotationOffsetScale implements NestingConfigData<RotationOffs
         this(new Rotation(), new Offset(), 1.0F);
     }
 
+    @SuppressWarnings("unused")
     public RotationOffsetScale(final float scale) {
         this(new Rotation(), new Offset(), scale);
     }
 
+    @SuppressWarnings("unused")
     public RotationOffsetScale(final float rotX,
                                final float rotY,
                                final float rotZ) {
         this(new Rotation(rotX, rotY, rotZ), new Offset(), 1.0F);
     }
 
+    @SuppressWarnings("unused")
     public RotationOffsetScale(final float rotX,
                                final float rotY,
                                final float rotZ,
@@ -42,6 +45,7 @@ public final class RotationOffsetScale implements NestingConfigData<RotationOffs
         this(new Rotation(rotX, rotY, rotZ), new Offset(), scale);
     }
 
+    @SuppressWarnings("unused")
     public RotationOffsetScale(final float rotX,
                                final float rotY,
                                final float rotZ,
@@ -51,6 +55,7 @@ public final class RotationOffsetScale implements NestingConfigData<RotationOffs
         this(new Rotation(rotX, rotY, rotZ), new Offset(offsetX, offsetY, offsetZ), 1.0F);
     }
 
+    @SuppressWarnings("unused")
     public RotationOffsetScale(final float rotX,
                                final float rotY,
                                final float rotZ,

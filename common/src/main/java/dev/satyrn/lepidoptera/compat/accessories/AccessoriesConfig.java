@@ -1,6 +1,7 @@
 package dev.satyrn.lepidoptera.compat.accessories;
 
 import dev.satyrn.lepidoptera.api.config.NestingConfigData;
+import dev.satyrn.lepidoptera.api.config.TransformField;
 import dev.satyrn.lepidoptera.api.config.serializers.YamlComment;
 import dev.satyrn.lepidoptera.api.config.sync.ConfigCodec;
 import dev.satyrn.lepidoptera.api.config.transform.RotationOffsetScale;
@@ -20,10 +21,12 @@ import net.minecraft.network.FriendlyByteBuf;
 public class AccessoriesConfig implements NestingConfigData<AccessoriesConfig> {
 
     @YamlComment("Enable the custom accessory renderer for the Alchemical Alembic in the Accessories hat slot.")
+    @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean enableAlembicHatRenderer = true;
 
     @YamlComment("Transform of the Alchemical Alembic when rendered as an Accessories hat.")
-    @ConfigEntry.Gui.TransitiveObject
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @TransformField(displayObject = AccessoriesTransformDisplay.class)
     public RotationOffsetScale alembicHatTransform = new RotationOffsetScale();
 
     @Override

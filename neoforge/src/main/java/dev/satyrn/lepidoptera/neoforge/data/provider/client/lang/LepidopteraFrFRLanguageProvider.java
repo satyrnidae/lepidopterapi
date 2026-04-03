@@ -65,17 +65,15 @@ public class LepidopteraFrFRLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H : %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
 
-        this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "Default");
-        this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "Accessories");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "rotate"),    "Rotation");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "translate"), "Translation");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "scale"),     "Échelle");
 
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "Render alembic in hat slot");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "x"), "X rotation in degrees");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "y"), "Y rotation in degrees");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "z"), "Z rotation in degrees");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "x"), "X offset");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "y"), "Y offset");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "z"), "Z offset");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "scale"), "Scale multiplier");
+        this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "Défaut");
+        this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "Accessoires");
+
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "Afficher l'alambic dans le casque");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform"), "Décalage, rotation, et échelle de l'Alambic dans le casque");
 
         this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Armure de l'animaux");
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Plastrons");

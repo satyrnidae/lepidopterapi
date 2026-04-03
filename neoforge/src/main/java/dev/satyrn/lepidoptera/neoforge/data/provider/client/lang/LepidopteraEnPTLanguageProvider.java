@@ -61,17 +61,15 @@ public class LepidopteraEnPTLanguageProvider extends ModLanguageProvider {
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "height_short"), "H: %s");
         this.add(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"), "%s × %s");
 
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "rotate"),    "Rotate");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "translate"), "Translate");
+        this.add(T9n.gui(LepidopteraAPI.class, "transform", "mode", "scale"),     "Scale");
+
         this.add(T9n.configCategory(LepidopteraConfig.class, "default"), "Mainsails");
         this.add(T9n.configCategory(LepidopteraConfig.class, "accessories"), "Booty");
 
         this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer"), "Show th' Bottle o' th' Chemist on yer noggin");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "x"), "Tilt towards aft n' stern");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "y"), "Turn t' port n' starboard");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "rotation", "z"), "Tilt t' port n' starboard");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "x"), "Move t' port n' starboard");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "y"), "Move up n' down");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "offset", "z"), "Move t' aft n' stern");
-        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "scale"), "Size o' yer booty");
+        this.add(T9n.configOption(LepidopteraConfig.class, "accessories", "alembicHatTransform"), "Size, yaw, n' location o' th' Bottle o' th' Chemist on yer noggin");
 
         this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Cuirass o' the animals");
         this.add(T9n.itemTag(ApiItemTags.CHEST_EQUIPMENT), "Cuirasses");

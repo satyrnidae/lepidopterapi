@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.beans.BeanProperty;
 
+@SuppressWarnings("unused")
 @Transformation(offset = true, scale = true)
 public final class OffsetScale implements NestingConfigData<OffsetScale> {
     @ConfigEntry.Gui.TransitiveObject
