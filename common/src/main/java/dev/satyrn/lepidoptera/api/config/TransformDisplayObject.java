@@ -1,9 +1,7 @@
 package dev.satyrn.lepidoptera.api.config;
 
-import com.mojang.math.Axis;
-import dev.satyrn.lepidoptera.api.config.transform.Transformation;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import dev.satyrn.lepidoptera.api.config.transform.Rotation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -67,30 +65,24 @@ public interface TransformDisplayObject {
         return new Quaternionf();
     }
 
-    /**
-     * Applies the configurable rotation values to the pose stack.
-     *
-     * <p>The default implementation maps rotation[0] → X, rotation[1] → Y, rotation[2] → Z
-     * (negated, so positive = clockwise from the viewer). Override this to remap axes when
-     * the item's baked-in initial transform (e.g. an XP 90° from
-     * {@link ItemDisplayContext#FIXED}) causes the world axes to feel swapped to the user.</p>
-     *
-     * <p>Only called when {@code caps.rotation()} is {@code true} and {@code rotation} is
-     * non-null, but implementations should guard themselves regardless.</p>
-     *
-     * @since 1.0.1-SNAPSHOT.3+1.21.1
-     */
     @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
-    @Environment(EnvType.CLIENT)
-    default void applyPose(final com.mojang.blaze3d.vertex.PoseStack pose,
-                           final float[] rotation) {
-        if (Math.abs(rotation[0]) > 1e-4f)
-            pose.mulPose(Axis.XP.rotation((float) Math.toRadians(rotation[0])));
-        if (Math.abs(rotation[1]) > 1e-4f)
-            pose.mulPose(Axis.YP.rotation((float) Math.toRadians(rotation[1])));
-        if (Math.abs(rotation[2]) > 1e-4f)
-            // Negate: positive = clockwise from viewer (user expectation)
-            pose.mulPose(Axis.ZP.rotation(-(float) Math.toRadians(rotation[2])));
+    default Quaternionf calcConfiguredPose(Rotation rotation) {
+        return calcConfiguredPose(new float[] {rotation.getX(), rotation.getY(), rotation.getZ()});
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    default Quaternionf calcConfiguredPose(float[] rotation) {
+        float[] hangle = {
+                (float)Math.toRadians(rotation[0]/2f),
+                (float)Math.toRadians(rotation[1]/2f),
+                (float)Math.toRadians(rotation[2]/2f)
+        };
+        return new Quaternionf(
+                Mth.sin(hangle[0])*Mth.cos(hangle[1])*Mth.cos(hangle[2])-Mth.cos(hangle[0])*Mth.sin(hangle[1])*Mth.sin(hangle[2]),
+                Mth.cos(hangle[0])*Mth.sin(hangle[1])*Mth.cos(hangle[2])+Mth.sin(hangle[0])*Mth.cos(hangle[1])*Mth.sin(hangle[2]),
+                Mth.cos(hangle[0])*Mth.cos(hangle[1])*Mth.sin(hangle[2])-Mth.sin(hangle[0])*Mth.sin(hangle[1])*Mth.cos(hangle[2]),
+                Mth.cos(hangle[0])*Mth.cos(hangle[1])*Mth.cos(hangle[2])+Mth.sin(hangle[0])*Mth.sin(hangle[1])*Mth.sin(hangle[2])
+        );
     }
 
     @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")

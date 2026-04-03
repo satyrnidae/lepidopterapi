@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -70,7 +71,7 @@ final class TransformViewport {
     private static final int COLOR_AXIS_Z       = 0xFF44CC44;
     private static final int COLOR_AXIS_Z_HOVER = 0xFF88FF88;
 
-    private static final int COLOR_VIEWPORT_BG     = 0xFF181818;
+    private static final int COLOR_VIEWPORT_BG     = 0x44181818;
     private static final int COLOR_VIEWPORT_BORDER = 0xFF505050;
 
     /** Degrees of rotation change per pixel of drag. */
@@ -128,8 +129,10 @@ final class TransformViewport {
     private double dragStartMouseY;
     private float  dragStartValue;
     /** Normalised screen-space direction of the dragged axis (for projected drag). */
-    private float  dragAxisScreenDX = 1f;
-    private float  dragAxisScreenDY = 0f;
+    private float  dragAxisScreenDX   = 1f;
+    private float  dragAxisScreenDY   = 0f;
+    /** Sign multiplier for rotation drag: determined by which half of the ring was clicked. */
+    private float  dragRotationSign   = 1f;
 
     // -- Screen position caches (written each frame, read in mouse handlers) --
     private float axisOriginScreenX;
@@ -137,6 +140,8 @@ final class TransformViewport {
     private final float[][] axisTipScreen = new float[3][2];
     /** 3 rings × 8 sample points × {sx, sy} — used for rotation-ring hit-testing. */
     private final float[][][] ringScreenPoints = new float[3][8][2];
+    /** Pose matrix captured when drawing rotation rings — used to compute camera-facing sign. */
+    private final Matrix4f lastRotatePoseMat = new Matrix4f();
 
     // =====================================================================
     // Constructor
@@ -247,8 +252,7 @@ final class TransformViewport {
             pose.scale(s, s, s);
         }
 
-        // Translate and scale gizmos are world-space (pre-rotation): their handles
-        // must point along unrotated world axes regardless of item orientation.
+        // Translate and scale gizmos are world-space (pre-rotation).
         pose.pushPose();
         scaleInvariant(pose, 1.75F, 1.75F, 1.75F);
         if (mode == GizmoMode.TRANSLATE || mode == GizmoMode.SCALE) {
@@ -265,12 +269,13 @@ final class TransformViewport {
         }
         pose.popPose();
 
-        // All items face away from the camera by default in the item renderer; correct for it.
-        pose.mulPose(Axis.YP.rotationDegrees(180.0f));
-        pose.mulPose(displayObject.getInitialRotation());
         if (caps.rotation() && rotation != null) {
-            displayObject.applyPose(pose, rotation);
+            pose.mulPose(displayObject.calcConfiguredPose(rotation));
         }
+
+        pose.mulPose(displayObject.getInitialRotation());
+        // All items face away from the camera by default in the item renderer; correct for it.
+        pose.mulPose(Axis.YP.rotation(Mth.PI));
 
         // Item preview
         final ItemStack stack = displayObject.getDisplayStack();
@@ -281,10 +286,10 @@ final class TransformViewport {
             graphics.bufferSource().endBatch();
         }
 
-        // Rotation gizmo is local-space (post-rotation): rings align with the item's
-        // current orientation so they visually match the axes being edited.
+        // Rotation gizmo is local-space (post-rotation): rings align with the item's current
+        // axes.
         pose.pushPose();
-        // Undo the display object's initial rotation so the rings align with world axes.
+        pose.mulPose(Axis.YP.rotation(Mth.PI).conjugate());
         pose.mulPose(new Quaternionf(displayObject.getInitialRotation()).conjugate());
         scaleInvariant(pose, 1.25F, 1.25F, 1.25F);
         if (mode == GizmoMode.ROTATE) {
@@ -330,6 +335,7 @@ final class TransformViewport {
                 axisTipScreen[i][1] = v.y();
             }
         } else if (mode == GizmoMode.ROTATE) {
+            lastRotatePoseMat.set(mat);
             for (int i = 0; i < 3; i++) {
                 for (int pt = 0; pt < 8; pt++) {
                     final float ca = (float) Math.cos(pt * Math.PI / 4) * GIZMO_LENGTH;
@@ -462,6 +468,29 @@ final class TransformViewport {
                 dragAxisScreenDX = 1f;
                 dragAxisScreenDY = 0f;
             }
+            if (mode == GizmoMode.ROTATE) {
+                // "Wheel dragging": sign depends on which half of the ring was grabbed.
+                // 2D cross product of (click→center) × dragDir gives the side of the
+                // drag-axis line the click landed on.
+                final float toCenterX = axisOriginScreenX - (float) mouseX;
+                final float toCenterY = axisOriginScreenY - (float) mouseY;
+                final float cross = toCenterX * dragAxisScreenDY - toCenterY * dragAxisScreenDX;
+                final float crossSign = (cross >= 0f) ? 1f : -1f;
+
+                // Camera-face sign: if the ring's normal points toward the camera (Z > 0 in
+                // screen space) then the ring is viewed from its "back" face, which reverses
+                // the perceived rotation direction.
+                final Vector3f normal = new Vector3f(
+                        axis == 0 ? 1f : 0f,
+                        axis == 1 ? 1f : 0f,
+                        axis == 2 ? 1f : 0f);
+                lastRotatePoseMat.transformDirection(normal);
+                final float cameraSign = (normal.z() >= 0f) ? -1f : 1f;
+
+                dragRotationSign = crossSign * cameraSign * -1f;
+            } else {
+                dragRotationSign = 1f;
+            }
             return true;
         }
         // Empty viewport space → start orbit drag.
@@ -506,11 +535,12 @@ final class TransformViewport {
         return true;
     }
 
-    void mouseReleased(final double mouseX, final double mouseY, final int button) {
-        dragAxisIndex  = null;
-        dragMode       = null;
-        orbitDragging  = false;
-        middleDragging = false;
+    void mouseReleased() {
+        dragAxisIndex    = null;
+        dragMode         = null;
+        dragRotationSign = 1f;
+        orbitDragging    = false;
+        middleDragging   = false;
     }
 
     // =====================================================================
@@ -530,7 +560,8 @@ final class TransformViewport {
         switch (mode) {
             case ROTATE -> {
                 if (rotation != null) {
-                    rotation[axisIdx] = dragStartValue + totalDeltaPx * ROT_DRAG_SENSITIVITY;
+                    final float raw = dragStartValue + totalDeltaPx * ROT_DRAG_SENSITIVITY * dragRotationSign;
+                    rotation[axisIdx] = ((raw % 360f) + 360f) % 360f;
                     onChanged.run();
                 }
             }

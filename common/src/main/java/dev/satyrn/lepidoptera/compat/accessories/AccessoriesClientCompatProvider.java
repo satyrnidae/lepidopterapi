@@ -3,6 +3,8 @@ package dev.satyrn.lepidoptera.compat.accessories;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.config.transform.Rotation;
+import org.joml.Quaternionf;
 import dev.satyrn.lepidoptera.api.compatibility.ClientCompatibilityProvider;
 import dev.satyrn.lepidoptera.item.LepidopteraItems;
 import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
@@ -54,7 +56,7 @@ public final class AccessoriesClientCompatProvider extends ClientCompatibilityPr
         public <M extends LivingEntity> void render(
                 final ItemStack stack,
                 final SlotReference reference,
-                final PoseStack matrices,
+                final PoseStack pose,
                 final EntityModel<M> model,
                 final MultiBufferSource multiBufferSource,
                 final int light,
@@ -65,51 +67,48 @@ public final class AccessoriesClientCompatProvider extends ClientCompatibilityPr
                 final float netHeadYaw,
                 final float headPitch) {
 
-            // This doesn't update?
+            final AccessoriesTransformDisplay displayHelper = new AccessoriesTransformDisplay();
+
             final @Nullable AccessoriesConfig cfg = Objects.requireNonNull(LepidopteraAPI.SYNCED_CONFIG).get().accessories;
             if (!cfg.enableAlembicHatRenderer) {
                 return;
             }
 
-            matrices.pushPose();
+            pose.pushPose();
 
             // Navigate to the entity's head bone
             if (model instanceof HumanoidModel<?> humanoidModel) {
-                AccessoryRenderer.transformToModelPart(matrices, humanoidModel.head);
+                AccessoryRenderer.transformToModelPart(pose, humanoidModel.head);
             }
-            // Translate up one pixel
-            matrices.translate(0.0f, 0.125f, 0.0f);
-
-            matrices.translate(cfg.alembicHatTransform.getOffset().getX(),
+            // Attach the item to the top of the head first...
+            pose.translate(0f, 0.5f, 0f);
+            // ...then move it around by the configured amount
+            pose.translate(cfg.alembicHatTransform.getOffset().getX(),
                     cfg.alembicHatTransform.getOffset().getY(),
                     cfg.alembicHatTransform.getOffset().getZ());
 
-            // Apply configurable scale and center the item (1-block items need -0.5 offset)
+            // Scale item down first (~2/3 to match original HEAD display)...
+            pose.scale(0.67f, 0.67f, 0.67f);
+            // ...then up by config amt
             final float s = cfg.alembicHatTransform.getScale();
-            matrices.scale(s, s, s);
+            pose.scale(s, s, s);
 
-            // Rotate (5/8)π (112.5°) on the Y axis
-            matrices.mulPose(Axis.YP.rotation(Mth.PI));
+            // Apply configurable rotation via quaternion.
+            final Rotation r = cfg.alembicHatTransform.getRotation();
 
-            // Apply configurable rotation
-            if(Math.abs(cfg.alembicHatTransform.getRotation().getX()) > 1e-4f) {
-                matrices.rotateAround(Axis.XP.rotation(cfg.alembicHatTransform.getRotation().toRadiansX()),
-                        0.0f, 1.0f, 0.0f);
-            }
-            if (Math.abs(cfg.alembicHatTransform.getRotation().getY()) > 1e-4f) {
-                matrices.rotateAround(Axis.YP.rotation(cfg.alembicHatTransform.getRotation().toRadiansY()),
-                        0.0f, 1.0f, 0.0f);
-            }
-            if (Math.abs(cfg.alembicHatTransform.getRotation().getZ()) > 1e-4f) {
-                matrices.rotateAround(Axis.ZP.rotation(cfg.alembicHatTransform.getRotation().toRadiansZ()),
-                        0.0f, 1.0f, 0.0f);
-            }
+            pose.mulPose(displayHelper.calcConfiguredPose(r));
 
+            // Rotate frame item up 90°
+            pose.mulPose(displayHelper.getInitialRotation());
+            // Rotate π (180°) on the Y axis
+            pose.mulPose(Axis.YP.rotation(Mth.PI));
+
+            // We're rendering in Fixed mode so the rotation origin is correct.
             Minecraft.getInstance().getItemRenderer().renderStatic(
-                    stack, ItemDisplayContext.HEAD, light,
-                    OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, null, 0);
+                    stack, displayHelper.getDisplayContext(), light,
+                    OverlayTexture.NO_OVERLAY, pose, multiBufferSource, null, 0);
 
-            matrices.popPose();
+            pose.popPose();
         }
     }
 }

@@ -639,7 +639,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     @ApiStatus.Internal
     @Override
     public boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
-        viewport.mouseReleased(mouseX, mouseY, button);
+        viewport.mouseReleased();
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
