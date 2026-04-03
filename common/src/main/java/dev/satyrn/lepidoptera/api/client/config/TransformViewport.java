@@ -169,7 +169,8 @@ final class TransformViewport {
     void render(final GuiGraphics graphics,
                 final int vpX, final int vpY,
                 final int mouseX, final int mouseY,
-                final GizmoMode mode) {
+                final GizmoMode mode,
+                final int clipTop, final int clipBottom) {
         // Background + 1-px border
         graphics.fill(vpX,          vpY,          vpX + SIZE, vpY + SIZE,   COLOR_VIEWPORT_BG);
         graphics.fill(vpX,          vpY,          vpX + SIZE, vpY + 1,      COLOR_VIEWPORT_BORDER);
@@ -180,11 +181,15 @@ final class TransformViewport {
         final Minecraft mc   = Minecraft.getInstance();
         final double    gs   = mc.getWindow().getGuiScale();
         final int       winH = mc.getWindow().getHeight();
+        // Intersect viewport bounds with the scroll pane's clip region so the 3D scene
+        // doesn't overdraw UI elements below the list (e.g. Save/Cancel buttons).
+        final int scissorTop    = Math.max(vpY + 1,      clipTop);
+        final int scissorBottom = Math.min(vpY + SIZE - 1, clipBottom);
         RenderSystem.enableScissor(
                 (int)((vpX + 1) * gs),
-                (int)(winH - (vpY + SIZE - 1) * gs),
+                (int)(winH - scissorBottom * gs),
                 (int)((SIZE - 2) * gs),
-                (int)((SIZE - 2) * gs));
+                (int)((scissorBottom - scissorTop) * gs));
 
         final var pose = graphics.pose();
         pose.pushPose();
@@ -192,7 +197,7 @@ final class TransformViewport {
         // Camera: translate to viewport center (+ pan), apply orbit, scale (Y negated to
         // flip screen-Y → world-Y), then shift so the orbit focus sits at screen center.
         final float cs = SIZE * BASE_ZOOM * cameraZoom;
-        pose.translate(vpX + SIZE / 2.0f + panX, vpY + SIZE / 2.0f + panY, 100.0f);
+        pose.translate(vpX + SIZE / 2.0f + panX, vpY + SIZE / 2.0f + panY, 50.0f);
         pose.mulPose(Axis.YP.rotationDegrees(orbitYaw));
         pose.mulPose(Axis.XP.rotationDegrees(orbitPitch));
         pose.scale(cs, -cs, cs);

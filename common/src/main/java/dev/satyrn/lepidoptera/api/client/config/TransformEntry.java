@@ -1,5 +1,6 @@
 package dev.satyrn.lepidoptera.api.client.config;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
 import dev.satyrn.lepidoptera.api.config.TransformDisplayObject;
 import dev.satyrn.lepidoptera.api.config.TransformField;
@@ -9,6 +10,7 @@ import dev.satyrn.lepidoptera.api.config.transform.Transformation;
 import dev.satyrn.lepidoptera.api.lang.T9n;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.gui.registry.api.GuiProvider;
+import me.shedaniel.clothconfig2.gui.ClothConfigScreen;
 import me.shedaniel.clothconfig2.gui.entries.TooltipListEntry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,6 +22,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -35,8 +38,6 @@ import java.util.function.Supplier;
 
 // TODO: Edit box focusing does not unfocus other elements in the GUI; they are detached
 //   from the component chain somehow.
-// TODO: Much like the items in the viewport, the Translate / Rotate / Scale mode tabs
-//   are rendering outside of the scrollable area and should be masked.
 
 /**
  * A Cloth Config GUI entry for {@link Transformation @Transformation}-typed config fields.
@@ -83,8 +84,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     private static final int LABEL_WIDTH   = 12; // "X:" width
     private static final int INPUT_WIDTH   = FIELDS_WIDTH - LABEL_WIDTH - PADDING;
 
-    private static final int COLOR_TAB_ACTIVE    = 0xFF4A5880;
-    private static final int COLOR_TAB_INACTIVE  = 0xFF2A2A2A;
+    private static final ResourceLocation SPRITE_TAB_ACTIVE   = ResourceLocation.withDefaultNamespace("widget/button_disabled");
+    private static final ResourceLocation SPRITE_TAB_HOVERED  = ResourceLocation.withDefaultNamespace("widget/button_highlighted");
+    private static final ResourceLocation SPRITE_TAB_INACTIVE = ResourceLocation.withDefaultNamespace("widget/button");
     private static final int COLOR_TAB_TEXT      = 0xFFFFFFFF;
     private static final int COLOR_TAB_TEXT_DIM  = 0xFF888888;
     private static final int COLOR_LABEL         = 0xFFFFFFFF;
@@ -485,7 +487,13 @@ public final class TransformEntry extends TooltipListEntry<Object> {
                        final boolean isHovered,
                        final float delta) {
         lastRenderY = y;
-        final Font font = Minecraft.getInstance().font;
+        final Minecraft mc   = Minecraft.getInstance();
+        final Font      font = mc.font;
+
+        // Scroll list clip region — used to prevent overflow below Save/Cancel buttons
+        final ClothConfigScreen clothScreen = (ClothConfigScreen) getConfigScreen();
+        final int listTop    = clothScreen.listWidget.top;
+        final int listBottom = clothScreen.listWidget.bottom;
 
         // Row 1: field label
         graphics.drawString(font, getFieldName(), x + PADDING, y + PADDING, COLOR_LABEL);
@@ -502,16 +510,32 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         lastVpX = vpX;
         lastVpY = contentY;
 
-        // Viewport
-        viewport.render(graphics, vpX, contentY, mouseX, mouseY, activeMode);
+        // Shared scissor parameters — used by fields and tabs to clip to the scroll pane
+        final double gs   = mc.getWindow().getGuiScale();
+        final int    winH = mc.getWindow().getHeight();
 
-        // Numeric fields
+        // Viewport — pass list bounds so its scissor intersects with the scroll pane clip
+        viewport.render(graphics, vpX, contentY, mouseX, mouseY, activeMode, listTop, listBottom);
+
+        // Numeric fields — scissored to prevent overflow below Save/Cancel buttons
+        RenderSystem.enableScissor(
+                (int)(fieldsX * gs),
+                winH - (int)(listBottom * gs),
+                (int)(FIELDS_WIDTH * gs),
+                (int)((listBottom - listTop) * gs));
         renderFields(graphics, fieldsX, contentY, font, mouseX, mouseY, delta);
+        RenderSystem.disableScissor();
 
-        // Mode tabs (below the viewport, spanning full width)
+        // Mode tabs — scissored to the list widget's visible rect to prevent overflow
         if (modeCount > 1) {
             final int tabY = contentY + VIEWPORT_SIZE + PADDING;
-            renderModeTabs(graphics, x + PADDING, tabY, entryWidth - PADDING * 2, font);
+            RenderSystem.enableScissor(
+                    (int)(x * gs),
+                    winH - (int)(listBottom * gs),
+                    (int)(entryWidth * gs),
+                    (int)((listBottom - listTop) * gs));
+            renderModeTabs(graphics, x + PADDING, tabY, entryWidth - PADDING * 2, font, mouseX, mouseY);
+            RenderSystem.disableScissor();
         }
 
         super.render(graphics, index, y, x, entryWidth, entryHeight, mouseX, mouseY, isHovered, delta);
@@ -546,7 +570,8 @@ public final class TransformEntry extends TooltipListEntry<Object> {
 
     private void renderModeTabs(final GuiGraphics graphics,
                                 final int tabAreaX, final int tabAreaY,
-                                final int tabAreaW, final Font font) {
+                                final int tabAreaW, final Font font,
+                                final int mouseX, final int mouseY) {
         final int totalGap = (modeCount - 1); // 1px gaps between tabs
         final int tabW = (tabAreaW - totalGap) / modeCount;
         for (int i = 0; i < modeCount; i++) {
@@ -556,12 +581,17 @@ public final class TransformEntry extends TooltipListEntry<Object> {
             tabRects[i][2] = tabW;
             tabRects[i][3] = TAB_HEIGHT;
 
-            final boolean active = availableModes[i] == activeMode;
-            graphics.fill(tx, tabAreaY, tx + tabW, tabAreaY + TAB_HEIGHT,
-                    active ? COLOR_TAB_ACTIVE : COLOR_TAB_INACTIVE);
+            final boolean active  = availableModes[i] == activeMode;
+            final boolean hovered = !active
+                    && mouseX >= tx && mouseX < tx + tabW
+                    && mouseY >= tabAreaY && mouseY < tabAreaY + TAB_HEIGHT;
+            final ResourceLocation sprite = active  ? SPRITE_TAB_ACTIVE
+                                          : hovered ? SPRITE_TAB_HOVERED
+                                          :           SPRITE_TAB_INACTIVE;
+            graphics.blitSprite(sprite, tx, tabAreaY, tabW, TAB_HEIGHT);
             final Component label = tabLabel(availableModes[i]);
             graphics.drawCenteredString(font, label, tx + tabW / 2, tabAreaY + (TAB_HEIGHT - font.lineHeight) / 2,
-                    active ? COLOR_TAB_TEXT : COLOR_TAB_TEXT_DIM);
+                    active ? COLOR_TAB_TEXT_DIM : COLOR_TAB_TEXT);
         }
     }
 
