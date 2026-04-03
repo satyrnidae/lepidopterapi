@@ -23,19 +23,19 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
 
     @Override
     protected void addTranslations() {
-        this.add(T9n.item(LepidopteraItems.ALCHEMICAL_ALEMBIC), "Alchemical Alembic");
-        this.add(T9n.item(LepidopteraItems.DEPLETED_ALEMBIC), "Depleted Alembic");
+        this.add(LepidopteraItems.ALCHEMICAL_ALEMBIC, "Alchemical Alembic");
+        this.add(LepidopteraItems.DEPLETED_ALEMBIC, "Depleted Alembic");
 
         // This tag is region-specific
         this.addBodyEquipmentTag();
         this.add(ApiItemTags.CHEST_EQUIPMENT, "Chest equipment");
-        this.add(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE, "Quick-equip chest equipment");
+        this.add(ApiItemTags.CHEST_EQUIPMENT_SHIFTABLE, "Shift-click chest equipment");
         this.add(ApiItemTags.FEET_EQUIPMENT, "Footwear");
-        this.add(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE, "Quick-equip footwear");
+        this.add(ApiItemTags.FEET_EQUIPMENT_SHIFTABLE, "Shift-click footwear");
         this.add(ApiItemTags.HEAD_EQUIPMENT, "Hats");
-        this.add(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE, "Quick-equip hats");
+        this.add(ApiItemTags.HEAD_EQUIPMENT_SHIFTABLE, "Shift-click hats");
         this.add(ApiItemTags.LEGS_EQUIPMENT, "Pants");
-        this.add(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE, "Quick-equip pants");
+        this.add(ApiItemTags.LEGS_EQUIPMENT_SHIFTABLE, "Shift-click pants");
         this.add(ApiEntityTags.TICKS_FOOD, "Hungry Animals");
 
         this.addGui("inventory_size.width",        "Width: %s");
@@ -47,7 +47,9 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
         this.addGui("transform.mode.translate",    "Translate");
         this.addGui("transform.mode.scale",        "Scale");
 
-        this.addNetMsg("versionMismatch", "Incompatible Lepidoptera API version. Server: %s, Client: %s");
+        this.addNetMsg("versionMismatch",
+                new FormattedStringBuilder("Incompatible Lepidoptera API version.", ChatFormatting.RED)
+                        .append("\n").append("Server: %s, Client: %s"));
 
         this.addGamerule("doAnimalStarvation", "Animal Starvation");
         this.addGameruleDesc("doAnimalStarvation", "Allows animals to die from starvation if entity\nhunger for their type is enabled.");
@@ -58,23 +60,19 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
 
         this.addConfigOption(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", "Enable alembic crafting recipes");
         this.addConfigTooltip(LepidopteraConfig.class, "enableAlchemicalAlembicRecipes", new String[]{
-                "Changing this requires a server restart or /reload\n"+
-                "to take effect.",
-                "The server value is synced to the clients on join\n"+
-                "and on config reload."
+                "Changing this requires a server restart or /reload\nto take effect.",
+                "The server value is synced to the clients on join\nand on config reload."
         });
 
         this.addConfigOption(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", "Shift-click to equip alembic to head slot");
         this.addConfigTooltip(LepidopteraConfig.class, "alchemicalAlembicCanShiftClick", new String[] {
                 "Changes take effect when the config is reloaded.",
-                "The server value is synced to the clients on join\n"+
-                "and on config reload."
+                "The server value is synced to the clients on join\nand on config reload."
         });
 
         this.addConfigOption(LepidopteraConfig.class, "showAlembicInCreativeTabs", "Show alembic in the Creative inventory");
         this.addConfigTooltip(LepidopteraConfig.class, "showAlembicInCreativeTabs", new String[]{
-                "Toggles the alchemical alembic in the Tools and\n" +
-                "Utilities Creative tab.",
+                "Toggles the alchemical alembic in the Tools and\nUtilities Creative tab.",
                 new FormattedStringBuilder(
                 "Changing this value requires a full server", ChatFormatting.YELLOW).append("\n").append(
                 "restart.", ChatFormatting.YELLOW).toString()
@@ -91,9 +89,8 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
 
         this.addConfigOption(LepidopteraConfig.class, "demoInventorySize", "[Demo] Inventory size");
         this.addConfigTooltip(LepidopteraConfig.class, "demoInventorySize", new String[]{
-                "[Demo] Example inventory size entry for visual\n"+
-                "testing of the InventorySizeEntry widget.",
-                "Config file format: WxH (e.g. 9x3).\n"+
+                "[Demo] Example inventory size entry for visual\ntesting of the InventorySizeEntry widget.",
+                "Config file format: WxH (e.g. 9x3).",
                 "Max width: 9, max height: 4."
         });
 
@@ -101,17 +98,14 @@ public class LepidopteraEnUSLanguageProvider extends ModLanguageProvider {
 
         this.addConfigOption(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer", "Render alembic in hat slot");
         this.addConfigTooltip(LepidopteraConfig.class, "accessories", "enableAlembicHatRenderer", new String[]{
-                "If disabled, the alembic will not render on the\n" +
-                "user's head when placed in the hat slot.",
-                "Does not affect the rendering of the alembic hat\n"+
-                "in the vanilla helmet slot."
+                "If disabled, the alembic will not render on the\nuser's head when placed in the hat slot.",
+                "Does not affect the rendering of the alembic hat\nin the vanilla helmet slot."
         });
 
         this.addConfigOption(LepidopteraConfig.class, "accessories", "alembicHatTransform", "Size, rotation, and scale of the Alembic in the hat slot");
         this.addConfigTooltip(LepidopteraConfig.class, "accessories", "alembicHatTransform", new String[]{
                 "Approximate transformation of the alembic hat.",
-                "Does not affect the rendering of the alembic hat\n"+
-                "in the vanilla helmet slot."
+                "Does not affect the rendering of the alembic hat\nin the vanilla helmet slot."
         });
     }
 

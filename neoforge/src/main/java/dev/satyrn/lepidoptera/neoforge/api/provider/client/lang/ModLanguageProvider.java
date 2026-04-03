@@ -8,11 +8,7 @@ import dev.satyrn.lepidoptera.api.lang.T9n;
 import me.shedaniel.autoconfig.annotation.Config;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -69,6 +65,11 @@ public abstract class ModLanguageProvider extends LanguageProvider implements Wi
     @Override
     protected void addTranslations() {
         // Does nothing in the base class
+    }
+
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    protected final void add(Supplier<? extends ItemLike> key, String value) {
+        this.add(key.get().asItem(), value);
     }
 
     /**

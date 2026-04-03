@@ -19,7 +19,7 @@
   "lepidoptera_api$tool_effectiveness$stone": "kiwen",
   "lepidoptera_api$tool_effectiveness$wooden": "kasi",
   "network.lepidoptera_api.versionMismatch": "nanpa Lepidoptera API li ante. ma tomo: %s, ilo: %s",
-  "tag.entityType.lepidoptera_api.ticks_food": "soweli wile moku",
+  "tag.entity_type.lepidoptera_api.ticks_food": "soweli wile moku",
   "tag.item.lepidoptera_api.equipment.body": "len soweli",
   "tag.item.lepidoptera_api.equipment.chest": "len sijelo",
   "tag.item.lepidoptera_api.equipment.chest.quick_equip": "len sijelo pi tenpo lili",

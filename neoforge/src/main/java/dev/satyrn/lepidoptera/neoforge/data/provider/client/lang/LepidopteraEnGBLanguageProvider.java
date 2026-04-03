@@ -15,6 +15,6 @@ public class LepidopteraEnGBLanguageProvider extends LepidopteraEnUSLanguageProv
 
     @Override
     protected void addBodyEquipmentTag() {
-        this.add(T9n.itemTag(ApiItemTags.BODY_EQUIPMENT), "Animal Armour");
+        this.add(ApiItemTags.BODY_EQUIPMENT, "Animal Armour");
     }
 }

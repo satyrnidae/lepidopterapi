@@ -1359,7 +1359,7 @@ public final class T9n {
     @ApiStatus.AvailableSince("1.0.0-SNAPSHOT.3+1.21.1")
     @Contract(pure = true)
     public static String entityTypeTag(final String modId, final String... key) {
-        return tag(modId, "entityType", key);
+        return tag(modId, "entity_type", key);
     }
 
     /**

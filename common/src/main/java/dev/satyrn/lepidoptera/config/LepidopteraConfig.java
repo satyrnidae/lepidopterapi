@@ -38,7 +38,7 @@ public class LepidopteraConfig implements NestingConfigData<LepidopteraConfig> {
     public boolean showAlembicInCreativeTabs = false;
 
     @InventorySizeField(minWidth = 3, maxWidth = 9, minHeight = 2, maxHeight = 4)
-    @ConfigEntry.Gui.Tooltip(count = 2)
+    @ConfigEntry.Gui.Tooltip(count = 3)
     @YamlComment("[Demo] Example inventory size entry for visual testing of the InventorySizeEntry widget.")
     @SuppressWarnings("unused") // Demo
     public String demoInventorySize = new InventorySize(5, 3).toString();
