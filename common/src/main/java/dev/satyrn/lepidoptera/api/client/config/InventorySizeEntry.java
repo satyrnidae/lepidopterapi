@@ -3,6 +3,7 @@ package dev.satyrn.lepidoptera.api.client.config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.config.InventorySize;
 import dev.satyrn.lepidoptera.api.config.InventorySizeField;
 import dev.satyrn.lepidoptera.api.lang.T9n;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -109,8 +111,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         return (List) Collections.singletonList(entry);
     };
 
-    private static final ResourceLocation CELL_TEXTURE = ResourceLocation.fromNamespaceAndPath("lepidoptera_api",
-            "textures/gui/inventory_size.png");
+    private static final ResourceLocation CELL_TEXTURE = ModHelper.resource(LepidopteraAPI.class, "textures/gui/config_element.png");
     private static final ResourceLocation SLIDER_BG = ResourceLocation.withDefaultNamespace("widget/slider");
     private static final ResourceLocation SLIDER_BG_HL = ResourceLocation.withDefaultNamespace(
             "widget/slider_highlighted");
@@ -146,7 +147,6 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     private static final int COLOR_LABEL = 0xFFFFFFFF;
 
     // -- State --
-    private static final int COLOR_DIM_VALUE = 0xFFAAAAAA;
     private final String originalValue;
     private final String defaultValue;
     private final int minWidth;
@@ -168,6 +168,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
      * originally captured the click.</p>
      */
     private @Nullable AbstractWidget activeWidget = null;
+    private final Button resetButton;
 
     /**
      * Entry top-Y captured each frame; used to restrict tooltip display to the label row.
@@ -219,6 +220,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
                 : (this.currentWidth - this.minWidth) / (double) (this.maxWidth - this.minWidth);
         this.widthSlider = new WidthSlider(0, 0, this.maxWidth * CELL_SIZE, initWidthNorm);
         this.heightSlider = new HeightSliderWidget(0, 0, this.maxHeight * CELL_STEP);
+        final var resetLabel = Component.translatable("text.cloth-config.reset_value");
+        this.resetButton = Button.builder(resetLabel, btn -> resetToDefault())
+                .bounds(0, 0, Minecraft.getInstance().font.width(resetLabel) + 6, H_SLIDER_HEIGHT)
+                .build();
     }
 
     @Contract(pure = true)
@@ -311,7 +316,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @Override
     public int getItemHeight() {
         final int sliderRow = this.fixedWidth ? 0 : H_SLIDER_HEIGHT + PADDING;
-        return PADDING + LABEL_HEIGHT + PADDING + sliderRow + this.maxHeight * CELL_STEP + PADDING;
+        return PADDING + H_SLIDER_HEIGHT + PADDING + sliderRow + this.maxHeight * CELL_STEP + PADDING;
     }
 
     /**
@@ -324,9 +329,10 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     @Contract(value = "-> new", pure = true)
     @Override
     public @Unmodifiable List<? extends GuiEventListener> children() {
-        final var list = new java.util.ArrayList<AbstractWidget>(2);
+        final var list = new java.util.ArrayList<AbstractWidget>(3);
         if (!this.fixedWidth) list.add(this.widthSlider);
         if (!this.fixedHeight) list.add(this.heightSlider);
+        list.add(this.resetButton);
         return List.copyOf(list);
     }
 
@@ -368,12 +374,13 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         this.lastRenderY = y;
         final var font = Minecraft.getInstance().font;
 
-        // Row 1 — label + current value summary
+        // Row 1 — label + reset button (right-aligned)
         final int labelY = y + PADDING;
         graphics.drawString(font, getFieldName(), x + PADDING, labelY, COLOR_LABEL);
-        final Component summary = Component.translatable(T9n.gui(LepidopteraAPI.class, "inventory_size", "summary"),
-                this.currentWidth, this.currentHeight);
-        graphics.drawString(font, summary, x + entryWidth - PADDING - font.width(summary), labelY, COLOR_DIM_VALUE);
+        this.resetButton.active = isEditable() && isEdited();
+        this.resetButton.setX(x + entryWidth - PADDING - this.resetButton.getWidth());
+        this.resetButton.setY(labelY);
+        this.resetButton.render(graphics, mouseX, mouseY, delta);
 
         // Right-align the entire control block to match other Cloth Config entry positions.
         // Layout (right→left from entry right edge):
@@ -386,7 +393,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         final int labelLeft = sliderLeft - V_LABEL_GAP - FONT_LINE_HEIGHT;
 
         // Row 2 — horizontal width slider (omitted when fixedWidth)
-        final int row2Y = labelY + LABEL_HEIGHT + PADDING;
+        final int row2Y = labelY + H_SLIDER_HEIGHT + PADDING;
         if (!this.fixedWidth) {
             this.widthSlider.setX(gridLeft);
             this.widthSlider.setY(row2Y);
@@ -469,7 +476,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
             for (int col = 0; col < this.currentWidth; col++) {
                 final int cellX = startX + col * CELL_STEP;
                 final int cellY = startY + row * CELL_STEP;
-                graphics.blit(CELL_TEXTURE, cellX, cellY, 0, 0.0f, 0.0f, CELL_SIZE, CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                graphics.blit(CELL_TEXTURE, cellX, cellY, 0, 0.0f, 0.0f, CELL_SIZE, CELL_SIZE, 64, 64);
             }
         }
         RenderSystem.disableBlend();
@@ -540,6 +547,15 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
+    private void resetToDefault() {
+        final InventorySize def = safeParse(this.originalValue, this.defaultValue);
+        this.currentWidth  = Mth.clamp(def.width(),  this.minWidth,  this.maxWidth);
+        this.currentHeight = Mth.clamp(def.height(), this.minHeight, this.maxHeight);
+        if (!this.fixedWidth) {
+            this.widthSlider.resetTo(this.currentWidth);
+        }
+    }
+
     @Contract(pure = true)
     private InventorySize safeParse(final String value, final String fallback) {
         try {
@@ -571,6 +587,12 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
                     minWidth, maxWidth);
         }
 
+        void resetTo(final int newWidth) {
+            this.value = (newWidth - minWidth) / (double)(maxWidth - minWidth);
+            applyValue();
+            updateMessage();
+        }
+
         @ApiStatus.Internal
         @Override
         protected void updateMessage() {
@@ -589,7 +611,7 @@ public final class InventorySizeEntry extends TooltipListEntry<String> {
     // =========================================================================
     // Inner widget: vertical height slider
     // =========================================================================
-    // TODO: Vertical slider widget could be useful elsewhere
+    // TODO: Extract vertical slider for use elsewhere
     private final class HeightSliderWidget extends AbstractWidget {
 
         private boolean dragging = false;

@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -76,7 +77,11 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     private static final int FIELD_GAP     = 2;
     private static final int FIELDS_WIDTH  = 80;
     private static final int LABEL_WIDTH   = 12; // "X:" width
-    private static final int INPUT_WIDTH   = FIELDS_WIDTH - LABEL_WIDTH - PADDING;
+    private static final int ZERO_BTN_SIZE = 14;
+    private static final int INPUT_WIDTH   = FIELDS_WIDTH - LABEL_WIDTH - PADDING - ZERO_BTN_SIZE - FIELD_GAP;
+
+    private static final ResourceLocation FIELD_RESET_TEXTURE =
+            dev.satyrn.lepidoptera.api.ModHelper.resource(LepidopteraAPI.class, "textures/gui/reset_button.png");
 
     private static final ResourceLocation SPRITE_TAB_ACTIVE   = ResourceLocation.withDefaultNamespace("widget/button_disabled");
     private static final ResourceLocation SPRITE_TAB_HOVERED  = ResourceLocation.withDefaultNamespace("widget/button_highlighted");
@@ -108,14 +113,14 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         final TransformField annotation = field.getAnnotation(TransformField.class);
         final Transformation caps = field.getType().getAnnotation(Transformation.class);
 
-        TransformDisplayObject dispObj;
+        TransformDisplayObject display;
         try {
-            dispObj = (TransformDisplayObject) annotation.displayObject()
+            display = (TransformDisplayObject) annotation.displayObject()
                     .getDeclaredConstructor().newInstance();
         } catch (final Exception e) {
             LepidopteraAPI.error("TransformEntry: failed to instantiate displayObject {}: {}",
                     annotation.displayObject().getName(), e.getMessage());
-            dispObj = () -> ItemStack.EMPTY;
+            display = () -> ItemStack.EMPTY;
         }
 
         final @Nullable Object currentVal = readField(field, config, null);
@@ -136,7 +141,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
 
         final TransformEntry entry = new TransformEntry(
                 Component.translatable(i18n), tooltipSupplier,
-                currentVal, defaultVal, caps, dispObj, field.getType());
+                currentVal, defaultVal, caps, display, field.getType());
         entry.saveCallback = value -> writeField(field, config, value);
         return (List) Collections.singletonList(entry);
     };
@@ -201,6 +206,15 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     // EditBoxes — 3 boxes reused across modes
     private final EditBox[] editBoxes = new EditBox[3];
     private boolean suppressEditUpdate = false;
+
+    // Per-field zero buttons
+    private final boolean[] fieldResetHovered = new boolean[3];
+    private final boolean[] fieldResetPressed = new boolean[3];
+    private final int[] fieldResetBtnX = new int[3];
+    private final int[] fieldResetBtnY = new int[3];
+
+    // Per-mode default reset button
+    private final Button resetButton;
 
     // Tab rects: updated each render [mode_index][x, y, w, h]
     private final int[][] tabRects;
@@ -308,6 +322,11 @@ public final class TransformEntry extends TooltipListEntry<Object> {
             editBoxes[i] = eb;
         }
         refreshEditBoxValues();
+        this.resetButton = Button.builder(
+                Component.translatable("text.cloth-config.reset_value"),
+                btn -> resetToDefault())
+            .bounds(0, 0, FIELDS_WIDTH, ZERO_BTN_SIZE)
+            .build();
     }
 
     // =========================================================================
@@ -401,7 +420,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     }
 
     // =========================================================================
-    // Children / narratables
+    // Children / narrated elements
     // =========================================================================
 
     /**
@@ -416,6 +435,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     public List<? extends GuiEventListener> children() {
         final List<AbstractWidget> list = new ArrayList<>();
         addVisibleEditBoxes(list);
+        list.add(resetButton);
         return list;
     }
 
@@ -555,7 +575,25 @@ public final class TransformEntry extends TooltipListEntry<Object> {
             eb.setY(rowY);
             eb.setWidth(INPUT_WIDTH);
             eb.render(graphics, mouseX, mouseY, delta);
+            // Per-field zero button (right of edit box)
+            fieldResetBtnX[i] = fieldsX + LABEL_WIDTH + INPUT_WIDTH + FIELD_GAP;
+            fieldResetBtnY[i] = rowY + (FIELD_HEIGHT - ZERO_BTN_SIZE) / 2;
+            fieldResetHovered[i] = mouseX >= fieldResetBtnX[i] && mouseX < fieldResetBtnX[i] + ZERO_BTN_SIZE
+                                 && mouseY >= fieldResetBtnY[i] && mouseY < fieldResetBtnY[i] + ZERO_BTN_SIZE;
+            final float zU = (fieldResetPressed[i] && fieldResetHovered[i]) ? 28f
+                           : fieldResetHovered[i] ? 14f : 0f;
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            graphics.blit(FIELD_RESET_TEXTURE, fieldResetBtnX[i], fieldResetBtnY[i], 0, zU, 0f, ZERO_BTN_SIZE, ZERO_BTN_SIZE, 42, 14);
+            RenderSystem.disableBlend();
         }
+        // Per-mode default reset button (fixed at row 4)
+        final int btnY = fieldsY + 3 * (FIELD_HEIGHT + FIELD_GAP);
+        resetButton.active = isEditable() && getDefaultValue().isPresent() && !isMatchDefault();
+        resetButton.setX(fieldsX);
+        resetButton.setY(btnY);
+        resetButton.setWidth(FIELDS_WIDTH);
+        resetButton.render(graphics, mouseX, mouseY, delta);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -639,8 +677,17 @@ public final class TransformEntry extends TooltipListEntry<Object> {
             return true;
         }
 
-        // Delegate to edit boxes
+        // Per-field zero buttons
         final int count = activeEditBoxCount();
+        for (int i = 0; i < count; i++) {
+            if (mouseX >= fieldResetBtnX[i] && mouseX < fieldResetBtnX[i] + ZERO_BTN_SIZE
+                    && mouseY >= fieldResetBtnY[i] && mouseY < fieldResetBtnY[i] + ZERO_BTN_SIZE) {
+                fieldResetPressed[i] = true;
+                return true;
+            }
+        }
+
+        // Delegate to edit boxes
         for (int i = 0; i < count; i++) {
             if (editBoxes[i].mouseClicked(mouseX, mouseY, button)) {
                 setFocused(editBoxes[i]);
@@ -676,6 +723,13 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     @Override
     public boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
         viewport.mouseReleased();
+        final int count = activeEditBoxCount();
+        for (int i = 0; i < count; i++) {
+            if (fieldResetPressed[i] && fieldResetHovered[i]) {
+                zeroField(i);
+            }
+            fieldResetPressed[i] = false;
+        }
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
@@ -763,15 +817,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         try {
             final int count = activeEditBoxCount();
             for (int i = 0; i < count; i++) {
-                final float v = switch (activeMode) {
-                    case ROTATE    -> (rotation != null) ? rotation[i] : 0f;
-                    case TRANSLATE -> (offset   != null) ? offset[i]   : 0f;
-                    case SCALE     -> scaleHolder[0];
-                };
-                final String text = switch (activeMode) {
-                    case ROTATE, SCALE -> String.format("%.2f", v);
-                    case TRANSLATE     -> String.format("%.3f", v);
-                };
+                final String text = getRotationTextValue(i);
                 if (!editBoxes[i].getValue().equals(text)) {
                     editBoxes[i].setValue(text);
                 }
@@ -779,6 +825,77 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         } finally {
             suppressEditUpdate = false;
         }
+    }
+
+    private String getRotationTextValue(int i) {
+        final float v = switch (activeMode) {
+            case ROTATE    -> (rotation != null) ? rotation[i] : 0f;
+            case TRANSLATE -> (offset   != null) ? offset[i]   : 0f;
+            case SCALE     -> scaleHolder[0];
+        };
+        return switch (activeMode) {
+            case ROTATE    -> String.format("%.1f", v);
+            case SCALE     -> String.format("%.2f", v);
+            case TRANSLATE -> String.format("%.3f", v);
+        };
+    }
+
+    private void zeroField(final int i) {
+        switch (activeMode) {
+            case ROTATE    -> { if (rotation != null) rotation[i] = 0f; }
+            case TRANSLATE -> { if (offset   != null) offset[i]   = 0f; }
+            case SCALE     -> scaleHolder[0] = 1.0f;
+        }
+        refreshEditBoxValues();
+    }
+
+    private void resetToDefault() {
+        final @Nullable Object def = defaultValue;
+        if (def == null) return;
+        try {
+            switch (activeMode) {
+                case ROTATE -> {
+                    if (rotation != null) {
+                        final Rotation r = (Rotation) def.getClass().getMethod("getRotation").invoke(def);
+                        rotation[0] = r.getX(); rotation[1] = r.getY(); rotation[2] = r.getZ();
+                    }
+                }
+                case TRANSLATE -> {
+                    if (offset != null) {
+                        final Offset o = (Offset) def.getClass().getMethod("getOffset").invoke(def);
+                        offset[0] = o.getX(); offset[1] = o.getY(); offset[2] = o.getZ();
+                    }
+                }
+                case SCALE -> scaleHolder[0] = (float) def.getClass().getMethod("getScale").invoke(def);
+            }
+        } catch (final Exception e) {
+            LepidopteraAPI.error("TransformEntry: failed to reset to default", e);
+            return;
+        }
+        refreshEditBoxValues();
+    }
+
+    private boolean isMatchDefault() {
+        final @Nullable Object def = defaultValue;
+        if (def == null) return false;
+        try {
+            return switch (activeMode) {
+                case ROTATE -> {
+                    if (rotation == null) yield true;
+                    final Rotation r = (Rotation) def.getClass().getMethod("getRotation").invoke(def);
+                    yield rotation[0] == r.getX() && rotation[1] == r.getY() && rotation[2] == r.getZ();
+                }
+                case TRANSLATE -> {
+                    if (offset == null) yield true;
+                    final Offset o = (Offset) def.getClass().getMethod("getOffset").invoke(def);
+                    yield offset[0] == o.getX() && offset[1] == o.getY() && offset[2] == o.getZ();
+                }
+                case SCALE -> {
+                    final float ds = (float) def.getClass().getMethod("getScale").invoke(def);
+                    yield scaleHolder[0] == ds;
+                }
+            };
+        } catch (final Exception e) { return false; }
     }
 
     private void setActiveMode(final GizmoMode mode) {

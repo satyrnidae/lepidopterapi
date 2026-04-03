@@ -3,6 +3,8 @@ package dev.satyrn.lepidoptera.api.client.config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import dev.satyrn.lepidoptera.LepidopteraAPI;
+import dev.satyrn.lepidoptera.api.ModHelper;
 import dev.satyrn.lepidoptera.api.config.TransformDisplayObject;
 import dev.satyrn.lepidoptera.api.config.transform.Transformation;
 import net.fabricmc.api.EnvType;
@@ -12,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -23,12 +26,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-
-// TODO: Rotation gizmo directional signs need to be flipped based on which side
-//   of the gizmo the player is viewing it from.
-// TODO: Items in viewport render in front of the ClothConfig save and exit buttons
-//   Most likely, this means they need to be masked/hidden when outside the bounds
-//   of the config scroll pane. Better to use a mask most likely.
 
 /**
  * Handles all 3-D rendering and viewport interaction for {@link TransformEntry}.
@@ -46,8 +43,6 @@ import javax.annotation.Nullable;
 @Environment(EnvType.CLIENT)
 final class TransformViewport {
 
-    // TODO: Scale to the GUI Size option in Minecraft.
-    //   Increased from 80 to 120 by default.
     /** Width and height of the viewport square, in pixels. */
     static final int SIZE = 120;
 
@@ -56,9 +51,9 @@ final class TransformViewport {
     /** Base camera scale so the item fills the viewport proportionally regardless of SIZE. */
     private static final float BASE_ZOOM        = 38.0f / SIZE;
     private static final float ZOOM_SENSITIVITY = 0.15f;
-    private static final float CAMERA_YAW       = 0.0f;
+    private static final float CAMERA_YAW       = -30.0f;
     /** Negative pitch so the camera looks from above (positive 3-D Y = world-up). */
-    private static final float CAMERA_PITCH = -30.0f;
+    private static final float CAMERA_PITCH = -50.0f;
     private static final float ORBIT_HEIGHT = 0.5f;
     /** Degrees of orbit per pixel of drag. */
     private static final float ORBIT_SENSITIVITY = 0.4f;
@@ -71,8 +66,10 @@ final class TransformViewport {
     private static final int COLOR_AXIS_Z       = 0xFF44CC44;
     private static final int COLOR_AXIS_Z_HOVER = 0xFF88FF88;
 
-    private static final int COLOR_VIEWPORT_BG     = 0x44181818;
-    private static final int COLOR_VIEWPORT_BORDER = 0xFF505050;
+    private static final ResourceLocation VIEWPORT_TEXTURE =
+            ModHelper.resource(LepidopteraAPI.class, "textures/gui/config_element.png");
+    private static final ResourceLocation RESET_BUTTON_TEXTURE =
+            ModHelper.resource(LepidopteraAPI.class, "textures/gui/reset_button.png");
 
     /** Degrees of rotation change per pixel of drag. */
     private static final float ROT_DRAG_SENSITIVITY   = 1.0f;
@@ -134,6 +131,10 @@ final class TransformViewport {
     /** Sign multiplier for rotation drag: determined by which half of the ring was clicked. */
     private float  dragRotationSign   = 1f;
 
+    // -- Reset button state -----------------------------------------------
+    private boolean resetButtonHovered = false;
+    private boolean resetButtonPressed = false;
+
     // -- Screen position caches (written each frame, read in mouse handlers) --
     private float axisOriginScreenX;
     private float axisOriginScreenY;
@@ -171,12 +172,33 @@ final class TransformViewport {
                 final int mouseX, final int mouseY,
                 final GizmoMode mode,
                 final int clipTop, final int clipBottom) {
-        // Background + 1-px border
-        graphics.fill(vpX,          vpY,          vpX + SIZE, vpY + SIZE,   COLOR_VIEWPORT_BG);
-        graphics.fill(vpX,          vpY,          vpX + SIZE, vpY + 1,      COLOR_VIEWPORT_BORDER);
-        graphics.fill(vpX,          vpY + SIZE-1, vpX + SIZE, vpY + SIZE,   COLOR_VIEWPORT_BORDER);
-        graphics.fill(vpX,          vpY,          vpX + 1,    vpY + SIZE,   COLOR_VIEWPORT_BORDER);
-        graphics.fill(vpX + SIZE-1, vpY,          vpX + SIZE, vpY + SIZE,   COLOR_VIEWPORT_BORDER);
+        // Nine-slice background from config_element.png (3×3 section starting at UV 16,16).
+        // Each source cell is 16×16 in the 64×64 sheet; inner area = SIZE - 32.
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        final int inner = SIZE - 32;
+        // Corners (1:1, no stretch)
+        graphics.blit(VIEWPORT_TEXTURE, vpX,             vpY,             0, 16f, 16f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX + SIZE - 16, vpY,             0, 48f, 16f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX,             vpY + SIZE - 16, 0, 16f, 48f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX + SIZE - 16, vpY + SIZE - 16, 0, 48f, 48f, 16, 16, 64, 64);
+        // Edges and center (stretched to fill)
+        graphics.blit(VIEWPORT_TEXTURE, vpX + 16,        vpY,             inner, 16,    32f, 16f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX + 16,        vpY + SIZE - 16, inner, 16,    32f, 48f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX,             vpY + 16,        16,    inner, 16f, 32f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX + SIZE - 16, vpY + 16,        16,    inner, 48f, 32f, 16, 16, 64, 64);
+        graphics.blit(VIEWPORT_TEXTURE, vpX + 16,        vpY + 16,        inner, inner, 32f, 32f, 16, 16, 64, 64);
+        RenderSystem.disableBlend();
+
+        // Reset button — upper-left corner, 2px inset from the viewport edge
+        final int btnX = vpX + 2;
+        final int btnY = vpY + 2;
+        resetButtonHovered = mouseX >= btnX && mouseX < btnX + 14 && mouseY >= btnY && mouseY < btnY + 14;
+        final float btnU = (resetButtonPressed && resetButtonHovered) ? 28f : resetButtonHovered ? 14f : 0f;
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.blit(RESET_BUTTON_TEXTURE, btnX, btnY, 0, btnU, 0f, 14, 14, 42, 14);
+        RenderSystem.disableBlend();
 
         final Minecraft mc   = Minecraft.getInstance();
         final double    gs   = mc.getWindow().getGuiScale();
@@ -194,12 +216,26 @@ final class TransformViewport {
         final var pose = graphics.pose();
         pose.pushPose();
 
+        var orbitPitchLabel = (((orbitPitch + 50.0f) % 360f) + 360f) % 360f;
+        var orbitYawLabel = (((orbitYaw + 30.0f) % 360f) + 360f) % 360f;
+        graphics.drawString(mc.font, String.format("p:%.1f y:%.1f", orbitPitchLabel, orbitYawLabel), vpX + 18, vpY + mc.font.lineHeight/2, 0x88888888);
+
         // Camera: translate to viewport center (+ pan), apply orbit, scale (Y negated to
         // flip screen-Y → world-Y), then shift so the orbit focus sits at screen center.
         final float cs = SIZE * BASE_ZOOM * cameraZoom;
-        pose.translate(vpX + SIZE / 2.0f + panX, vpY + SIZE / 2.0f + panY, 50.0f);
-        pose.mulPose(Axis.YP.rotationDegrees(orbitYaw));
-        pose.mulPose(Axis.XP.rotationDegrees(orbitPitch));
+        pose.translate(vpX + SIZE / 2.0f + panX, vpY + SIZE / 2.0f + panY, 50.0f * cameraZoom);
+
+        // Quaternion orbit
+        var hu = (float) Math.toRadians(orbitPitch / 2F);
+        var hv = (float) Math.toRadians(orbitYaw / 2F);
+        var hw = (float) Math.toRadians(-orbitYaw / 2F);
+        pose.mulPose(new Quaternionf(
+                Mth.sin(hu) * Mth.cos(hv) * Mth.cos(hw) - Mth.cos(hu) * Mth.sin(hv) * Mth.sin(hw),
+                Mth.cos(hu) * Mth.sin(hv) * Mth.cos(hw) + Mth.sin(hu) * Mth.cos(hv) * Mth.sin(hw),
+                Mth.cos(hu) * Mth.cos(hv) * Mth.sin(hw) - Mth.sin(hu) * Mth.sin(hv) * Mth.cos(hw),
+                Mth.cos(hu) * Mth.cos(hv) * Mth.cos(hw) + Mth.sin(hu) * Mth.sin(hv) * Mth.sin(hw)
+        ));
+
         pose.scale(cs, -cs, cs);
         pose.translate(0.0f, -ORBIT_HEIGHT, 0.0f);
 
@@ -498,6 +534,13 @@ final class TransformViewport {
             }
             return true;
         }
+        // Reset button
+        final int btnX = vpX + 2;
+        final int btnY = vpY + 2;
+        if (mouseX >= btnX && mouseX < btnX + 14 && mouseY >= btnY && mouseY < btnY + 14) {
+            resetButtonPressed = true;
+            return true;
+        }
         // Empty viewport space → start orbit drag.
         orbitDragging   = true;
         orbitDragStartX = mouseX;
@@ -541,6 +584,14 @@ final class TransformViewport {
     }
 
     void mouseReleased() {
+        if (resetButtonPressed && resetButtonHovered) {
+            orbitYaw   = CAMERA_YAW;
+            orbitPitch = CAMERA_PITCH;
+            cameraZoom = 1.0f;
+            panX       = 0.0f;
+            panY       = 0.0f;
+        }
+        resetButtonPressed = false;
         dragAxisIndex    = null;
         dragMode         = null;
         dragRotationSign = 1f;
