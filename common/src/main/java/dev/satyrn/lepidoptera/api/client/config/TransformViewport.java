@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
@@ -37,9 +38,9 @@ import javax.annotation.Nullable;
  * modifies them in-place and fires the {@code onChanged} callback afterward so
  * the entry can refresh its numeric {@link net.minecraft.client.gui.components.EditBox} fields.</p>
  *
- * @since 1.0.1-SNAPSHOT.4+1.21.1
+ * @since 1.0.1-SNAPSHOT.3+1.21.1
  */
-@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
 @ApiStatus.Internal
 @Environment(EnvType.CLIENT)
 final class TransformViewport {
@@ -264,17 +265,11 @@ final class TransformViewport {
         }
         pose.popPose();
 
+        // All items face away from the camera by default in the item renderer; correct for it.
         pose.mulPose(Axis.YP.rotationDegrees(180.0f));
-        pose.mulPose(Axis.XP.rotationDegrees(90.0f));
         pose.mulPose(displayObject.getInitialRotation());
         if (caps.rotation() && rotation != null) {
-            if (Math.abs(rotation[0]) > 1e-4f)
-                pose.mulPose(Axis.XP.rotation((float) Math.toRadians(rotation[0])));
-            // Y and Z axes are flipped due to baked in 90 degree offset from FIXED
-            if (Math.abs(rotation[1]) > 1e-4f)
-                pose.mulPose(Axis.ZP.rotation((float) Math.toRadians(rotation[1])));
-            if (Math.abs(rotation[2]) > 1e-4f)
-                pose.mulPose(Axis.YP.rotation((float) Math.toRadians(rotation[2])));
+            displayObject.applyPose(pose, rotation);
         }
 
         // Item preview
@@ -289,7 +284,8 @@ final class TransformViewport {
         // Rotation gizmo is local-space (post-rotation): rings align with the item's
         // current orientation so they visually match the axes being edited.
         pose.pushPose();
-        pose.mulPose(Axis.XP.rotationDegrees(-90.0f));
+        // Undo the display object's initial rotation so the rings align with world axes.
+        pose.mulPose(new Quaternionf(displayObject.getInitialRotation()).conjugate());
         scaleInvariant(pose, 1.25F, 1.25F, 1.25F);
         if (mode == GizmoMode.ROTATE) {
             captureScreenPositions(pose.last().pose(), mode);

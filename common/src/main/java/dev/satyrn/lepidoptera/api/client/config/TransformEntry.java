@@ -63,9 +63,9 @@ import java.util.function.Supplier;
  *                && field.isAnnotationPresent(TransformField.class));
  * }</pre>
  *
- * @since 1.0.1-SNAPSHOT.4+1.21.1
+ * @since 1.0.1-SNAPSHOT.3+1.21.1
  */
-@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
 @Environment(EnvType.CLIENT)
 public final class TransformEntry extends TooltipListEntry<Object> {
 
@@ -103,9 +103,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
      * <p>Pass this to {@code GuiRegistry.registerPredicateProvider} once in your client
      * initializer (see class-level Javadoc).</p>
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static final GuiProvider TYPE_PROVIDER = (i18n, field, config, defaults, guiProvider) -> {
@@ -233,9 +233,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
      * @param displayObject  the preview display object
      * @param fieldType      the declared type of the config field
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     public TransformEntry(final Component label,
@@ -321,9 +321,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(pure = true)
     @Override
@@ -355,9 +355,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(pure = true)
     @Override
@@ -368,9 +368,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(pure = true)
     @Override
@@ -393,9 +393,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(pure = true)
     @Override
@@ -411,9 +411,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(value = "-> new", pure = true)
     @Override
@@ -426,9 +426,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Contract(value = "-> new", pure = true)
     @Override
@@ -449,9 +449,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * Restricts tooltip display to the label row.
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public Optional<Component[]> getTooltip(final int mouseX, final int mouseY) {
@@ -469,9 +469,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public void render(final GuiGraphics graphics,
@@ -572,9 +572,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
@@ -617,9 +617,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean mouseDragged(final double mouseX, final double mouseY,
@@ -633,9 +633,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean mouseReleased(final double mouseX, final double mouseY, final int button) {
@@ -646,9 +646,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean mouseScrolled(final double mouseX, final double mouseY,
@@ -662,9 +662,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean keyPressed(final int keyCode, final int scanCode, final int modifiers) {
@@ -680,9 +680,9 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     @ApiStatus.Internal
     @Override
     public boolean charTyped(final char codePoint, final int modifiers) {
@@ -723,8 +723,8 @@ public final class TransformEntry extends TooltipListEntry<Object> {
                     case SCALE     -> scaleHolder[0];
                 };
                 final String text = switch (activeMode) {
-                    case ROTATE             -> String.format("%.2f", v);
-                    case TRANSLATE, SCALE   -> String.format("%.3f", v);
+                    case ROTATE, SCALE -> String.format("%.2f", v);
+                    case TRANSLATE     -> String.format("%.3f", v);
                 };
                 if (!editBoxes[i].getValue().equals(text)) {
                     editBoxes[i].setValue(text);

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 /**
  * The active gizmo editing mode for a {@link TransformEntry}.
  *
- * @since 1.0.1-SNAPSHOT.4+1.21.1
+ * @since 1.0.1-SNAPSHOT.3+1.21.1
  */
 @ApiStatus.Internal
 @Environment(EnvType.CLIENT)

@@ -22,9 +22,9 @@ import java.lang.annotation.*;
  *                && field.isAnnotationPresent(TransformField.class));
  * }</pre>
  *
- * @since 1.0.1-SNAPSHOT.4+1.21.1
+ * @since 1.0.1-SNAPSHOT.3+1.21.1
  */
-@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+@ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -38,8 +38,8 @@ public @interface TransformField {
      * code and the implementation class may use client-only APIs; the class is only instantiated
      * at runtime on the client inside {@code TransformEntry.TYPE_PROVIDER}.</p>
      *
-     * @since 1.0.1-SNAPSHOT.4+1.21.1
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
-    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.4+1.21.1")
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
     Class<?> displayObject();
 }
