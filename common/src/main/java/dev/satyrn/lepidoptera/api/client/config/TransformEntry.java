@@ -29,15 +29,9 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
-// TODO: Edit box focusing does not unfocus other elements in the GUI; they are detached
-//   from the component chain somehow.
 
 /**
  * A Cloth Config GUI entry for {@link Transformation @Transformation}-typed config fields.
@@ -491,7 +485,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         final Font      font = mc.font;
 
         // Scroll list clip region — used to prevent overflow below Save/Cancel buttons
-        final ClothConfigScreen clothScreen = (ClothConfigScreen) getConfigScreen();
+        final ClothConfigScreen clothScreen = Objects.requireNonNull((ClothConfigScreen) getConfigScreen());
         final int listTop    = clothScreen.listWidget.top;
         final int listBottom = clothScreen.listWidget.bottom;
 
@@ -602,6 +596,24 @@ public final class TransformEntry extends TooltipListEntry<Object> {
     /**
      * {@inheritDoc}
      *
+     * <p>Propagates focus changes through the parent container chain and updates each
+     * {@link EditBox}'s focus state to match, so only the clicked box shows a cursor.</p>
+     *
+     * @since 1.0.1-SNAPSHOT.3+1.21.1
+     */
+    @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
+    @ApiStatus.Internal
+    @Override
+    public void setFocused(final @Nullable GuiEventListener child) {
+        super.setFocused(child);
+        for (final EditBox eb : editBoxes) {
+            eb.setFocused(eb == child);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @since 1.0.1-SNAPSHOT.3+1.21.1
      */
     @ApiStatus.AvailableSince("1.0.1-SNAPSHOT.3+1.21.1")
@@ -631,13 +643,7 @@ public final class TransformEntry extends TooltipListEntry<Object> {
         final int count = activeEditBoxCount();
         for (int i = 0; i < count; i++) {
             if (editBoxes[i].mouseClicked(mouseX, mouseY, button)) {
-                for (int j = 0; j < count; j++) {
-                    // Take focus
-                    // TODO: Focus set is not propogating up the chain to parent elements
-                    //   (hence this stepwise set). Need to figure out what part of component
-                    //   registration is missing.
-                    editBoxes[j].setFocused(i == j);
-                }
+                setFocused(editBoxes[i]);
                 return true;
             }
         }
